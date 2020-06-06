@@ -1,3 +1,0 @@
-[submodule "y"]
-	path = .deploy_git
-	url = ./.deploy_git/
