@@ -180,7 +180,7 @@ const wrap = xf => ({
 
 首先我们检查参数 `xf` 的类型是否为 function。若是，我们假定它是一个 step function, 并调用 wrap 函数将其转换为 transformer。然后像之前一样调用 reduce 。
 
-现在已经可以直接向 reduce 传递 reducer了。
+现在已经可以直接向 reduce 传递 reducer 了。
 
 ```js
 const input = [2,3,4];
