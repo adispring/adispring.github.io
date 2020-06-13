@@ -43,3 +43,7 @@ $ hexo d -g
 
 More info: [Deployment](https://hexo.io/docs/deployment.html)
 
+### Hexo 自动化部署
+
+* 官方自动化部署文档 -- Hexo + Travis: https://hexo.io/docs/github-pages.html
+* 空白页问题的解决方案：http://magicse7en.github.io/2016/03/27/travis-ci-auto-deploy-hexo-github/
