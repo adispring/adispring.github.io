@@ -7,7 +7,6 @@ branches:
   only:
     - hexo-source # store source code of hexo in hexo-source branch
 script:
-  - hexo clean
   - hexo generate
 deploy:
   provider: pages
