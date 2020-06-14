@@ -408,7 +408,7 @@ const output = xf.result(result);
 
 上面的例子讲解了如何使用 transducers 对一系列输入进行转换。我们来分解一下其中的步骤。
 
-首先通过调用一个包含 stepper 转换的 transducer 来初始化 transformation，并定义 transduce 的初始值。
+首先调用一个包含 stepper 转换的 transducer 来初始化转换，并定义 transduce 的初始值。
 
 ```js
 const transducer = map(plus1);
@@ -417,7 +417,7 @@ const xf = transducer(stepper);
 const init = [];
 ```
 
-然后使用 *reducer* `xf.step` 来遍历每个输入元素。将初始值作为 step 函数的第一个 `result` 参数（另一个是输入源中的元素），上一个 step 函数的返回值供所有后续元素迭代使用。
+然后使用 `xf.step` 来单步处理每个元素。我们使用初始值作为传入 step 函数的第一个 `result` 参数，上一个 step 函数的返回值供后面的 step 函数迭代使用。
 
 ```js
 let result = xf.step(init, 2);
@@ -437,25 +437,24 @@ const output = xf.result(result);
 // [3,4,5]
 ```
 
-可能你已经注意到了，这与上面定义的 `reduce` 实现非常相似。 事实也是如此。 我们可以将这个过程封装成一个新的函数 `transduce`。
+可能你已经注意到了，这与上面定义的 `reduce` 实现非常相似。事实上确实是这样。我们可以将这个过程封装成一个新的函数 `transduce`。
 
 ```js
 const transduce = (transducer, stepper, init, input) => {
   if(typeof stepper === 'function'){
-    // 确保存在用于步进（迭代）的 transformer
+    // 确保迭代时，存在可用的 transformer
     stepper = wrap(stepper);
   }
 
-  // 传入 stepper 来创建 transformer：xf
+  // 传入 stepper 来创建 transformer
   const xf = transducer(stepper);
-  // xf 现在成为一个 transformer
-  // 现在可以使用上面定义的 reduce 来迭代并
-  // （在迭代之前）变换输入元素
+  // xf 是一个 transformer
+  // 现在可以使用上面定义的 reduce 来迭代并变换输入
   return reduce(xf, init, input);
 };
 ```
 
-就像 reduce，我们需要确保 stepper 是一个 transformer。然后通过向 transducer 传入 stepper 来创建新的 transformer。 最后，我们使用包含新的 transformer 的 reduce 来进行迭代和转换结果。也就是说 transducer 的函数类型为：transformer -> transformer。
+就像 reduce，我们需要确保 stepper 是一个 transformer。然后通过向 transducer 传入 stepper 来创建新的 transformer。 最后，我们使用包含新的 transformer 的 reduce 来进行迭代和转换数据。也就是说 transducer 的函数类型为：transformer -> transformer。
 
 我们来实践一下。
 
@@ -477,7 +476,7 @@ const output = transduce(transducer, stepper, init, input);
 
 上述两例的唯一区别是传递给 map 的函数不同。
 
-我们来尝试一下不同的 step function 和初始值。
+我们来尝试一下不同的步进函数（step function）和初始值。
 
 ```js
 const transducer = map(plus1);
@@ -511,13 +510,13 @@ const output = transduce(transducer, stepper, init, input);
 
 ![transduce](./transduce.png)
 
-这里我们只是改变了 stepper 和初始值，便可以得到不同的结果。我们可以在不依赖中间变量的情况下，遍历一次便可求得累加和或乘积。
+这里我们只是改变了 stepper 和初始值，便可以得到不同的结果。我们可以在不依赖中间结果的情况下，遍历一次便可求得累加和或乘积。
 
 ## 组合
 
-如果我们想加3，改怎么办呢？我们可以定义 `plus3` 并且使用 `map`，但更好的方法是利用 transducers 的一个特性。
+如果我们想加3，该怎么办呢？我们可以定义 `plus3` 并且使用 `map`，但利用 transducers 的一个特性来进行优化。
 
-事实上，我们可以通过其他两个函数：`plus1` 和 `plus2`，来定义 `plus3`。
+事实上，可以通过已有的两个函数：`plus1` 和 `plus2`，来定义 `plus3`。
 
 ```js
 const plus3 = item => puls2(plus1(item));
@@ -536,7 +535,7 @@ const output = [plus3(2), plus3(3), plus3(4)];
 
 `compose2` 用于组合两个函数，调用顺序从右向左，看一下 `compose2` 的实现就可以知道为什么调用顺序是从右向左的了。最后一个 function 接受传入参数，返回结果作为下个 function 的输入。如此迭代，直到输出结果。
 
-让我们使用 `compose2` 来定义一个 transducer，该 transducer 由 `plus1` 和 `plus2` 组合而成，用于将每个迭代的元素加3。
+让我们使用 `compose2` 来定义一个对每个迭代元素加 3 的 transducer，该 transducer 由 `plus1` 和 `plus2` 组合而成。
 
 ```js
 const transducerPlus3 = map(compose2(plus1, plus2));
@@ -548,9 +547,9 @@ const output = transduce(transducer, stepper, init, input);
 // [5,6,7]
 ```
 
-我们使用“函数组合”来组合 `plus1` 和 `plus2` 而不是重新定义 `plus3`，来组合出传入 map 的加3操作。
+我们对已有的函数：`plus1` 和 `plus2` 进行组合，生成传入 `map` 的函数，而不是从头重新实现一遍 `plus3`。
 
-将上述这些的目的是什么呢？实际上，我们可以通过组合其他的 transducers 来创建新的 transducers。
+为什么要告诉你上面这些呢？实际上，我们可以通过组合其他的 transducers 来创建新的 transducers。
 
 ```js
 const transducerPlus1 = map(plus1);
