@@ -253,7 +253,7 @@ const xfplus1 = {
 }
 ```
 
-我们可以使用 transformer 逐步输出结果。
+我们来使用 transformer 输出每步的计算结果。
 
 ```js
 const xf = xfplus1;
@@ -358,17 +358,17 @@ const output = xf.result(result);
 
 这些特性允许我们定义独立于输出的转换。
 
-## 可能会变糟
+## 可能会像 1 一样糟糕
 
 (注：第二句歌词，Can be as bad as one，作者意思应该是，如果 `plus2` 还跟 `plus1` 一样从头重新实现一遍，就比较坑了)
 
-假如我们想要在归并之前 `plus2`，需要改变哪些地方呢？我们可以定义一个类似于 `transducerPlus1` 的新的 `transducerPlus2` 。回头看一下 `transducerPlus1` 是如何实现的，并决定哪些地方需要更改。但这样做违反了 DRY 原则。
+假如我们想要 `plus2`，需要做哪些改变呢？我们可以像定义 `transducerPlus1` 那样，定义一个新的 `transducerPlus2` 。看看 `transducerPlus1` 是如何实现的，并决定做哪些改变。但这样做违反了 DRY 原则。
 
 有更好的方案吗？
 
-实际上，除了将 step 的值用 `plus2` 替换掉 `plus1` 以外，其他都是一样的。
+实际上，除了将 transformer 中 `step` 函数的值由 `plus1` 替换为 `plus2` 之外，其他的没变。
 
-让我们将 `plus1` 提取出来，并将其作为函数 `f` 进行传递。
+因此，可以将 `plus1` 提取出来，并将其作为 `f` 传进去。
 
 ```js
 const map = f => xf => ({
@@ -381,10 +381,10 @@ const map = f => xf => ({
 });
 ```
 
-我们定义了 mapping transducer，让我们使用它来逐步转换。
+我们定义了 mapping transducer，我们使用它来单步执行转换过程。
 
 ```js
-const plus2 = (input) => input + 2;
+const plus2 = input => input + 2;
 const transducer = map(plus2);
 const stepper = wrap(append);
 const xf = transducer(stepper);
@@ -402,11 +402,11 @@ const output = xf.result(result);
 // [4,5,6]
 ```
 
-本例相较于之前使用`plus1` 和 `append` 函数的例子，唯一的区别在于使用 `map` 创建 transducer。我们可以类似地使用 `map(plus1)` 来创建 `plus1` transducer。`transducerPlus1` 虽然只是短暂的出现便被 `map(plus1)` 代替，但它对我们理解 transduce 的内部原理帮助很大。
+本例相较于之前 `plus1` 和 `append` 的例子，唯一的区别在于使用 `map` 创建 transducer。我们可以类似地使用 `map(plus1)` 来创建 `plus1` transducer。`transducerPlus1` 虽然只是短暂的出现便被 `map(plus1)` 代替，但它对我们理解 transduce 的内部原理帮助很大。
 
 ## Transduce
 
-前面的示例讲解了使用 transducers 手动转换一系列的输入。让我们进一步优化。
+上面的例子讲解了如何使用 transducers 对一系列输入进行转换。我们来分解一下其中的步骤。
 
 首先通过调用一个包含 stepper 转换的 transducer 来初始化 transformation，并定义 transduce 的初始值。
 
