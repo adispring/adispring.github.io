@@ -549,7 +549,7 @@ const output = transduce(transducer, stepper, init, input);
 
 我们对已有的函数：`plus1` 和 `plus2` 进行组合，生成传入 `map` 的函数，而不是从头重新实现一遍 `plus3`。
 
-为什么要告诉你上面这些呢？实际上，我们可以通过组合其他的 transducers 来创建新的 transducers。
+为什么要告诉你上面这些呢？实际上，我们还可以通过组合其他的 transducers 来创建新的 transducers。
 
 ```js
 const transducerPlus1 = map(plus1);
@@ -563,7 +563,7 @@ const output = transduce(transducer, stepper, init, input);
 // [5,6,7]
 ```
 
-新组合出来的 transducer 可以用于组合其他的 transducer 。
+新组合出来的 transducer 又可以用于组合其他的 transducer 。
 
 ```js
 const transducerPlus1 = map(plus1);
@@ -578,44 +578,44 @@ const output = transduce(transducer, stepper, init, input);
 ```
 ![compose_transducers](./compose_transducers.png)
 
-再次注意，与本节前面的例子的唯一区别是 transducer 的创建。其它都没变。
+再次注意，这里与本节前面的例子的唯一区别仅仅在于 transducer 的创建，其它都一样。
 
-组合之所以能工作，是因为 transducers 的定义：接受一个 transformer 并返回一个新的 transformer。也即 transducer 的输入与返回值类型相同，且为单输入单输出。只要符合上述条件，便可以使用函数组合来创建与“输入函数”相同类型的“新函数”。
+之所以可以使用 组合，是因为 transducers 可以接受已有 transformer，返回新的 transformer。也即 transducer 的输入与输出类型相同，且为单输入单输出的函数。只要符合上述条件，便可以使用函数组合来创建接受相同类型参数的新函数。
 
-由上可得，transducers 是一种 “可组合的算法变换”。这在实践中已经证明其强大之处：可以将新的变换定义为一系列较小变换的组合，然后将它们通过 `compose` 或 `pipe` 组合起来。我们将在后续章节中展示更多的例子。
+由上可得，transducers 是一种 “可组合的算法变换”。这在实际开发中非常有用：可以将新的变换分解为一系列较小的变换，然后将它们通过 `compose` 或 `pipe` 以流水线（ pipeline）的组合起来。后面后有更多的例子进行演示。
 
-事实上，虽然函数组合调用顺序为由右向左，而 transformation 调用是自左向右的（译者注：这也是理解 transduce 的难点之一，理解了这个，也就基本理解了 transduce。可以通过单个 transducer 和 transformer 的组合，来理解 transformation 的调用顺序。transduce 本质上做的事情是 **在对每个元素进行归并之前先对其进行变换** ，将这句话重复五遍：），这也是 transduce 区别于 reduce 的“唯一”不同点）。
+事实上，虽然函数组合的顺序从右向左，而转换本身是自左向右的（译者注：这也是理解 transduce 的难点之一，理解了这个，也就基本理解了 transduce。可以通过单个 transducer 和 transformer 的组合，来理解转换的调用顺序。transduce 本质上做的事情是 **在对每个元素进行归并之前先对其进行转换** ，将这句话在自己心里默念三遍：），这也是 transduce 区别于 reduce 的“唯一”不同点）。
 
 在上面的 `transducersPlus4` 示例中，每个元素先进行 `plus3` 转换，然后进行 `plus1` 转换。
 
-虽然在本例中 transducers 的调用顺序对结果没有影响，但是**从左向右**的变换顺序还是需要牢记在心。这个变换调用顺序让你在阅读代码时更容易理解，因为它与你的阅读顺序是一至的（如果使用的是英文，或者中文）。
+虽然在本例中 transducers 的调用顺序对结果没有影响，但是**从左向右**的变换顺序还是需要牢记在心。变换的调用顺序让你在阅读代码时更容易理解，因为它与你的阅读顺序是一致的。
 
 ## part 1 总结
 
 Transducers 将 “可组合的算法转换” 抽象出来，使其独立于输入、输出，甚至迭代的整个过程。
 
-本文演示了如何使用 transducers 来抽象算法转换，transducer 将一个 transformer 转换为另一个 transformer。transformer 可以用于 transduce 进行迭代和转换输入源。
+本文演示了如何使用 transducers 来抽象算法转换，transducer 将一个 transformer 转换为另一个 transformer。transformer 可以用于 transduce，进行迭代和转换输入源。
 
-相较于 [Underscore.js](http://underscorejs.org/) 或 [Lo-Dash](https://lodash.com/)对数组和计算中间结果的对象进行操作，transducers 定义的 transformation 在函数方面类似于传递给 reduce 的 stepping function：将初始值作为首次迭代的“结果参数”，执行输入为一个“结果参数”和元素的函数，返回可能变换过的结果，并将其作为下次迭代的“结果参数”。一旦将 transformation 从数据中抽象出来，就可以将相同的 transformations 应用于以某初始值开始并遍历某个“累积结果”的不同处理过程。
+[Underscore.js](http://underscorejs.org/) 或 [Lo-Dash](https://lodash.com/) 在进行数组或对象计算时，往往会产生中间结果。而 transducers 以一系列函数的方式定义转换，类似于 reduce 的处理方式：将初始值作为首次迭代的累积值，使用累积值和当前元素进行计算，返回转换后的累积值，并将其作为下次迭代的累积值参数。一旦将这些转换从数据中抽象出来，就可以将相同的转换应用于不同的处理过程，这些处理过程以某个初始的累积值开始，不断对变换后的元素累积。
 
-我们已经展示了相同的 transducers 可以操作不同的“输出源”，只需改变创建 transducer 时用到的初始值和 stepper。这种抽象的好处之一是：可以遍历一次得到结果，且没有中间数组产生。
+我们已经展示了同一 transducer 可以应用于不同的 “输出源”，只需改变初始累积值和 reducer 函数。这种抽象的好处之一为：可以只通过一轮计算便得到结果，且不会产生中间辅助数组。
 
-尽管没有明确说明，我们还是展示了 transducers 将 transducer 与 迭代过程及输入源解耦。在迭代过程中，我们使用相同的 transducer 对元素进行转换，并将转换结果传给 step function，我们使用数组的 reduce 从数组中获取数据。
+尽管没有明确说明，我们还是展示了 transducer 是与迭代过程及输入源解耦的。在迭代过程中，我们使用相同的 transducer 对元素进行转换，并将转换结果传给 step 函数，并且使用数组的 reduce 从数组中拉取待处理的数据元素。
 
 ## 还想了解更多！
 
-[看这里](http://simplectic.com/blog/2014/transducers-explained-pipelines/) ,以后的文章中将会进一步讨论 transducers 并不会每步都输出元素；并且可能会提前终止迭代，并返回终止前已经归并的结果。本文只讨论了 step，未讨论 init 和 result，将来会有补充。
+[看这里](http://simplectic.com/blog/2014/transducers-explained-pipelines/) ，之后的文章中将会在本文基础上探讨更多主题，例如：transducers 并不一定需要每步都输出元素；并且迭代过程可以提前终止，并返回终止前已经归并的结果。本文只讨论了 step，未讨论 init 和 result，将来也会进行补充。
 
-我们将会了解到，输入源可以是任意产生一系列值的东西：惰性列表，不确定的序列生成器，CSP（通信顺序进程），[Node.js streams](https://github.com/transduce/transduce-stream)
+我们还将会学习到，输入源可以是任意产生一系列值的模型：惰性列表，不确定的序列生成器，CSP（通信顺序进程），[Node.js streams](https://github.com/transduce/transduce-stream)
 lazy lists, indefinite sequence generation, CSP[http://phuu.net/2014/08/31/csp-and-transducers.html), [push streams][12], [Node.js streams](https://github.com/transduce/transduce-stream), iterators, generators, immutable-js data structures, 等等。
 
 ## 等不及了！
 
-在此期间，可以查看 [Clojure文档](http://clojure.org/transducers), 或者观看[视频](https://www.youtube.com/watch?v=6mTbuzafcII)或这篇[文章](http://phuu.net/2014/08/31/csp-and-transducers.html)，还有其他更多更好的介绍，可以自行 Google 。
+在此期间，可以看看 [Clojure文档](http://clojure.org/transducers), 或者看看 [这个视频](https://www.youtube.com/watch?v=6mTbuzafcII) 或 [这篇文章](http://phuu.net/2014/08/31/csp-and-transducers.html)。其他更多更好的介绍，可以自行 Google 。
 
-想要立刻实践一下？已经有三个库实现了相似的API：[transducers-js](https://github.com/cognitect-labs/transducers-js)、[transducers.js](https://github.com/jlongster/transducers.js)、[ramda](https://github.com/ramda/ramda/blob/v0.22.1/src/transduce.js)(译者注：ramda 中 transducer 部分也是本文作者写的）。本文介绍与 transducers-js 实现类似，但概念同样适用于 transducers.js。
+想要立刻实践一下？已经有三个库实现了相似的API：[transducers-js](https://github.com/cognitect-labs/transducers-js)、[transducers.js](https://github.com/jlongster/transducers.js)、[ramda](https://github.com/ramda/ramda/blob/v0.22.1/src/transduce.js)(译者注：ramda 中 transducer 部分也是本文作者写的）。本文是按照 transducers-js 的实现进行讲解和演示的，但这些概念同样适用于 transducers.js。
 
-[Underscore.js](http://underscorejs.org/) 的粉丝？可以查看 [underarm](http://simplectic.com/projects/underarm/)，基于 [transduce](https://github.com/transduce/transduce) 库（译者注：本文作者写的库）写的。
+[Underscore.js](http://underscorejs.org/) 的爱好者？可以查看 [underarm](http://simplectic.com/projects/underarm/)，基于 [transduce](https://github.com/transduce/transduce) 库（译者注：本文作者写的库）写的。
 
 怎样将 transducer 应用到 [Node.js streams](https://github.com/transduce/transduce-stream) 中呢？我们还在探索。
 
