@@ -28,7 +28,7 @@
 <meta property="og:description" content="译者注：本文翻译自 Scott Sauyet 的 《Why Ramda》，转载请与原作者或本人联系。下面开始正文。  当 buzzdecafe 最近将 Ramda 介绍给 大家时，出现了两种截然相反的反应。那些熟悉函数式技术（在 JavaScript 或其他语言中）的人大部分的反应是：“Cool”。他们可能对此非常兴奋，也可能觉得只是另一个有潜力的工具而已，但他们都知道它的作用和目的。 另一部分人">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://adispring.github.io/2017/06/25/Why-Ramda/rbudiharso_tweet-2.png">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.893Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.548Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Why Ramda">
 <meta name="twitter:description" content="译者注：本文翻译自 Scott Sauyet 的 《Why Ramda》，转载请与原作者或本人联系。下面开始正文。  当 buzzdecafe 最近将 Ramda 介绍给 大家时，出现了两种截然相反的反应。那些熟悉函数式技术（在 JavaScript 或其他语言中）的人大部分的反应是：“Cool”。他们可能对此非常兴奋，也可能觉得只是另一个有潜力的工具而已，但他们都知道它的作用和目的。 另一部分人">
@@ -183,7 +183,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -233,7 +233,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (if created by hand)</span></span><br><span class="line"><span class="keyword">var</span> activeByUser = <span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> groupByUser(incomplete(tasks));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>“不必手动一步一步地去做” 是组合的关键所在。并且组合是函数式编程的一项关键技术。让我们看看，如果再进一步的话会发生什么。如果需要使用到期日期来对这些用户的待办事项进行排序，该怎么办呢？</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(R.map(R.sortBy(R.prop(<span class="string">"dueDate"</span>))), activeByUser);</span><br></pre></td></tr></table></figure>
-<h2 id="一步到位？">一步到位？</h2>
+<h2 id="yi-bu-dao-wei">一步到位？</h2>
 <p>善于观察的读者可能已经注意到了，我们可以组合上述所有需求。由于 <code>compose</code> 函数可以接受多个参数，为什么不一次完成上面所有的功能呢？</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(</span><br><span class="line">    R.mapObj(R.sortBy(R.prop(<span class="string">'dueDate'</span>))),</span><br><span class="line">    groupByUser,</span><br><span class="line">    R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <p>我的答案是：如果中间函数 <code>activeByUser</code> 和 <code>incomplete</code> 没有其他的调用，上述方案可能更合理一些。但是这可能会使调试变得更麻烦，而且对代码的可读性也并没有什么帮助。</p>
@@ -243,7 +243,7 @@
 <p>但是，等等，如果想要按日期降序排列呢？</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortByDateDescend = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(R.mapObj(sortByDateDescend), activeByUser);</span><br></pre></td></tr></table></figure>
 <p>如果确定只需要按日期降序排列，可以将所有这些操作都在 <code>sortByDateDescend</code> 中进行组合。如果不确定会升序还是降序排列，我个人会将升序和降序方法都保留。</p>
-<h2 id="数据在哪里？">数据在哪里？</h2>
+<h2 id="shu-ju-zai-na-li">数据在哪里？</h2>
 <p>我们 <strong>仍然</strong> 没有任何数据。这是怎么回事？没有数据的 “数据处理” 是…什么呢？是 “处理”。接下来恐怕需要你多一些耐心了。当进行函数式编程时，所有能获得只是组成 pipeline （管道）的函数。一个函数将数据提供给下一个，下一个函数将数据提供给下下个，依次类推，直到所需的结果从 pipeline 末端输出。</p>
 <p>到目前为止，我们已经创建的函数如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">incomplete: [Task] -&gt; [Task]</span><br><span class="line">sortByDate: [Task] -&gt; [Task]</span><br><span class="line">sortByDateDescend: [Task] -&gt; [Task]</span><br><span class="line">activeByUser: [Task] -&gt; &#123;<span class="attr">String</span>: [Task]&#125;</span><br><span class="line">sortUserTasks: &#123;<span class="attr">String</span>: [Task]&#125; -&gt; &#123;<span class="attr">String</span>: [Task]&#125;</span><br></pre></td></tr></table></figure>
@@ -252,7 +252,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> groupByUser = R.partition(R.prop(<span class="string">'username'</span>));</span><br></pre></td></tr></table></figure>
 <p><code>partition</code> 使用了 Ramda 中的 <code>reduce</code>（与 Array.prototype.reduce <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce" target="_blank" rel="noopener">类似</a>）。它也被叫做 <code>foldl</code>，一个在许多其他函数式语言中使用的名称。我们不会在这里做过多讨论。你可以在 <a href="https://www.google.com/?q=reduce+function+javascript" target="_blank" rel="noopener">网上</a> 获得所有关于 <code>reduce</code> 的信息。<code>partition</code> 只是使用 <code>reduce</code> 将一个列表分成具有相同键值的子列表，子列表通过函数来确定，本例中为 <code>prop('username')</code>，它只是简单地从每个数组元素中取出 “username” 属性。</p>
 <p>（所以，我是否使用 “闪亮” 的新函数来分散了你的注意力？我在这里仍然没有提到数据！对不住了，看！一大波 “闪亮” 的新函数又来了！）</p>
-<h2 id="但等等，还有更多（函数）">但等等，还有更多（函数）</h2>
+<h2 id="dan-deng-deng-huan-you-geng-duo-han-shu">但等等，还有更多（函数）</h2>
 <p>如果我们愿意，可以继续这样下去。如果想从列表中选出前 5 个元素，可以使用 Ramda 的 <code>take</code> 函数。所以想要获取每个用户前 5 个任务，可以这样做：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> topFiveUserTasks = R.compose(R.mapObj(R.take(<span class="number">5</span>)), sortUserTasks);</span><br></pre></td></tr></table></figure>
 <p>(会有人在这里想到 <a href="http://en.wikipedia.org/wiki/Take_Five" target="_blank" rel="noopener">Brubeck 和 Desmond</a> 吗)？</p>
@@ -261,7 +261,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> importantFields = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(importantFields), topFiveUserTasks);</span><br></pre></td></tr></table></figure>
 <p>我们一路创建的一些函数，看起来可以在 TODO 应用的其他地方复用。其他的一些函数或许只是创建出来放在那里，以供将来组合使用。所以，如果现在回顾一下，我们可能会组合出下面的代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;));</span><br><span class="line"><span class="keyword">var</span> sortByDate = R.sortBy(R.prop(<span class="string">'dueDate'</span>));</span><br><span class="line"><span class="keyword">var</span> sortByDateDescend = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="keyword">var</span> importantFields = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="keyword">var</span> groupByUser = R.partition(R.prop(<span class="string">'username'</span>));</span><br><span class="line"><span class="keyword">var</span> activeByUser = R.compose(groupByUser, incomplete);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(R.compose(importantFields, </span><br><span class="line">    R.take(<span class="number">5</span>), sortByDateDescend)), activeByUser);</span><br></pre></td></tr></table></figure>
-<h2 id="好吧，够了！我可以看一些数据吗？">好吧，够了！我可以看一些数据吗？</h2>
+<h2 id="hao-ba-gou-liao-wo-ke-yi-kan-yi-xie-shu-ju-ma">好吧，够了！我可以看一些数据吗？</h2>
 <p>好的，马上就可以了。</p>
 <p>现在是时候将数据传给我们的函数了。但关键是，这些函数都接受相同类型的数据，一个包含 TODO 元素的数组。我们还没有具体描述这些元素的数据结构，但我们知道它至少必须包含下列属性：</p>
 <ul>
@@ -281,13 +281,13 @@
 <p>返回的内容可能是下面这样子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        username: <span class="string">'Scott'</span>,</span><br><span class="line">        title: <span class="string">'Add `mapObj`'</span>,</span><br><span class="line">        dueDate: <span class="string">'2014-06-09'</span>,</span><br><span class="line">        complete: <span class="literal">false</span>,</span><br><span class="line">        effort: <span class="string">'low'</span>,</span><br><span class="line">        priority: <span class="string">'medium'</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        username: <span class="string">'Michael'</span>,</span><br><span class="line">        title: <span class="string">'Finish algebraic types'</span>,</span><br><span class="line">        dueDate: <span class="string">'2014-06-15'</span>,</span><br><span class="line">        complete: <span class="literal">true</span>,</span><br><span class="line">        effort: <span class="string">'high'</span>,</span><br><span class="line">        priority: <span class="string">'high'</span></span><br><span class="line">    &#125; <span class="comment">/*, ... */</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <p>当然，你也可以将任务列表传给 <code>sortByDate</code>、<code>sortByDateDescend</code>、<code>importantFields</code>、<code>byUser</code> 或者 <code>activeByUser</code>。因为它们都处理相似的数据类型：一系列任务的列表。我们可以通过简单的组合创建出大量的工具。</p>
-<h2 id="新需求">新需求</h2>
+<h2 id="xin-xu-qiu">新需求</h2>
 <p>在游戏的最后，你刚刚被告知需要添加一个新特性。你需要过滤出仅属于特定用户的任务，然后对该用户进行与之前相同的过滤、排序和提取子集操作。</p>
 <p>这个逻辑当前嵌入到 <code>topDataAllUser</code> 里了…，或许我们组合的函数侵入太深。但也很容易重构。通常情况下，最难的是起一个好的名字。“gloss” 可能不太好，但已经是深夜了，这是我能想到最好的了：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gloss = R.compose(importantFields, R.take(<span class="number">5</span>), sortByDateDescend);</span><br><span class="line"><span class="keyword">var</span> topData = R.compose(gloss, incomplete);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(gloss), activeByUser);</span><br><span class="line"><span class="keyword">var</span> byUser = R.use(R.filter).over(R.propEq(<span class="string">"username"</span>));</span><br></pre></td></tr></table></figure>
 <p>如果想使用它，可以像下面这样：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> results = topData(byUser(<span class="string">'Scott'</span>, tasks));</span><br></pre></td></tr></table></figure>
-<h2 id="拜托，我只是想要我的数据！">拜托，我只是想要我的数据！</h2>
+<h2 id="bai-tuo-wo-zhi-shi-xiang-yao-wo-de-shu-ju">拜托，我只是想要我的数据！</h2>
 <p>“好的”，你说，“也许这很酷，但现在我真的只是想要我的数据，我不想要不知猴年马月才能返回给我数据的函数。我还能用 Ramda 吗？”</p>
 <p>当然可以。</p>
 <p>让我们回到第一个函数：</p>
@@ -295,15 +295,15 @@
 <p>如何才能变成会返回数据的东西呢？非常简单：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;), tasks);</span><br></pre></td></tr></table></figure>
 <p>所有其他主要的函数也是这样：只需要在调用的最后面添加一个 <code>tasks</code> 参数，即可返回数据。</p>
-<h2 id="刚刚发生了什么？">刚刚发生了什么？</h2>
+<h2 id="gang-gang-fa-sheng-liao-shi-yao">刚刚发生了什么？</h2>
 <p>这是 Ramda 的另一个重要特性。Ramda 所有主要的函数都是自动柯里化的。这意味着，如果你不提供给函数需要的所有参数，不想立即调用函数，我们会返会一个接受剩余参数的新函数。所以，<code>filter</code> 的定义既包含数组，也包含了过滤数组元素的 “predicate” 函数（判断函数）。在初始版本中，我们没有提供数组值，所以 <code>filter</code> 会返回一个新的接受数组为参数的函数。在第二个版本中，我们传入了数组，并与 “predicate” 函数一起来计算结果。</p>
 <p>Ramda 函数的自动柯里化和 “函数优先，数据最后” 的 API 设计理念一起，使得 Ramda 能够非常简单地进行这种风格的函数式组合。</p>
 <p>但 Ramda 中柯里化的实现细节是另一篇文章的事情（更新：该文章已经发布了：<a href="http://fr.umio.us/favoring-curry/" target="_blank" rel="noopener">Favoring Curry</a>）。同时，Hugh Jackson 的这篇文章也绝对值得一读：<a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">为什么柯里化有帮助</a>。</p>
-<h2 id="但是，这些东西真能工作吗？">但是，这些东西真能工作吗？</h2>
+<h2 id="dan-shi-zhe-xie-dong-xi-zhen-neng-gong-zuo-ma">但是，这些东西真能工作吗？</h2>
 <p>这是我们一直讨论的代码的 JSFiddle 示例：</p>
 <iframe scrolling="no" width="100%" height="300" src="//jsfiddle.net/CrossEye/Gk6uu/embedded/js,html,result/light" frameborder="0" allowfullscreen></iframe>
 <p>这段优雅的代码清楚的表明了使用 Ramda 的好处。</p>
-<h2 id="使用-Ramda">使用 Ramda</h2>
+<h2 id="shi-yong-ramda">使用 Ramda</h2>
 <p><a href="http://ramda.cn/docs/" target="_blank" rel="noopener">可以参考 Ramda 非常不错的文档</a>。</p>
 <p>Ramda 代码本身非常有用，上面提到的技术也非常有帮助。你可以从 <a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Github 仓库</a> 获取代码，或 <a href="https://www.npmjs.org/package/ramda" target="_blank" rel="noopener">通过 npm 安装 Ramda</a>。</p>
 <p>在 Node 中使用：</p>
@@ -394,7 +394,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一步到位？"><span class="nav-number">1.</span> <span class="nav-text">一步到位？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据在哪里？"><span class="nav-number">2.</span> <span class="nav-text">数据在哪里？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#但等等，还有更多（函数）"><span class="nav-number">3.</span> <span class="nav-text">但等等，还有更多（函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好吧，够了！我可以看一些数据吗？"><span class="nav-number">4.</span> <span class="nav-text">好吧，够了！我可以看一些数据吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新需求"><span class="nav-number">5.</span> <span class="nav-text">新需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拜托，我只是想要我的数据！"><span class="nav-number">6.</span> <span class="nav-text">拜托，我只是想要我的数据！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刚刚发生了什么？"><span class="nav-number">7.</span> <span class="nav-text">刚刚发生了什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#但是，这些东西真能工作吗？"><span class="nav-number">8.</span> <span class="nav-text">但是，这些东西真能工作吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Ramda"><span class="nav-number">9.</span> <span class="nav-text">使用 Ramda</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yi-bu-dao-wei"><span class="nav-number">1.</span> <span class="nav-text">一步到位？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shu-ju-zai-na-li"><span class="nav-number">2.</span> <span class="nav-text">数据在哪里？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dan-deng-deng-huan-you-geng-duo-han-shu"><span class="nav-number">3.</span> <span class="nav-text">但等等，还有更多（函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hao-ba-gou-liao-wo-ke-yi-kan-yi-xie-shu-ju-ma"><span class="nav-number">4.</span> <span class="nav-text">好吧，够了！我可以看一些数据吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xin-xu-qiu"><span class="nav-number">5.</span> <span class="nav-text">新需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bai-tuo-wo-zhi-shi-xiang-yao-wo-de-shu-ju"><span class="nav-number">6.</span> <span class="nav-text">拜托，我只是想要我的数据！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gang-gang-fa-sheng-liao-shi-yao"><span class="nav-number">7.</span> <span class="nav-text">刚刚发生了什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dan-shi-zhe-xie-dong-xi-zhen-neng-gong-zuo-ma"><span class="nav-number">8.</span> <span class="nav-text">但是，这些东西真能工作吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shi-yong-ramda"><span class="nav-number">9.</span> <span class="nav-text">使用 Ramda</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

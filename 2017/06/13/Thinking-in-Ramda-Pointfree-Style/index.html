@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Pointfree Style》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第五篇。 在第四节中，我们讨论了如何用声明式编程（告诉计算机做什么，我们想要什么）代替命令式编程（告诉计算机该怎么做，详细的执行步骤）来编写代码。 你可能已经注意到了">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 无参数风格编程 (Pointfree Style)">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Pointfree Style》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第五篇。 在第四节中，我们讨论了如何用声明式编程（告诉计算机做什么，我们想要什么）代替命令式编程（告诉计算机该怎么做，详细的执行步骤）来编写代码。 你可能已经注意到了">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -210,7 +210,7 @@
 <p>在<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">第四节</a>中，我们讨论了如何用声明式编程（告诉计算机做什么，我们想要什么）代替命令式编程（告诉计算机该怎么做，详细的执行步骤）来编写代码。</p>
 <p>你可能已经注意到了，我们编写的几个函数（如 <code>forever21</code>、<code>alwaysDrivingAge</code>、<code>water</code>）都接受一个参数，构建一个新函数，然后将该函数作用于该参数。</p>
 <p>这是函数式编程里非常常见的一种模式，Ramda 同样提供了优化这种模式的方法。</p>
-<h2 id="Pointfree-风格（无参数风格）">Pointfree 风格（无参数风格）</h2>
+<h2 id="pointfree-feng-ge-wu-can-shu-feng-ge">Pointfree 风格（无参数风格）</h2>
 <p>我们在 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a> 中讨论了 Ramda 的两个指导原则：</p>
 <ul>
 <li>将数据放到参数列表的最后面。</li>
@@ -235,7 +235,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = <span class="function"><span class="params">temperature</span> =&gt;</span> cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])(temperature)</span><br></pre></td></tr></table></figure>
 <p>现在将其变为 pointfree 风格的：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<h2 id="多元函数（多参数函数）">多元函数（多参数函数）</h2>
+<h2 id="duo-yuan-han-shu-duo-can-shu-han-shu">多元函数（多参数函数）</h2>
 <p>如果函数接受多个参数会怎样呢？回顾一下 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a> 中的例子：<code>titlesForYear</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> titlesForYear = curry(<span class="function">(<span class="params">year, books</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>注意，<code>books</code> 出现了两次：一次作为参数列表的最后一个参数（最后一个数据！）；一次出现在函数最后，当我们将其传入 pipeline 的时候。这跟我们之前看到参数为 <code>age</code> 的模式类似，所以可以对它进行相同的转换：</p>
@@ -244,7 +244,7 @@
 <p>其实，这种情况下，我可能不会刻意追求 pointfree 风格，因为就像之前文章讨论过的：JavaScript 在调用一系列单参数函数方面并不方便。</p>
 <p>在 pipeline 中使用 <code>titleForYear</code> 是很方便，如我们可以很轻松的调用 <code>titlesForYear(2012)</code>，但当想要单独使用它时，我们就不得不回到之前文章里看到的形式 <code>)(</code>，对我而言，并不值得做出这种妥协（没必要为了 pointfree 而 pointfree）。</p>
 <p>但只要有如上形式的单参数函数（或者可能以后会被重构），我几乎总是写成 pointfree 风格的。</p>
-<h2 id="重构为-pointfree-风格的代码">重构为 pointfree 风格的代码</h2>
+<h2 id="zhong-gou-wei-pointfree-feng-ge-de-dai-ma">重构为 pointfree 风格的代码</h2>
 <p>有时我们的代码不会遵循这种模式。我们可能会在同一函数内多次对数据进行操作。</p>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> 的几个例子中便是这种情形。我们使用诸如 <code>both</code>、<code>either</code>、<code>pipe</code>、<code>compose</code> 来重构代码。一旦我们这样做了，便会很容易让函数转换为 pointfree 风格的。</p>
 <p>我们来回顾一下 <code>isEligibleToVote</code> 这个例子，代码如下：</p>
@@ -255,7 +255,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEligibleToVote = <span class="function"><span class="params">person</span> =&gt;</span> both(isOver18, isCitizen)(person)</span><br></pre></td></tr></table></figure>
 <p>现在我们已经完成了这些重构，可以看到，这两个函数都遵循上面提到的模式：<code>person</code> 出现了两次，一次作为函数参数；一次放到最后，将组合函数作用其上。现在可以将它们重构为 pointfree 风格的代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
-<h2 id="为什么要这么做？">为什么要这么做？</h2>
+<h2 id="wei-shi-yao-yao-zhe-yao-zuo">为什么要这么做？</h2>
 <p>Pointfree 风格需要一定的时间才能习惯。可能并不需要所有的地方都没有参数。有时候知道某些 Ramda 函数需要多少参数，也是很重要的。</p>
 <p>但是，一旦习惯了这种方式，它将变得非常强大：可以以非常有趣的方式将很多小的 pointfree 函数组合起来。</p>
 <p>Pointfree 风格的优点是什么呢？人们可能会认为，这只不过是为了让函数式编程赢得 “优点徽章” 的学术活动而已（实际上并没有什么用处）。然而，我认为还是有一些优点的，即使需要花一些时间来习惯这种方式也是值得的：</p>
@@ -265,9 +265,9 @@
 <li>它促使我们更专注于正在做的转换的本身，而不是正被转换的数据。</li>
 <li>它可以帮助我们将函数视为可以作用于不同数据的通用构建模块，而非对特定类型数据的操作。如果给数据一个名字，我们的思想便会被<a href="https://en.wikipedia.org/wiki/Anchoring" target="_blank" rel="noopener">禁锢</a>在：“需要在哪里使用我们的函数”；如果去掉参数，便会使我们更有创造力。</li>
 </ul>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>Pointfree 风格也被成为 <a href="https://en.wikipedia.org/wiki/Tacit_programming" target="_blank" rel="noopener">tacit 式编程</a>(隐含式编程)，可以使代码更清晰、更易于理解。通过代码重构将所有的转换组合成单一函数，我们最终会得到可以在更多地方使用的更小的构建块（函数）。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>在当前示例中，我们尚未将所有代码都重构为 pointfree 的风格。还有一些代码是命令式的。大部分这种代码是处理对象和数组的。</p>
 <p>我们需要找到声明式的方式来处理对象和数组。Immutability (不变性) 怎么样？我们如何以 “不变” (immutable) 的方式来操作对象和数组呢？</p>
 <p>本系列的下一节，<a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">数据不变性和对象</a> 将讨论如何以函数式和 immutable 的方式来处理对象。紧随其后的章节：<a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">数据不变性和数组</a> 对数组也是相同的处理方式。</p>
@@ -351,7 +351,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pointfree-风格（无参数风格）"><span class="nav-number">1.</span> <span class="nav-text">Pointfree 风格（无参数风格）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多元函数（多参数函数）"><span class="nav-number">2.</span> <span class="nav-text">多元函数（多参数函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构为-pointfree-风格的代码"><span class="nav-number">3.</span> <span class="nav-text">重构为 pointfree 风格的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要这么做？"><span class="nav-number">4.</span> <span class="nav-text">为什么要这么做？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">5.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">6.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pointfree-feng-ge-wu-can-shu-feng-ge"><span class="nav-number">1.</span> <span class="nav-text">Pointfree 风格（无参数风格）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#duo-yuan-han-shu-duo-can-shu-han-shu"><span class="nav-number">2.</span> <span class="nav-text">多元函数（多参数函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zhong-gou-wei-pointfree-feng-ge-de-dai-ma"><span class="nav-number">3.</span> <span class="nav-text">重构为 pointfree 风格的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wei-shi-yao-yao-zhe-yao-zuo"><span class="nav-number">4.</span> <span class="nav-text">为什么要这么做？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">5.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">6.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

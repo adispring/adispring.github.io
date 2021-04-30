@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Getting Started》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第一篇。 本系列文章使用 Ramda JavaScript 库进行演示。许多理论、方法同样适用于其他函数式 JavaScript 库，如 Underscore 和 L">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 入门">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Getting Started》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第一篇。 本系列文章使用 Ramda JavaScript 库进行演示。许多理论、方法同样适用于其他函数式 JavaScript 库，如 Underscore 和 L">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -209,7 +209,7 @@
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第一篇。</p>
 <p>本系列文章使用 <a href="http://ramda.cn" target="_blank" rel="noopener">Ramda</a> JavaScript 库进行演示。许多理论、方法同样适用于其他函数式 JavaScript 库，如 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 和 <a href="https://lodash.com/" target="_blank" rel="noopener">Lodash</a>。</p>
 <p>我将尽量用通俗、非学术性的语言演示函数式编程。一方面想让更多的人理解该系列文章；另一方面本人在函数式编程方面造诣尚浅。</p>
-<h2 id="Ramda">Ramda</h2>
+<h2 id="ramda">Ramda</h2>
 <p>我已经在博客中多次提到过 <a href="http://ramda.cn" target="_blank" rel="noopener">Ramda</a> JavaScript 库：</p>
 <ul>
 <li>在 <a href="http://randycoulman.com/blog/2016/02/16/using-ramda-with-redux/" target="_blank" rel="noopener">Using Ramda With Redux</a> 中，展示了在编写 <a href="http://redux.js.org/" target="_blank" rel="noopener">Redux</a> 应用程序时如何运用 Ramda 的例子。</li>
@@ -217,7 +217,7 @@
 </ul>
 <p>我发现 Ramda 是一个精心设计的库：包含许多 API ，来简洁、优雅进行 JavaScript 函数式编程。</p>
 <p>如果你想在阅读本系列文章时进行 Ramda 实验，Ramda 网站有一个 <a href="http://ramda.cn/repl/" target="_blank" rel="noopener">repl 运行环境</a> 。</p>
-<h2 id="函数">函数</h2>
+<h2 id="han-shu">函数</h2>
 <p>正如名字所示，函数式编程与函数有很大的关系。为了演示，我们定义一个函数为一段可重用的代码：接受 0 到多个参数，返回单个值。</p>
 <p>下面是一个简单的 JavaScript 函数：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">double</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -231,17 +231,17 @@
 <li>将函数作为其他函数的返回值</li>
 </ul>
 <p>JavaScript 就是一种这样的语言，我们将利用它的这一优势进行编程。</p>
-<h2 id="纯函数">纯函数</h2>
+<h2 id="chun-han-shu">纯函数</h2>
 <p>在进行函数式编程时，使用所谓的 “纯” 函数进行工作将变得非常重要。</p>
 <p><a href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch3.html" target="_blank" rel="noopener">纯函数</a>是没有副作用的函数。它不会给任何外部变量赋值，不会获取输入，不会产生 “输出”，不会对数据库进行读写，不会修改输入参数等。</p>
 <p>纯函数的基本思想是：相同的输入，永远会得到相同的输出。</p>
 <p>当然可以用非纯函数编程（而且这也是必须的，如果想让程序做任何有趣的事情），但在大多数情况下，需要保持大部分函数是纯函数。（译者注：并不是说，要禁止使用一切副作用，而是说，要让它们在可控的范围内发生）</p>
-<h2 id="IMMUTABILITY">IMMUTABILITY</h2>
+<h2 id="immutability">IMMUTABILITY</h2>
 <p>函数式编程的另一个重要概念是 “Immutability”。什么意思呢？“Immutability” 是指 “数据不变性”。</p>
 <p>当以 immutable 方式工作时，一旦定义了某个值或对象，以后就再也不会改变它了。这意味着不能更改已有数组中的元素或对象中的属性。</p>
 <p>如果想改变数组或对象中的元素时，需要返回一份带有更改值的新拷贝。后面文章将会对此做详细介绍。</p>
 <p>Immutability 和 纯函数息息相关。由于纯函数不允许有副作用，所以不允许更改函数体外部的数据结构。纯函数强制以 immutable 的方式处理数据。</p>
-<h2 id="从哪里开始呢？">从哪里开始呢？</h2>
+<h2 id="cong-na-li-kai-shi-ni">从哪里开始呢？</h2>
 <p>开始以函数式思维思考最简单的方式是，使用集合迭代函数代替循环。</p>
 <p>如果用过具备这些特性的其他语言（如 Ruby、Smalltalk），你可能已经熟悉了这些特性。</p>
 <p>Martin Fowler 有几篇关于 “Collection PipeLines” 非常好的文章，展示了<a href="https://martinfowler.com/articles/collection-pipeline/" target="_blank" rel="noopener">如何使用这些函数</a> 以及<a href="https://martinfowler.com/articles/refactoring-pipelines.html" target="_blank" rel="noopener">如何将现有代码重构为 collection pipelines</a>。</p>
@@ -278,9 +278,9 @@
 <li><code>reduce</code> 最后一次调用 <code>add</code>，使用 <code>11</code> 和 数组中的最后一个元素 <code>4</code> ，输出 <code>15</code>。</li>
 <li><code>reduce</code> 将最终累加值 <code>15</code> 作为结果返回。</li>
 </ol>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>从这些集合迭代函数开始，需要逐渐习惯将函数传入其他函数的编程方式。你可能在其他语言中用过，但没有意识到正在做函数式编程。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>本系列的下一篇文章，<a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">函数组合</a> 将演示怎样以新的、有趣的方式对函数进行组合。</p>
 
     </div>
@@ -362,7 +362,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ramda"><span class="nav-number">1.</span> <span class="nav-text">Ramda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#纯函数"><span class="nav-number">3.</span> <span class="nav-text">纯函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IMMUTABILITY"><span class="nav-number">4.</span> <span class="nav-text">IMMUTABILITY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从哪里开始呢？"><span class="nav-number">5.</span> <span class="nav-text">从哪里开始呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#foreach"><span class="nav-number">6.</span> <span class="nav-text">foreach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">7.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter-reject"><span class="nav-number">8.</span> <span class="nav-text">filter/reject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find"><span class="nav-number">9.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce"><span class="nav-number">10.</span> <span class="nav-text">reduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">11.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">12.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ramda"><span class="nav-number">1.</span> <span class="nav-text">Ramda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#han-shu"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chun-han-shu"><span class="nav-number">3.</span> <span class="nav-text">纯函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#immutability"><span class="nav-number">4.</span> <span class="nav-text">IMMUTABILITY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cong-na-li-kai-shi-ni"><span class="nav-number">5.</span> <span class="nav-text">从哪里开始呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#foreach"><span class="nav-number">6.</span> <span class="nav-text">foreach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">7.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter-reject"><span class="nav-number">8.</span> <span class="nav-text">filter/reject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find"><span class="nav-number">9.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce"><span class="nav-number">10.</span> <span class="nav-text">reduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">11.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">12.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

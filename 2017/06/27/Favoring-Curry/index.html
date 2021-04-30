@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Scott Sauyet 的 《Favoring Curry》，转载请与原作者或本人联系。下面开始正文。  我最近一篇 关于 Ramda 函数式组合的文章阐述了一个重要的话题。为了使用 Ramda 函数做这种组合，需要这些函数是柯里化的。 Curry，咖喱？某种辛辣的食物？是什么呢？又在哪里？ 实际上，curry 是为纪念 Haskell Curry 而命名的，他是第一个研究这">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.869Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爱上柯里化 (Favoring Curry)">
 <meta name="twitter:description" content="译者注：本文翻译自 Scott Sauyet 的 《Favoring Curry》，转载请与原作者或本人联系。下面开始正文。  我最近一篇 关于 Ramda 函数式组合的文章阐述了一个重要的话题。为了使用 Ramda 函数做这种组合，需要这些函数是柯里化的。 Curry，咖喱？某种辛辣的食物？是什么呢？又在哪里？ 实际上，curry 是为纪念 Haskell Curry 而命名的，他是第一个研究这">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,7 +219,7 @@
 <p>你也可以分多次传入参数，像这样：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> james = formatNames2(<span class="string">'James'</span>); <span class="comment">//=&gt; returns a function</span></span><br><span class="line">james(<span class="string">'Byron'</span>, <span class="string">'Dean'</span>); <span class="comment">//=&gt; 'James Byron Dean' (rebel)</span></span><br><span class="line"><span class="keyword">var</span> je = james(<span class="string">'Earl'</span>); also returns a <span class="function"><span class="keyword">function</span></span></span><br><span class="line"><span class="function"><span class="title">je</span>(<span class="params"><span class="string">'Carter'</span></span>); //=&gt; '<span class="title">James</span> <span class="title">Earl</span> <span class="title">Carter</span>' (<span class="params">president</span>)</span></span><br><span class="line"><span class="function"><span class="title">je</span>(<span class="params"><span class="string">'Jones'</span></span>); //=&gt; '<span class="title">James</span> <span class="title">Earl</span> <span class="title">Jones</span>' (<span class="params">actor, Vader</span>)</span></span><br></pre></td></tr></table></figure>
 <p>（有些人会坚持认为我们正在做的应该叫作 “部分应用(partial application)”，“柯里化” 的返回函数应该每次只接受一个参数，每次函数处理完单个参数后返回一个新的接受单参数的函数，直到所有必需的参数都已传入。他们可以坚持他们的观点，无所谓）</p>
-<h2 id="好无聊啊…-它能为我做什么呢？">好无聊啊…! 它能为我做什么呢？</h2>
+<h2 id="hao-wu-liao-a-ta-neng-wei-wo-zuo-shi-yao-ni">好无聊啊…! 它能为我做什么呢？</h2>
 <p>这里有一个稍有意义的示例。如果想计算一个数字集合的总和，可以这样：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Plain JS:</span></span><br><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;<span class="keyword">return</span> a + b;&#125;;</span><br><span class="line"><span class="keyword">var</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> sum = numbers.reduce(add, <span class="number">0</span>); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
 <p>而若想编写一个通用的计算数字列表总和的函数，可以这样：</p>
@@ -232,7 +232,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = total(numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
 <p>再次注意，函数的定义和将函数作用于数据是多么的相似：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> total = R.reduce(add, <span class="number">0</span>); <span class="comment">//=&gt; function:: [Number] -&gt; Number</span></span><br><span class="line"><span class="keyword">var</span> sum =   R.reduce(add, <span class="number">0</span>, numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
-<h2 id="我不关心这些，我又不是数学怪黎叔">我不关心这些，我又不是数学怪黎叔</h2>
+<h2 id="wo-bu-guan-xin-zhe-xie-wo-you-bu-shi-shu-xue-guai-li-shu">我不关心这些，我又不是数学怪黎叔</h2>
 <p>那么你做 web 开发吗？huh？会对服务器发起 AJAX 请求吗？使用的是 <a href="http://promises-aplus.github.io/promises-spec/" target="_blank" rel="noopener">Promises</a> 吗？必须要操作返回的数据，对其进行过滤，取子集等？或者你做 server 端开发？会异步查询一个 no-SQL 数据库，并操作这些结果？</p>
 <p>我最好的建议是，去看看 Hugh FD Jackson 的文章：<a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">为什么柯里化有帮助</a>。它是我读过的这方面最好的文章。如果你想要看视频，花上半个小时看一下 Dr. Boolean 的视频：<a href="http://www.youtube.com/watch?v=m3svKOdZijA" target="_blank" rel="noopener">Hey Underscore, 你错了</a>。（不要被标题吓到，他没有花太多时间批评那个库）</p>
 <p>一定要看看这些材料！它们比我解释的更好；你已经察觉到我有多么的啰嗦、夸夸其谈、冗长甚至愚笨。如果你已经看了上面的材料，可以跳过本文剩余小节了。它们解释的已经够清楚了。</p>
@@ -274,7 +274,7 @@
 <p>好的，还记得小时候坐在教室，等待上课结束的情形吗？手里时钟的分针像是卡住了，另一只手正伸向桌洞里的糖果；老师却还在一遍一遍地重复相同的事情。还记得吗？然后那一刻终于到了，可能是结束前的最后两分钟，结束的时刻已经在眼前了：谢天谢地！下面是最后一个例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.then(R.sortBy(R.get(<span class="string">'dueDate'</span>)));</span><br></pre></td></tr></table></figure>
 <p>之前已经提到过 <code>get</code>。这也是柯里化的，它会返回一个函数：输入对象，输出该对象的 <code>dueDate</code> 属性值。我们将其传给 <code>sortBy</code>，它接受这样的函数和一个列表，并根据函数返回的值对列表中的元素进行排序。但等等，我们没有列表，对吧？当然没有。我们又在做柯里化。但当调用 <code>then</code> 时，它会接收到列表，将列表中的每个对象传给 <code>get</code>，并根据结果进行排序。</p>
-<h2 id="那么，柯里化有多重要呢？">那么，柯里化有多重要呢？</h2>
+<h2 id="na-yao-ke-li-hua-you-duo-zhong-yao-ni">那么，柯里化有多重要呢？</h2>
 <p>这个例子展示了 Ramda 的一些实用函数和 Ramda 的柯里化特性。或许柯里化并没有那么重要。我们不加柯里化重写一遍：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getIncompleteTaskSummaries = <span class="function"><span class="keyword">function</span>(<span class="params">membername</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetchData()</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.get(<span class="string">'tasks'</span>, data)</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.filter(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.propEq(<span class="string">'username'</span>, membername, task)</span><br><span class="line">            &#125;, tasks)</span><br><span class="line">         &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.reject(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.propEq(<span class="string">'complete'</span>, <span class="literal">true</span>, task);</span><br><span class="line">            &#125;, tasks)</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.map(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.pick([<span class="string">'id'</span>, <span class="string">'dueDate'</span>, <span class="string">'title'</span>, <span class="string">'priority'</span>], task);</span><br><span class="line">            &#125;, tasks);</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">abbreviatedTasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.sortBy(<span class="function"><span class="keyword">function</span>(<span class="params">abbrTask</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.get(<span class="string">'dueDate'</span>, abbrTask);</span><br><span class="line">            &#125;, abbreviatedTasks);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>上面是等价的程序。它仍然比原来的代码好一些。Ramda 实用的函数… 确实比较实用，即使没有柯里化。但我不认为它的可读性有下面的好：</p>
@@ -292,7 +292,7 @@
 <ul>
 <li><a href="http://bahmutov.calepin.co/put-callback-first-for-elegance.html" target="_blank" rel="noopener">将回调放在首位，代码会更优雅</a> ，Gleb Bahmutov</li>
 </ul>
-<h2 id="一点不太好的小秘密">一点不太好的小秘密</h2>
+<h2 id="yi-dian-bu-tai-hao-de-xiao-mi-mi">一点不太好的小秘密</h2>
 <p>柯里化尽管非常强大，但单独使用并不足以让你的代码变得 “那么” 优雅。</p>
 <p>应该有三个重要的组成部分：</p>
 <ul>
@@ -307,7 +307,7 @@
 </li>
 </ul>
 <p><a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Ramda</a> 的目标之一便是：在一个简单的包里面提供所有这些功能。</p>
-<h2 id="致谢">致谢</h2>
+<h2 id="zhi-xie">致谢</h2>
 <p><a href="http://buzzdecafe.github.io/" target="_blank" rel="noopener">buzzdecafe</a> 帮助编辑了本文和上一篇文章，并且这次还起了一个完美标题。谢谢，Mike！</p>
 
     </div>
@@ -389,7 +389,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#好无聊啊…-它能为我做什么呢？"><span class="nav-number">1.</span> <span class="nav-text">好无聊啊…! 它能为我做什么呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我不关心这些，我又不是数学怪黎叔"><span class="nav-number">2.</span> <span class="nav-text">我不关心这些，我又不是数学怪黎叔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#那么，柯里化有多重要呢？"><span class="nav-number">3.</span> <span class="nav-text">那么，柯里化有多重要呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一点不太好的小秘密"><span class="nav-number">4.</span> <span class="nav-text">一点不太好的小秘密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#致谢"><span class="nav-number">5.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hao-wu-liao-a-ta-neng-wei-wo-zuo-shi-yao-ni"><span class="nav-number">1.</span> <span class="nav-text">好无聊啊…! 它能为我做什么呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wo-bu-guan-xin-zhe-xie-wo-you-bu-shi-shu-xue-guai-li-shu"><span class="nav-number">2.</span> <span class="nav-text">我不关心这些，我又不是数学怪黎叔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#na-yao-ke-li-hua-you-duo-zhong-yao-ni"><span class="nav-number">3.</span> <span class="nav-text">那么，柯里化有多重要呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yi-dian-bu-tai-hao-de-xiao-mi-mi"><span class="nav-number">4.</span> <span class="nav-text">一点不太好的小秘密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zhi-xie"><span class="nav-number">5.</span> <span class="nav-text">致谢</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/open-nodejs-repl.png">
 <meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/import-lib.png">
 <meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/eval.png">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.865Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Debug Nodejs in Spacemacs">
 <meta name="twitter:description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
@@ -185,7 +185,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -213,7 +213,7 @@
 <p>这里有两条命令比较重要：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodejs-repl-send-region ;; 用于将选中的区域发送至 repl 中，但不求值，在引入库时比较有用</span><br><span class="line">nodejs-repl-send-last-sexp ;; 将当前行光标前面的内容发送至 repl，并进行运算</span><br></pre></td></tr></table></figure>
 <p>具体步骤：</p>
-<h2 id="一、配置">一、配置</h2>
+<h2 id="yi-pei-zhi">一、配置</h2>
 <ol>
 <li>
 <p>在 <code>~/.spacemacs</code> <code>dotspacemacs-additional-packages '(nodejs-repl)</code> 中添加 <code>nodejs-repl</code></p>
@@ -226,7 +226,7 @@
 <ol start="3">
 <li>运行 <code>M-m f e R</code>，安装 nodejs-repl</li>
 </ol>
-<h2 id="二、调试">二、调试</h2>
+<h2 id="er-diao-shi">二、调试</h2>
 <ol>
 <li>使用 emacs 打开待调试文件；使用 <code>M-x</code> 运行命令 <code>nodejs-repl</code>，便会在编辑窗口相同 frame 里打开 nodejs 的 repl：</li>
 </ol>
@@ -239,7 +239,7 @@
 <li>对于需要调试的代码行，运行 <code>nodejs-repl-send-last-sexp</code> ，便会将代码加入 repl 中，并进行运算：</li>
 </ol>
 <p><img src="./eval.png" alt="eval"></p>
-<h2 id="三、TODO">三、TODO</h2>
+<h2 id="san-todo">三、TODO</h2>
 <ol>
 <li>快捷键配置在 js2-mode 中只能部分起作用，js-mode 中都可以。需要研究一下 emacs 快捷键配置和优先级。</li>
 </ol>
@@ -323,7 +323,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、配置"><span class="nav-number">1.</span> <span class="nav-text">一、配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、调试"><span class="nav-number">2.</span> <span class="nav-text">二、调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、TODO"><span class="nav-number">3.</span> <span class="nav-text">三、TODO</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yi-pei-zhi"><span class="nav-number">1.</span> <span class="nav-text">一、配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#er-diao-shi"><span class="nav-number">2.</span> <span class="nav-text">二、调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#san-todo"><span class="nav-number">3.</span> <span class="nav-text">三、TODO</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

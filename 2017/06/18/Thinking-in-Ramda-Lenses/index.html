@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Lenses》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第八篇。 在 第六节  和 第七节 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。 Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 透镜（Lenses）">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Lenses》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第八篇。 在 第六节  和 第七节 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。 Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -209,10 +209,10 @@
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第八篇。</p>
 <p>在 <a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">第六节</a>  和 <a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">第七节</a> 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。</p>
 <p>Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。</p>
-<h2 id="什么是透镜？">什么是透镜？</h2>
+<h2 id="shi-yao-shi-tou-jing">什么是透镜？</h2>
 <p>透镜将 “getter” 和 “setter” 函数组合为一个单一模块。Ramda 提供了一系列配合透镜一起工作的函数。</p>
 <p>可以将透镜视为对某些较大数据结构的特定部分的聚焦、关注。</p>
-<h2 id="如何创建透镜">如何创建透镜</h2>
+<h2 id="ru-he-chuang-jian-tou-jing">如何创建透镜</h2>
 <p>在 Ramda 中，最常见的创建透镜的方法是 <code>lens</code> 函数。<code>lens</code> 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一个新透镜。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> person = &#123;</span><br><span class="line">  name: <span class="string">'Randy'</span>,</span><br><span class="line">  socialMedia: &#123;</span><br><span class="line">    github: <span class="string">'randycoulman'</span>,</span><br><span class="line">    twitter: <span class="string">'@randycoulman'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> nameLens = lens(prop(<span class="string">'name'</span>), assoc(<span class="string">'name'</span>))</span><br><span class="line"><span class="keyword">const</span> twitterLens = lens(</span><br><span class="line">  path([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>]),</span><br><span class="line">  assocPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>这里使用 <code>prop</code> 和 <code>path</code> 作为 “getter” 方法；<code>assoc</code> 和 <code>assocPath</code> 作为 “setter” 方法。</p>
@@ -225,7 +225,7 @@
 <p>可以用 <code>lensProp</code> 和 <code>lensPath</code> 来重写上述示例：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nameLens = lensProp(<span class="string">'name'</span>)</span><br><span class="line"><span class="keyword">const</span> twitterLens = lensPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br></pre></td></tr></table></figure>
 <p>这样便摆脱了向 “getter” 和 “setter” 重复输入两次相同参数的烦扰，变得简洁多了。在实际工作中，我发现我几乎从来不需要使用通用的 <code>lens</code> 函数。</p>
-<h2 id="我能用它做什么呢？">我能用它做什么呢？</h2>
+<h2 id="wo-neng-yong-ta-zuo-shi-yao-ni">我能用它做什么呢？</h2>
 <p>我们创建了一些透镜，可以用它们做些什么呢？</p>
 <p>Ramda 提供了三个配合透镜一起使用的的函数：</p>
 <ul>
@@ -235,9 +235,9 @@
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">view(nameLens, person) <span class="comment">// =&gt; 'Randy'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(twitterLens, '@randy', person)</span><br><span class="line">// =&gt; &#123;</span><br><span class="line"><span class="comment">//   name: 'Randy',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randy'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"> </span><br><span class="line">over(nameLens, toUpper, person)</span><br><span class="line"><span class="comment">// =&gt; &#123;</span></span><br><span class="line"><span class="comment">//   name: 'RANDY',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randycoulman'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
 <p>注意，<code>set</code> 和 <code>over</code> 会按指定的方式对被透镜关注的属性进行修改，并返回整个新的对象。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>如果想从复杂数据结构的操作中抽象出简单、通用的方法，透镜可以提供很多帮助。我们只需暴露透镜；而不需要暴露整个数据结构、或者为每个可访问属性都提供 “setter”、“getter” 和 变换方法。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>我们现在已经了解了许多 Ramda 提供的方法，已经足以应对大部分编程需要。<a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Wrap-Up/" target="_blank" rel="noopener">总结</a> 将回顾整个系列的内容，并会提到一些可能需要自己进一步探索的其他主题。</p>
 
     </div>
@@ -319,7 +319,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是透镜？"><span class="nav-number">1.</span> <span class="nav-text">什么是透镜？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何创建透镜"><span class="nav-number">2.</span> <span class="nav-text">如何创建透镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我能用它做什么呢？"><span class="nav-number">3.</span> <span class="nav-text">我能用它做什么呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">5.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shi-yao-shi-tou-jing"><span class="nav-number">1.</span> <span class="nav-text">什么是透镜？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ru-he-chuang-jian-tou-jing"><span class="nav-number">2.</span> <span class="nav-text">如何创建透镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wo-neng-yong-ta-zuo-shi-yao-ni"><span class="nav-number">3.</span> <span class="nav-text">我能用它做什么呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">5.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

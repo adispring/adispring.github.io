@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Immutability and Objects》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第六篇。 在 第五节 中，我们讨论了如何以 “pointfree” 或 “tacit” 风格来编写函数：函数的参数不会显式的出现。 那时候，因为缺少">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 数据不变性和对象">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Immutability and Objects》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第六篇。 在 第五节 中，我们讨论了如何以 “pointfree” 或 “tacit” 风格来编写函数：函数的参数不会显式的出现。 那时候，因为缺少">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -209,7 +209,7 @@
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第六篇。</p>
 <p>在 <a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">第五节</a> 中，我们讨论了如何以 “pointfree” 或 “tacit” 风格来编写函数：函数的参数不会显式的出现。</p>
 <p>那时候，因为缺少一些工具，我们还无法将所有的函数转换为 “pointfree” 的风格。现在我们就来学习这些工具。</p>
-<h2 id="读取对象属性">读取对象属性</h2>
+<h2 id="du-qu-dui-xiang-shu-xing">读取对象属性</h2>
 <p>再来回顾一下 <a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">第五节</a> 已经重构过的 “合格选民” 的例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> wasBornInCountry = <span class="function"><span class="params">person</span> =&gt;</span> person.birthCountry === OUR_COUNTRY</span><br><span class="line"><span class="keyword">const</span> wasNaturalized = <span class="function"><span class="params">person</span> =&gt;</span> <span class="built_in">Boolean</span>(person.naturalizationDate)</span><br><span class="line"><span class="keyword">const</span> isOver18 = <span class="function"><span class="params">person</span> =&gt;</span> person.age &gt;= <span class="number">18</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
 <p>如上所示，我们已经将 <code>isCitizen</code> 和 <code>isEligibleToVote</code> 变为 “pointfree” 风格的了，但前三个函数还没有 “pointfree” 化。</p>
@@ -241,26 +241,26 @@
 <h2 id="path">path</h2>
 <p><code>prop</code> 用来读取对象的属性，<code>path</code> 可以读取对象的嵌套属性。例如，我们可以从更深层的结构中访问邮编：<code>path(['address', 'zipCode'], person)</code>。</p>
 <p>注意，<code>path</code> 容错性更强。如果路径上的任意属性为 <code>null</code> 或 <code>undefined</code>，则 <code>path</code> 返回 <code>undefined</code>，而 <code>prop</code> 会引发错误。</p>
-<h2 id="propOr-pathOr">propOr / pathOr</h2>
+<h2 id="prop-or-path-or">propOr / pathOr</h2>
 <p><code>propOr</code> 和 <code>pathOr</code> 像是 <code>prop</code>/<code>path</code> 与 <code>defaultTo</code> 的组合。如果在目标对象中找不到属性或路径的值，它们允许你提供默认值。</p>
 <p>例如，当我们不知道某人的姓名时，可以提供一个占位符：<code>propOr('&lt;Unnamed&gt;', 'name', person)</code>。注意，与 <code>prop</code> 不同，如果 <code>person</code> 为 <code>null</code> 或 <code>undefined</code> 时，<code>propOr</code> 不会引发错误，而是会返回一个默认值。</p>
 <h2 id="keys-values">keys / values</h2>
 <p><code>keys</code> 返回一个包含对象中所有属性名称的数组。<code>values</code> 返回这些属性的值组成的数组。当与 <a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8" target="_blank" rel="noopener">第一节</a> 中提到集合迭代函数结合使用时，这两个函数会非常有用。</p>
-<h2 id="对属性增、删、改、查">对属性增、删、改、查</h2>
+<h2 id="dui-shu-xing-zeng-shan-gai-cha">对属性增、删、改、查</h2>
 <p>现在已经有很多对对象进行声明式读取的函数，但如果想要进行更改操作呢？</p>
 <p>由于数据不变性很重要，我们不想直接更改对象。相反，我们想要更改后形成的新对象。</p>
 <p>Ramda 再次为我们提供了很多辅助函数。</p>
-<h2 id="assoc-assocPath">assoc / assocPath</h2>
+<h2 id="assoc-assoc-path">assoc / assocPath</h2>
 <p>在命令式编程时，可以使用赋值操作符设置或更改一个人的名字：<code>person.name = 'New name'</code>。</p>
 <p>在函数式、数据不变的世界里，可以使用 <code>assoc</code> 来代替：<code>const updatedPerson = assoc('name', 'New name', person)</code>。</p>
 <p><code>assoc</code> 返回一个添加或修改属性的新对象，原对象保持不变。</p>
 <p>还有用于更新嵌套属性的方法：<code>assocPath</code>：<code>const updatedPerson = assocPath(['address', 'zipcode'], '97504', person)</code>。</p>
-<h2 id="dissoc-dissocPath-omit">dissoc / dissocPath / omit</h2>
+<h2 id="dissoc-dissoc-path-omit">dissoc / dissocPath / omit</h2>
 <p>如何删除属性呢？我们可能想删除 <code>person.age</code> 。在 Ramda 中，可以使用 <code>dissoc</code>：<code>const updatedPerson = dissoc('age', person)</code>。</p>
 <p><code>dissocPath</code> 类似于 <code>dissoc</code>，但可以作用于对象的嵌套属性：<code>dissocPath(['address', 'zipCode'], person)</code>。</p>
 <p>还有一个 <code>omit</code>，用于一次删除多个属性。<code>const updatedPerson = omit(['age', 'birthCountry'], person)</code>。</p>
 <p>注意，<code>pick</code> 与 <code>omit</code> 的操作很像，两者是互补的关系。它们能辅助实现白名单（使用 <code>pick</code> 保留想要的属性集）和黑名单（使用 <code>omit</code> 删除不想要的属性集）的功能。</p>
-<h2 id="属性转换">属性转换</h2>
+<h2 id="shu-xing-zhuan-huan">属性转换</h2>
 <p>我们现在已经知道如何利用声明式和数据不变性的方式来处理对象。我们来写一个函数：<code>celebrateBirthday</code>，在生日当前更新他的年龄。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nextAge = compose(inc, prop(<span class="string">'age'</span>))</span><br><span class="line"><span class="keyword">const</span> celebrateBirthday = <span class="function"><span class="params">person</span> =&gt;</span> assoc(<span class="string">'age'</span>, nextAge(person), person)</span><br></pre></td></tr></table></figure>
 <p>这是一种很常见的模式。如上所示，我们并不想用给定的新值覆盖已有属性值，而是想通过函数作用于属性的旧值来对其进行转换。</p>
@@ -272,7 +272,7 @@
 <p><code>evolve</code> 可以一次转换多个属性，还可以进行嵌套转换。“转换函数对象”（包含转换函数的对象）与被转换对象具有基本相同的结构，<code>evolve</code> 会递归地遍历这两个对象，然后将转换函数作用于对应的属性值上。</p>
 <p>注意，<code>evolve</code> 不会添加新属性，如果为目标对象不存在的属性指定转换函数，<code>evolve</code> 会将其忽略。</p>
 <p><code>evolve</code> 已经很快成为我编程时的主力。</p>
-<h2 id="合并对象">合并对象</h2>
+<h2 id="he-bing-dui-xiang">合并对象</h2>
 <p>有时，需要合并两个对象。一种常见的情形是当使用含有 “options” 配置项的函数时，常常需要将这些配置项与一组默认配置项进行组合。Ramda 为此提供了 <code>merge</code> 方法。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">a, b, options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> defaultOptions = &#123; <span class="attr">value</span>: <span class="number">42</span>, <span class="attr">local</span>: <span class="literal">true</span> &#125;</span><br><span class="line">  <span class="keyword">const</span> finalOptions = merge(defaultOptions, options)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>merge</code> 返回一个包含两个对象的所有属性和值的新对象。如果两个对象具有相同的属性，则采用第二个对象参数的属性值。</p>
@@ -281,9 +281,9 @@
 <p>对于这种情况，我通常会定义一个辅助函数 <code>reverseMerge</code>：<code>const reverseMerge = flip(merge)</code>。回想一下，<code>flip</code> 会翻转函数前两个参数的位置。</p>
 <p><code>merge</code> 执行的是浅合并。如果被合并的对象存在属性值为对象的属性，子对象并不会继续嵌套合并。如果想递归地进行 “深合并”，可以使用 Ramda 的 <code>mergeDeep</code> 系列函数。（译者注：作者在写这篇文章时，Ramda 还没有 <code>mergeDeep</code> 系列函数，<code>mergeDeep</code> 系列函数是在 v0.24.0 中加入的）</p>
 <p>注意，<code>merge</code> 只接受两个参数。如果想要将多个对象合并为一个对象，可以使用 <code>mergeAll</code>，它接受一个需要被合并对象的数组作为参数。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>本文展示了 Ramda 中一系列很好的以声明式和数据不变方式处理对象的方法。我们现在可以对对象进行增、删、改、查，而不会改变原有的对象。并且也可以在组合函数时使用这些方法来做这些事情。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>现在可以以 Immutable 的方式处理对象，那么数组呢？<a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">数据不变性和数组</a> 将演示对数组的处理。</p>
 
     </div>
@@ -365,7 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取对象属性"><span class="nav-number">1.</span> <span class="nav-text">读取对象属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prop"><span class="nav-number">2.</span> <span class="nav-text">prop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pick"><span class="nav-number">3.</span> <span class="nav-text">pick</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#has"><span class="nav-number">4.</span> <span class="nav-text">has</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path"><span class="nav-number">5.</span> <span class="nav-text">path</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propOr-pathOr"><span class="nav-number">6.</span> <span class="nav-text">propOr / pathOr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keys-values"><span class="nav-number">7.</span> <span class="nav-text">keys / values</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对属性增、删、改、查"><span class="nav-number">8.</span> <span class="nav-text">对属性增、删、改、查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assoc-assocPath"><span class="nav-number">9.</span> <span class="nav-text">assoc / assocPath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dissoc-dissocPath-omit"><span class="nav-number">10.</span> <span class="nav-text">dissoc / dissocPath / omit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性转换"><span class="nav-number">11.</span> <span class="nav-text">属性转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并对象"><span class="nav-number">12.</span> <span class="nav-text">合并对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">13.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">14.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#du-qu-dui-xiang-shu-xing"><span class="nav-number">1.</span> <span class="nav-text">读取对象属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prop"><span class="nav-number">2.</span> <span class="nav-text">prop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pick"><span class="nav-number">3.</span> <span class="nav-text">pick</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#has"><span class="nav-number">4.</span> <span class="nav-text">has</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path"><span class="nav-number">5.</span> <span class="nav-text">path</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prop-or-path-or"><span class="nav-number">6.</span> <span class="nav-text">propOr / pathOr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keys-values"><span class="nav-number">7.</span> <span class="nav-text">keys / values</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dui-shu-xing-zeng-shan-gai-cha"><span class="nav-number">8.</span> <span class="nav-text">对属性增、删、改、查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assoc-assoc-path"><span class="nav-number">9.</span> <span class="nav-text">assoc / assocPath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dissoc-dissoc-path-omit"><span class="nav-number">10.</span> <span class="nav-text">dissoc / dissocPath / omit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shu-xing-zhuan-huan"><span class="nav-number">11.</span> <span class="nav-text">属性转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#he-bing-dui-xiang"><span class="nav-number">12.</span> <span class="nav-text">合并对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">13.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">14.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -209,7 +209,7 @@
 <p>在<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">第四节</a>中，我们讨论了如何用声明式编程（告诉计算机做什么，我们想要什么）代替命令式编程（告诉计算机该怎么做，详细的执行步骤）来编写代码。</p>
 <p>你可能已经注意到了，我们编写的几个函数（如 <code>forever21</code>、<code>alwaysDrivingAge</code>、<code>water</code>）都接受一个参数，构建一个新函数，然后将该函数作用于该参数。</p>
 <p>这是函数式编程里非常常见的一种模式，Ramda 同样提供了优化这种模式的方法。</p>
-<h2 id="Pointfree-风格（无参数风格）">Pointfree 风格（无参数风格）</h2>
+<h2 id="pointfree-feng-ge-wu-can-shu-feng-ge">Pointfree 风格（无参数风格）</h2>
 <p>我们在 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a> 中讨论了 Ramda 的两个指导原则：</p>
 <ul>
 <li>将数据放到参数列表的最后面。</li>
@@ -234,7 +234,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = <span class="function"><span class="params">temperature</span> =&gt;</span> cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])(temperature)</span><br></pre></td></tr></table></figure>
 <p>现在将其变为 pointfree 风格的：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<h2 id="多元函数（多参数函数）">多元函数（多参数函数）</h2>
+<h2 id="duo-yuan-han-shu-duo-can-shu-han-shu">多元函数（多参数函数）</h2>
 <p>如果函数接受多个参数会怎样呢？回顾一下 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a> 中的例子：<code>titlesForYear</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> titlesForYear = curry(<span class="function">(<span class="params">year, books</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>注意，<code>books</code> 出现了两次：一次作为参数列表的最后一个参数（最后一个数据！）；一次出现在函数最后，当我们将其传入 pipeline 的时候。这跟我们之前看到参数为 <code>age</code> 的模式类似，所以可以对它进行相同的转换：</p>
@@ -243,7 +243,7 @@
 <p>其实，这种情况下，我可能不会刻意追求 pointfree 风格，因为就像之前文章讨论过的：JavaScript 在调用一系列单参数函数方面并不方便。</p>
 <p>在 pipeline 中使用 <code>titleForYear</code> 是很方便，如我们可以很轻松的调用 <code>titlesForYear(2012)</code>，但当想要单独使用它时，我们就不得不回到之前文章里看到的形式 <code>)(</code>，对我而言，并不值得做出这种妥协（没必要为了 pointfree 而 pointfree）。</p>
 <p>但只要有如上形式的单参数函数（或者可能以后会被重构），我几乎总是写成 pointfree 风格的。</p>
-<h2 id="重构为-pointfree-风格的代码">重构为 pointfree 风格的代码</h2>
+<h2 id="zhong-gou-wei-pointfree-feng-ge-de-dai-ma">重构为 pointfree 风格的代码</h2>
 <p>有时我们的代码不会遵循这种模式。我们可能会在同一函数内多次对数据进行操作。</p>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> 的几个例子中便是这种情形。我们使用诸如 <code>both</code>、<code>either</code>、<code>pipe</code>、<code>compose</code> 来重构代码。一旦我们这样做了，便会很容易让函数转换为 pointfree 风格的。</p>
 <p>我们来回顾一下 <code>isEligibleToVote</code> 这个例子，代码如下：</p>
@@ -254,7 +254,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEligibleToVote = <span class="function"><span class="params">person</span> =&gt;</span> both(isOver18, isCitizen)(person)</span><br></pre></td></tr></table></figure>
 <p>现在我们已经完成了这些重构，可以看到，这两个函数都遵循上面提到的模式：<code>person</code> 出现了两次，一次作为函数参数；一次放到最后，将组合函数作用其上。现在可以将它们重构为 pointfree 风格的代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
-<h2 id="为什么要这么做？">为什么要这么做？</h2>
+<h2 id="wei-shi-yao-yao-zhe-yao-zuo">为什么要这么做？</h2>
 <p>Pointfree 风格需要一定的时间才能习惯。可能并不需要所有的地方都没有参数。有时候知道某些 Ramda 函数需要多少参数，也是很重要的。</p>
 <p>但是，一旦习惯了这种方式，它将变得非常强大：可以以非常有趣的方式将很多小的 pointfree 函数组合起来。</p>
 <p>Pointfree 风格的优点是什么呢？人们可能会认为，这只不过是为了让函数式编程赢得 “优点徽章” 的学术活动而已（实际上并没有什么用处）。然而，我认为还是有一些优点的，即使需要花一些时间来习惯这种方式也是值得的：</p>
@@ -264,9 +264,9 @@
 <li>它促使我们更专注于正在做的转换的本身，而不是正被转换的数据。</li>
 <li>它可以帮助我们将函数视为可以作用于不同数据的通用构建模块，而非对特定类型数据的操作。如果给数据一个名字，我们的思想便会被<a href="https://en.wikipedia.org/wiki/Anchoring" target="_blank" rel="noopener">禁锢</a>在：“需要在哪里使用我们的函数”；如果去掉参数，便会使我们更有创造力。</li>
 </ul>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>Pointfree 风格也被成为 <a href="https://en.wikipedia.org/wiki/Tacit_programming" target="_blank" rel="noopener">tacit 式编程</a>(隐含式编程)，可以使代码更清晰、更易于理解。通过代码重构将所有的转换组合成单一函数，我们最终会得到可以在更多地方使用的更小的构建块（函数）。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>在当前示例中，我们尚未将所有代码都重构为 pointfree 的风格。还有一些代码是命令式的。大部分这种代码是处理对象和数组的。</p>
 <p>我们需要找到声明式的方式来处理对象和数组。Immutability (不变性) 怎么样？我们如何以 “不变” (immutable) 的方式来操作对象和数组呢？</p>
 <p>本系列的下一节，<a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">数据不变性和对象</a> 将讨论如何以函数式和 immutable 的方式来处理对象。紧随其后的章节：<a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">数据不变性和数组</a> 对数组也是相同的处理方式。</p>
@@ -320,7 +320,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,7 +349,7 @@
 <p>在<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a>中，讨论了使用 “部分应用” 和 “柯里化” 技术来组合多元（多参数）函数。</p>
 <p>当我们开始编写小的函数式构建块并组合它们时，发现必须写好多函数来包裹 JavaScript 操作符，比如算术、比较、逻辑操作符和控制流。这可能比较乏味，但 Ramda 将我们拉了回来，让事情变得有趣起来。</p>
 <p>开始之前，先介绍一些背景知识。</p>
-<h2 id="命令式-vs-声明式">命令式 vs 声明式</h2>
+<h2 id="ming-ling-shi-vs-sheng-ming-shi">命令式 vs 声明式</h2>
 <p>存在很多编程语言分类的方式，如静态语言和动态语言，解释型语言和编译型语言，底层和高层语言等等。</p>
 <p>另一种划分的方式是命令式编程和声明式编程。</p>
 <p>简单地说，命令式编程中，程序员需要告诉计算机怎么做来完成任务。命令式编程带给我们每天会用到的大量的基本结构：控制流（<code>if</code>-<code>then</code>-<code>else</code> 语句和循环），算术运算符（<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>），比较运算符（<code>===</code>、<code>&gt;</code>、<code>&lt;</code> 等），和逻辑运算符（<code>&amp;&amp;</code>、<code>||</code>、<code>!</code>）。</p>
@@ -357,10 +357,10 @@
 <p>其中一种经典的声明式编程语言是 Prolog。在 Prolog 中，程序是由一组 “facts” (谓词) 和 一组 “rules” (规则) 组成。可以通过提问来启动程序。Prolog 的推理机使用 facts 和 rules 来回答问题。</p>
 <p>函数式编程被认为是声明式编程的一个子集。在一段函数式程序中，我们定义函数，然后通过组合这些函数告诉计算机做什么。</p>
 <p>即使在声明式程序中，也需要做一些命令式程序中的工作。控制流，算术、比较和逻辑操作仍然是必须使用的基本构建块。但我们需要找到一种声明式的方式来描述这些基本构建块。</p>
-<h2 id="声明式替换">声明式替换</h2>
+<h2 id="sheng-ming-shi-ti-huan">声明式替换</h2>
 <p>由于我们使用 JavaScript （一种命令式语言）编程，所以在编写 “普通” JavaScript 代码时，使用标准的命令式结构也是正常的。</p>
 <p>但当使用 “pipeline” 或类似的结构编写函数式变换时，命令式的结构并不能很好的工作。</p>
-<h2 id="算术">算术</h2>
+<h2 id="suan-zhu">算术</h2>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> ，我们实现了一系列算术变换来演示 “pipeline”：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a * b</span><br><span class="line"><span class="keyword">const</span> addOne = <span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> x * x</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = pipe(</span><br><span class="line">  multiply,</span><br><span class="line">  addOne,</span><br><span class="line">  square</span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line">operate(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// =&gt; ((3 * 4) + 1)^2 =&gt; (12 + 1)^2 =&gt; 13^2 =&gt; 169</span></span><br></pre></td></tr></table></figure>
 <p>注意我们是如何编写函数来实现我们想要的基本构建块的。</p>
@@ -371,7 +371,7 @@
 <p>所以可以进一步简化我们的 “pipeline”：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> multiply(x, x)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = pipe(</span><br><span class="line">  multiply,</span><br><span class="line">  inc,</span><br><span class="line">  square</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p><code>subtract</code> 是二元操作符 <code>-</code> 的替代，但还有一个表示取反的一元操作符 <code>-</code>。我们可以使用 <code>multiply(-1)</code>，但 Ramda 也提供了 <code>negate</code> 来实现相同的功能。</p>
-<h2 id="Comparison-比较">Comparison (比较)</h2>
+<h2 id="comparison-bi-jiao">Comparison (比较)</h2>
 <p>还是在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a>，我们写了一些函数来确定一个人是否有资格投票。该代码的最终版本如下所示：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> wasBornInCountry = <span class="function"><span class="params">person</span> =&gt;</span> person.birthCountry === OUR_COUNTRY</span><br><span class="line"><span class="keyword">const</span> wasNaturalized = <span class="function"><span class="params">person</span> =&gt;</span> <span class="built_in">Boolean</span>(person.naturalizationDate)</span><br><span class="line"><span class="keyword">const</span> isOver18 = <span class="function"><span class="params">person</span> =&gt;</span> person.age &gt;= <span class="number">18</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
 <p>注意，上面的一些函数使用了标准比较运算符（<code>===</code> 和 <code>&gt;=</code>）。正如你现在所怀疑的，Ramda 也提供了这些运算符的替代。</p>
@@ -381,7 +381,7 @@
 <p>注意，这些函数保持正常的参数顺序（<code>gt</code> 表示第一个参数是否大于第二个参数）。这在单独使用时没有问题，但在组合函数时，可能会让人产生困惑。这些函数似乎违反了 Ramda 的 “待处理数据放在最后” 的原则，所以我们在 pipeline 或类似的情况下使用它们时，要格外小心。这时，<code>flip</code> 和 占位符 (<code>__</code>) 就派上了用场。</p>
 <p>除了 <code>equals</code>，还有一个 <code>identical</code>，可以用来判断两个值是否引用了同一块内存。</p>
 <p><code>===</code> 还有一些其他的用途：可以检测字符串或数组是否为空（<code>str === ''</code> 或 <code>arr.length === 0</code>），也可以检查变量是否为 <code>null</code> 或 <code>undefined</code>。Ramda 为这两种情况提供了方便的判断函数：<code>isEmpty</code> 和 <code>isNil</code>。</p>
-<h2 id="Logic-逻辑">Logic (逻辑)</h2>
+<h2 id="logic-luo-ji">Logic (逻辑)</h2>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> 中（参见上面的相关代码）。我们使用 <code>both</code> 和 <code>either</code> 来代替 <code>&amp;&amp;</code> 和 <code>||</code> 运算符。我们还提到使用 <code>complement</code> 代替 <code>!</code>。</p>
 <p>当组合的函数作用于同一份输入值时，这些组合函数帮助很大。上述示例中，<code>wasBornInCountry</code>、<code>wasNaturalized</code> 和 <code>isOver18</code> 都作用于同一个人上。</p>
 <p>但有时我们需要将 <code>&amp;&amp;</code>、<code>||</code> 和 <code>!</code> 作用于不同的数值。对于这些情况， Ramda 提供了 <code>and</code>、<code>or</code> 和 <code>not</code> 函数。我以下列方式进行分类：<code>and</code>、<code>or</code> 和 <code>not</code> 用于处理数值；<code>both</code>、<code>either</code> 和 <code>complement</code> 用于处理函数。</p>
@@ -391,9 +391,9 @@
 <p>我们可以使用上面刚学到的 <code>isNil</code> 函数，但 Ramda 提供了一个更好的选择：<code>defaultTo</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lineWidth = defaultTo(<span class="number">80</span>, settings.lineWidth)</span><br></pre></td></tr></table></figure>
 <p><code>defaultTo</code> 检查第二个参数是否为空（<code>isNil</code>）。如果非空，则返回该值；否则返回第一个值。</p>
-<h2 id="Conditionals-条件">Conditionals (条件)</h2>
+<h2 id="conditionals-tiao-jian">Conditionals (条件)</h2>
 <p>控制流在函数式编程中不是必要的，但偶尔也会有些用处。在 <a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一节</a> 中讨论的集合迭代函数在大部分情况下都可以很好的取代循环，但 “条件” 仍然非常重要。</p>
-<h2 id="ifElse">ifElse</h2>
+<h2 id="if-else">ifElse</h2>
 <p>我们来写一个函数，<code>forever21</code>，接受一个年龄，并返回下一个年龄。但正如名字所示，一旦成长到 21 岁，就一直保持这样。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> age &gt;= <span class="number">21</span> ? <span class="number">21</span> : age + <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>注意，条件（<code>age &gt;= 21</code>）和第二个分支（<code>age + 1</code>）都可以写作 <code>age</code> 的函数。第一个分支（<code>21</code>）也可以重写成一个常量函数（<code>() =&gt; 21</code>）。现在我们有三个接受（或忽略）<code>age</code> 为参数的函数。</p>
@@ -402,18 +402,18 @@
 <p>如上所示，比较函数在进行组合时，可能并不是以我们想要的形式进行工作。所以在这里被迫引入了占位符（<code>__</code>）。我们也可以使用 <code>lte</code>：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lte(<span class="number">21</span>), () =&gt; <span class="number">21</span>, inc)(age)</span><br></pre></td></tr></table></figure>
 <p>在这种情况下，我们不得不读作：“21岁小于或等于给定年龄”。但这样可读性很低、比较乱，所以我坚持使用占位符版本的函数。</p>
-<h2 id="constants-常量">constants (常量)</h2>
+<h2 id="constants-chang-liang">constants (常量)</h2>
 <p>常量函数在这种情形下非常有用。你可能已经想到了，Ramda 为我们提供了一些便捷的方法。本例中，这个方法是 <code>always</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(gte(__, <span class="number">21</span>), always(<span class="number">21</span>), inc)(age)</span><br></pre></td></tr></table></figure>
 <p>Ramda 还提供了 <code>T</code> 和 <code>F</code>，作为 <code>always(true) 和 always(false)</code> 的缩写。</p>
-<h2 id="identity-恒等">identity (恒等)</h2>
+<h2 id="identity-heng-deng">identity (恒等)</h2>
 <p>再来写一个函数：<code>alwaysDrivingAge</code>。该函数接受一个年龄，如果 <code>gte</code> 16，则将该年龄返回；但如果小于 16，则返回 16。这样任何人都可以伪造他们的驾驶年龄了，即使他们还没有达到。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lt(__, <span class="number">16</span>), always(<span class="number">16</span>), a =&gt; a)(age)</span><br></pre></td></tr></table></figure>
 <p>条件中的第二个分支（<code>a =&gt; a</code>）是函数式编程中的另一种常见的模式。它被称为恒等函数。也即，输出永远等于输入的函数。</p>
 <p>正如你所想的，Ramda 为我们提供了 <code>identity</code> 函数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lt(__, <span class="number">16</span>), always(<span class="number">16</span>), identity)(age)</span><br></pre></td></tr></table></figure>
 <p><code>identity</code> 可以接受多个参数，但总是返回首个参数。如果想要返回除首个参数之外的参数，可以使用更通用的 <code>nthArg</code> 函数。但 <code>nthArg</code> 不如 <code>identity</code> 用的频繁。</p>
-<h2 id="when-和-unless">when 和 unless</h2>
+<h2 id="when-he-unless">when 和 unless</h2>
 <p>在 <code>ifElse</code> 代码中，其中一个条件分支为 <code>identity</code> 也很常见。所以 Ramda 也提供了便捷的方法。</p>
 <p>如果像上例所示，第二个分支是 <code>identity</code>，可以用 <code>when</code> 代替 <code>ifElse</code>：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> when(lt(__, <span class="number">16</span>), always(<span class="number">16</span>))(age)</span><br></pre></td></tr></table></figure>
@@ -424,9 +424,9 @@
 <p>这里采用 Ramda 文档中的例子来展示 <code>cond</code> 的用法：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = <span class="function"><span class="params">temperature</span> =&gt;</span> cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])(temperature)</span><br></pre></td></tr></table></figure>
 <p>我目前还不需要在 Ramda 代码中使用 <code>cond</code>。但我很多年前编写过 Common Lisp 代码，所以 <code>cond</code> 函数感觉就像是位老朋友。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>本节中展示了很多将命令式代码转为函数声明式代码的 Ramda 函数。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>你可能已经注意到了，最后我们编写的几个函数（<code>forever21</code>、<code>alwaysDrivingAge</code> 和 <code>water</code>）都接受一个参数，构建一个新函数，然后将该函数作用于参数。</p>
 <p>这也是一种常见的模式，并且 Ramda 照例提供了一些简化这些代码的便捷方法。下一节中，<a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">Pointfree Style</a> 将演示如何简化符合这种模式的代码。</p>
 
@@ -479,7 +479,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -511,7 +511,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(<span class="function"><span class="params">book</span> =&gt;</span> publishedInYear(book, year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果能将 <code>filter</code> 和 <code>map</code> 组合成 “pipeline” 就好了，但我们并不知道该如何处理，因为 <code>filter</code> 和 <code>map</code> 都是二元函数。</p>
 <p>如果不需要在 <code>filter</code> 中使用箭头函数会更好些。先来解决这个问题，并借此展示一些制作 “pipeline” 的知识。</p>
-<h2 id="高阶函数">高阶函数</h2>
+<h2 id="gao-jie-han-shu">高阶函数</h2>
 <p>在本系列文章的<a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一篇</a>中，我们将函数视为 “一等结构”。一等函数可以作为参数传递给其他函数，也可以作为其他函数的返回值。我们一直在使用前者，但还没有见过后者（函数作为其他函数的返回值）。</p>
 <p>获取或返回其他函数的函数称为 “高阶函数”。</p>
 <p>在上面的示例中，我们传递了一个箭头函数给 <code>filter</code>：<code>book =&gt; publishedInYear(book, year)</code>，但我们想去掉箭头函数。为了做到这点，需要一个函数：输入一本书，若该书是在指定年份出版的则返回 <code>true</code>。但还需要一个指定的年份，让该操作更加灵活。</p>
@@ -520,7 +520,7 @@
 <p>利用新实现的 <code>publishedInYear</code>，可以重写 <code>filter</code> 调用，从而消除箭头函数：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function"><span class="params">year</span> =&gt;</span> <span class="function"><span class="params">book</span> =&gt;</span> book.year === year</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>现在，当调用 <code>filter</code> 时，<code>publishedInYear(year)</code> 会立即调用，并返回一个接受 <code>book</code> 为参数的函数，这正是 <code>filter</code> 需要的。</p>
-<h2 id="部分应用函数">部分应用函数</h2>
+<h2 id="bu-fen-ying-yong-han-shu">部分应用函数</h2>
 <p>可以按上面的方式重写任何多参数函数。但我们不可能拥有所有我们想要的函数的源码；另外，很多情况下，我们可能还是希望以普通的方式调用多参数函数。</p>
 <p>例如，在其他一些代码中，只是想检查一本书是否是在指定年份出版的，我们可能想要 <code>publishedInYear(book, 2012)</code>，但现在不能再那么做了。相反，我们必须要用这种方式：<code>publishedInYear(book)(2012)</code>。这样做降低了代码的可读性，也很烦人。</p>
 <p>幸运的是，Ramda 提供了两个函数：<code>partial</code> 和 <code>partialRight</code>，来帮我们解决这个问题。</p>
@@ -531,7 +531,7 @@
 <p>如果 <code>pubilshedInYear</code> 原本参数的顺序为 <code>(year, book)</code> ，而非 <code>(book, year)</code> ，则需要用 <code>partial</code> 代替 <code>partialRight</code>。</p>
 <p>注意，为被 <code>partial</code> 和 <code>partialRight</code> 包裹的函数提供的参数必须包裹在数组中，即使只有一个参数。我不会告诉你我已经忘记了多少次，导致出现令人困惑的错误信息：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">First argument to _arity must be a non-negative <span class="built_in">integer</span> no greater than ten</span><br></pre></td></tr></table></figure>
-<h2 id="柯里化-Curry">柯里化(Curry)</h2>
+<h2 id="ke-li-hua-curry">柯里化(Curry)</h2>
 <p>如果到处使用 <code>partial</code> 和 <code>partialRight</code> 的话，会让代码变得冗长乏味；但是，将多元函数以一系列一元函数的形式调用同样不好。</p>
 <p>幸运的是，Ramda 给我们提供了一个解决方案：<code>curry</code>。</p>
 <p><a href="https://en.wikipedia.org/wiki/Currying" target="_blank" rel="noopener">Currying（柯里化）</a> 是函数式编程的另一个核心概念。从技术角度讲，一个柯里化了的函数是一系列高阶一元函数，这也是我刚刚抱怨过的。在纯函数式语言中，柯里化函数在调用时，语法上看起来和调用多个参数没有什么区别。</p>
@@ -546,11 +546,11 @@
 <p>接下来写一个柯里化版本的 <code>publishedInYear</code> 函数。注意，<code>curry</code> 会像 <code>partial</code> 一样工作；并且没有 <code>partialRight</code> 版本的 <code>curry</code> 函数。对这方面后续会有更多讨论，但现在我们需要将 <code>publishedInYear</code> 的参数翻转一下，以便让参数 <code>year</code> 在最前面。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>现在可以只使用参数 <code>year</code> 来调用 <code>publishedInYear</code>，并返回一个新函数，该函数接受参数 <code>book</code> 并执行原函数。但是，仍然可以按普通方式对它调用：<code>publishedInYear(2012, book)</code>，不需要写烦人的语法 <code>)(</code>。所以，柯里化的函数在两种情况下都能很好地工作。</p>
-<h2 id="参数的顺序">参数的顺序</h2>
+<h2 id="can-shu-de-shun-xu">参数的顺序</h2>
 <p>注意，为了让 <code>curry</code> 工作，我们不得不对参数的顺序进行翻转。这在函数式编程中非常常见，所以几乎所有的 Ramda 函数都将待处理的数据放到参数列表的最后面。</p>
 <p>你可以将先期传入的参数看作对操作的配置。所以，对于 <code>publishedInYear</code>，参数 <code>year</code> 作为配置（需要查找的年份），而参数 <code>book</code> 作为被处理的数据（被查找的对象）。</p>
 <p>我们已经在集合迭代函数中见过这样的例子。它们都将集合作为最后一个参数，这样可以使这种风格的编程更容易些。</p>
-<h2 id="顺序错误的参数">顺序错误的参数</h2>
+<h2 id="shun-xu-cuo-wu-de-can-shu">顺序错误的参数</h2>
 <p>如果不改变 <code>publishedInYear</code> 的顺序，还可以继续使用柯里化特性的优势吗？</p>
 <p>当然可以了，Ramda 提供了几个选择。</p>
 <h2 id="flip">flip</h2>
@@ -558,7 +558,7 @@
 <p>使用 <code>flip</code>，我们可以恢复 <code>publishedInYear</code> 参数的初始的顺序：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(flip(publishedInYear)(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>多数情况下，我更喜欢使用方便的参数顺序，但如果用到不能自己掌控的函数，<code>flip</code> 是一个好的选择。</p>
-<h2 id="placeholder-占位符">placeholder (占位符)</h2>
+<h2 id="placeholder-zhan-wei-fu">placeholder (占位符)</h2>
 <p>更通用的选择是使用 “placeholder” 参数（<code>__</code>）</p>
 <p>假设有一个三元柯里化的函数，并且我们想传入第一个和最后一个参数，中间参数后续再传，应该怎么办呢？我们可以使用 “占位符” 作为中间参数：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> threeArgs = curry(<span class="function">(<span class="params">a, b, c</span>) =&gt;</span> &#123; <span class="comment">/* ... */</span> &#125;)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> middleArgumentLater = threeArgs(<span class="string">'value for a'</span>, __, <span class="string">'value for c'</span>)</span><br></pre></td></tr></table></figure>
@@ -568,7 +568,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(__, year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我觉得这个版本的可读性更好，但如果需要频繁使用参数顺序翻转的 <code>publishedInYear</code>，我可能会使用 <code>flip</code> 定义一个辅助函数，然后在任何用到它的地方使用辅助函数。在后续文章中会看到一些示例。</p>
 <p>注意， <code>__</code> 仅适用于柯里化的函数，而 <code>partial</code>、<code>partialRight</code> 和 <code>flip</code> 适用于任何函数。如果需要对某个普通函数使用 <code>__</code>，可以先用 <code>curry</code> 将其包裹起来。</p>
-<h2 id="来做一条管道（pipeline）">来做一条管道（pipeline）</h2>
+<h2 id="lai-zuo-yi-tiao-guan-dao-pipeline">来做一条管道（pipeline）</h2>
 <p>现在看看能否将我们的 <code>filter</code> 和 <code>map</code> 调用放入 “pipeline” (管道)中？下面是代码当前的状态，使用了方便的参数顺序的 <code>publishedInYear</code>：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上一节中，我们了解了 <code>pipe</code> 和 <code>compose</code>，但我们还需要另一部分信息，以便能够使用上面所学的知识。</p>
@@ -577,10 +577,10 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br></pre></td></tr></table></figure>
 <p>我们来更进一步，将 <code>titlesForYear</code> 的参数顺序也调换一下，这样更符合 Ramda 中待处理数据放在最后的约定。也可以将该函数进行柯里化，以便其在后续的 “pipeline” 中使用。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = curry(<span class="function">(<span class="params">year, books</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>本文可能是这个系列中讲解最深的一篇。部分应用和柯里化可能需要花一些时间和精力来熟悉和掌握。但一旦学会，他们会以一种强大的方式将数据处理变得更加函数式。</p>
 <p>它们引导你通过创建包含许多小而简单代码块的 “pipeline” 的方式，来构建数据处理程序。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>为了以函数式的方式编写代码，我们需要用 “声明式” 的思维代替 “命令式” 思维。要做到这点，需要找到一种函数式的方式来表示命令式的结构。<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">声明式编程</a> 将会讨论这些想法。</p>
 
       
@@ -632,7 +632,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -659,10 +659,10 @@
 <hr>
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第二篇。</p>
 <p>在<a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一节</a>中，介绍了 Ramda 和函数式编程的一些基本思想，如函数、纯函数和数据不变性。并介绍了如何入门：可以从集合迭代函数（如 <code>forEach</code>、<code>map</code>、<code>reduce</code>）开始。</p>
-<h2 id="简单组合">简单组合</h2>
+<h2 id="jian-dan-zu-he">简单组合</h2>
 <p>一旦熟悉了可以将函数传递给其他函数，你可能会开始找将多个函数组合在一起的场景。</p>
 <p>Ramda 为简单的函数组合提供了一些函数。我们来看看。</p>
-<h2 id="Complement">Complement</h2>
+<h2 id="complement">Complement</h2>
 <p>在上一节，我们使用 <code>find</code> 来查找列表中的首个偶数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEven = <span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span></span><br><span class="line">find(isEven, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) <span class="comment">//=&gt; 2</span></span><br></pre></td></tr></table></figure>
 <p>如果想找首个奇数呢？我们可以随手写一个 <code>isOdd</code> 函数并使用它。但我们知道任何非偶整数都是奇数，所以可以重用 <code>isEven</code> 函数。</p>
@@ -681,7 +681,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
 <p>注意，<code>both</code> 以函数的方式实现了逻辑与（<code>&amp;&amp;</code>）的功能，<code>either</code> 实现了逻辑或（<code>||</code>）的功能。</p>
 <p>Ramda 还提供了 <code>allPass</code> 和 <code>anyPass</code>，接受由任意多个函数组成的数组作为参数。如名称所示，<code>allPass</code> 类似于 <code>both</code>，而 <code>anyPass</code> 类似于 <code>either</code>。</p>
-<h2 id="Pipelines-管道">Pipelines(管道)</h2>
+<h2 id="pipelines-guan-dao">Pipelines(管道)</h2>
 <p>有时我们需要以 pipeline 的方式将多个函数依次作用于某些数据。例如，接受两个数字，将它们相乘，加 1 ，然后平方。我们可以这样写：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a * b</span><br><span class="line"><span class="keyword">const</span> addOne = <span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> x * x</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = <span class="function">(<span class="params">x, y</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> product = multiply(x, y)</span><br><span class="line">  <span class="keyword">const</span> incremented = addOne(product)</span><br><span class="line">  <span class="keyword">const</span> squared = square(incremented)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> squared</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">operate(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// =&gt; ((3 * 4) + 1)^2 =&gt; (12 + 1)^2 =&gt; 13^2 =&gt; 169</span></span><br></pre></td></tr></table></figure>
 <p>注意，每次操作是对上次操作的结果进行处理。</p>
@@ -701,12 +701,12 @@
 <p>这与上面的 <code>pipe</code> 几乎一样，除了函数的顺序是相反的。实际上，Ramda 中的 <code>compose</code> 函数的内部是用 <code>pipe</code> 实现的。</p>
 <p>我一直这样思考 <code>compose</code> 的工作方式：<code>compose(f, g)(value)</code> 等价于 <code>f(g(value))</code>。</p>
 <p>注意，与 <code>pipe</code> 类似，<code>compose</code> 中的函数除最后一个外，其余都是一元函数。</p>
-<h2 id="compose-还是-pipe？">compose 还是 pipe？</h2>
+<h2 id="compose-huan-shi-pipe">compose 还是 pipe？</h2>
 <p>具有命令式编程背景的人可能觉得 <code>pipe</code> 更容易理解，因为可以按照从左往右的顺序进行阅读。但 <code>compose</code> 更容易对如上所示的嵌套函数进行转换。</p>
 <p>我也不太清楚什么时候该用 <code>compose</code>，什么时候该用 <code>pipe</code>。由于它们在 Ramda 中基本等价，所以选择用哪个可能并不重要。只要根据自己的情况选择合适的即可。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>通过特定的方式进行函数组合，我们已经可以开始编写更强的函数了。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>你可能已经注意到了，在进行函数组合时，我们多数情况下都可以省略函数参数。只有在最终调用组合好的函数时，才传入参数。</p>
 <p>这在函数式编程中非常常见，我们将在下一节 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener"><code>Partial Application</code> (部分应用)</a>进行更多详细介绍。我们还会讨论如何组合多元（多参数）函数。</p>
 
@@ -759,7 +759,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -787,7 +787,7 @@
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第一篇。</p>
 <p>本系列文章使用 <a href="http://ramda.cn" target="_blank" rel="noopener">Ramda</a> JavaScript 库进行演示。许多理论、方法同样适用于其他函数式 JavaScript 库，如 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 和 <a href="https://lodash.com/" target="_blank" rel="noopener">Lodash</a>。</p>
 <p>我将尽量用通俗、非学术性的语言演示函数式编程。一方面想让更多的人理解该系列文章；另一方面本人在函数式编程方面造诣尚浅。</p>
-<h2 id="Ramda">Ramda</h2>
+<h2 id="ramda">Ramda</h2>
 <p>我已经在博客中多次提到过 <a href="http://ramda.cn" target="_blank" rel="noopener">Ramda</a> JavaScript 库：</p>
 <ul>
 <li>在 <a href="http://randycoulman.com/blog/2016/02/16/using-ramda-with-redux/" target="_blank" rel="noopener">Using Ramda With Redux</a> 中，展示了在编写 <a href="http://redux.js.org/" target="_blank" rel="noopener">Redux</a> 应用程序时如何运用 Ramda 的例子。</li>
@@ -795,7 +795,7 @@
 </ul>
 <p>我发现 Ramda 是一个精心设计的库：包含许多 API ，来简洁、优雅进行 JavaScript 函数式编程。</p>
 <p>如果你想在阅读本系列文章时进行 Ramda 实验，Ramda 网站有一个 <a href="http://ramda.cn/repl/" target="_blank" rel="noopener">repl 运行环境</a> 。</p>
-<h2 id="函数">函数</h2>
+<h2 id="han-shu">函数</h2>
 <p>正如名字所示，函数式编程与函数有很大的关系。为了演示，我们定义一个函数为一段可重用的代码：接受 0 到多个参数，返回单个值。</p>
 <p>下面是一个简单的 JavaScript 函数：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">double</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -809,17 +809,17 @@
 <li>将函数作为其他函数的返回值</li>
 </ul>
 <p>JavaScript 就是一种这样的语言，我们将利用它的这一优势进行编程。</p>
-<h2 id="纯函数">纯函数</h2>
+<h2 id="chun-han-shu">纯函数</h2>
 <p>在进行函数式编程时，使用所谓的 “纯” 函数进行工作将变得非常重要。</p>
 <p><a href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch3.html" target="_blank" rel="noopener">纯函数</a>是没有副作用的函数。它不会给任何外部变量赋值，不会获取输入，不会产生 “输出”，不会对数据库进行读写，不会修改输入参数等。</p>
 <p>纯函数的基本思想是：相同的输入，永远会得到相同的输出。</p>
 <p>当然可以用非纯函数编程（而且这也是必须的，如果想让程序做任何有趣的事情），但在大多数情况下，需要保持大部分函数是纯函数。（译者注：并不是说，要禁止使用一切副作用，而是说，要让它们在可控的范围内发生）</p>
-<h2 id="IMMUTABILITY">IMMUTABILITY</h2>
+<h2 id="immutability">IMMUTABILITY</h2>
 <p>函数式编程的另一个重要概念是 “Immutability”。什么意思呢？“Immutability” 是指 “数据不变性”。</p>
 <p>当以 immutable 方式工作时，一旦定义了某个值或对象，以后就再也不会改变它了。这意味着不能更改已有数组中的元素或对象中的属性。</p>
 <p>如果想改变数组或对象中的元素时，需要返回一份带有更改值的新拷贝。后面文章将会对此做详细介绍。</p>
 <p>Immutability 和 纯函数息息相关。由于纯函数不允许有副作用，所以不允许更改函数体外部的数据结构。纯函数强制以 immutable 的方式处理数据。</p>
-<h2 id="从哪里开始呢？">从哪里开始呢？</h2>
+<h2 id="cong-na-li-kai-shi-ni">从哪里开始呢？</h2>
 <p>开始以函数式思维思考最简单的方式是，使用集合迭代函数代替循环。</p>
 <p>如果用过具备这些特性的其他语言（如 Ruby、Smalltalk），你可能已经熟悉了这些特性。</p>
 <p>Martin Fowler 有几篇关于 “Collection PipeLines” 非常好的文章，展示了<a href="https://martinfowler.com/articles/collection-pipeline/" target="_blank" rel="noopener">如何使用这些函数</a> 以及<a href="https://martinfowler.com/articles/refactoring-pipelines.html" target="_blank" rel="noopener">如何将现有代码重构为 collection pipelines</a>。</p>
@@ -856,9 +856,9 @@
 <li><code>reduce</code> 最后一次调用 <code>add</code>，使用 <code>11</code> 和 数组中的最后一个元素 <code>4</code> ，输出 <code>15</code>。</li>
 <li><code>reduce</code> 将最终累加值 <code>15</code> 作为结果返回。</li>
 </ol>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>从这些集合迭代函数开始，需要逐渐习惯将函数传入其他函数的编程方式。你可能在其他语言中用过，但没有意识到正在做函数式编程。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>本系列的下一篇文章，<a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">函数组合</a> 将演示怎样以新的、有趣的方式对函数进行组合。</p>
 
       
@@ -910,7 +910,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -933,38 +933,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Applicative类-的定义">Applicative类 的定义</h2>
+          <h2 id="applicative-lei-de-ding-yi">Applicative类 的定义</h2>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> (<span class="type">Functor</span> <span class="title">f</span>) =&gt; <span class="type">Applicative</span> f <span class="keyword">where</span></span></span><br><span class="line">  pure :: a -&gt; f a</span><br><span class="line">  (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b</span><br></pre></td></tr></table></figure>
 <p>Applicative 中定义了 <code>pure</code> 和 <code>&lt;*&gt;</code></p>
-<h2 id="Applicative-Functor-的几个实例">Applicative Functor 的几个实例</h2>
-<h3 id="Maybe">Maybe</h3>
+<h2 id="applicative-functor-de-ji-ge-shi-li">Applicative Functor 的几个实例</h2>
+<h3 id="maybe">Maybe</h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Applicative</span> <span class="type">Maybe</span> <span class="keyword">where</span></span></span><br><span class="line">  pure = <span class="type">Just</span></span><br><span class="line">  <span class="type">Nothing</span> &lt;*&gt; _ = <span class="type">Nothing</span></span><br><span class="line">  (<span class="type">Just</span> f) &lt;*&gt; something = fmap f something</span><br></pre></td></tr></table></figure>
-<h3 id="Applicative-相较于-Functor-的改进之处：">Applicative 相较于 Functor 的改进之处：</h3>
+<h3 id="applicative-xiang-jiao-yu-functor-de-gai-jin-zhi-chu">Applicative 相较于 Functor 的改进之处：</h3>
 <p>with the Applicative type class, we can chain the use of the &lt;*&gt; function, thus enabling us to seamlessly operate on several applicative values instead of just one. For instance, check this out:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pure</span>(+) &lt;*&gt; <span class="type">Just</span> <span class="number">3</span> &lt;*&gt; <span class="type">Just</span> <span class="number">5</span> <span class="comment">-- Just 8</span></span><br></pre></td></tr></table></figure>
 <p>lift 相当于 <code>pure</code></p>
-<h3 id="Applicative-中还定义了">Applicative 中还定义了 <code>&lt;$&gt;</code></h3>
+<h3 id="applicative-zhong-huan-ding-yi-liao-code-lt-gt-code">Applicative 中还定义了 <code>&lt;$&gt;</code></h3>
 <p>&lt;$&gt; 相当于中缀版的 fmap，但应用于 Applicative 的链式调用特别方便</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(&lt;$&gt;) :: (<span class="type">Functor</span> f) =&gt; (a -&gt; b) -&gt; f a -&gt; f b</span><br><span class="line"><span class="title">f</span> &lt;$&gt; x = fmap f x</span><br><span class="line"><span class="comment">-- pure f &lt;*&gt; x &lt;*&gt; y &lt;*&gt; ... === fmap f x &lt;*&gt; y... === f &lt;$&gt; x &lt;*&gt; y...</span></span><br></pre></td></tr></table></figure>
-<h3 id="List-也是-Applicative-Functor">List 也是 Applicative Functor</h3>
+<h3 id="list-ye-shi-applicative-functor">List 也是 Applicative Functor</h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Applicative</span> [] <span class="keyword">where</span></span></span><br><span class="line">  pure x = [x]</span><br><span class="line">  fs &lt;*&gt; xs = [f x | f &lt;- fs, x &lt;- xs]</span><br></pre></td></tr></table></figure>
 <p>理解了 haskell 中 List 的 <code>&lt;*&gt;</code> 也就理解了 Ramda 中的 <code>liftN</code><br>
 将 fs 中的每个 f map 到 xs 中的每个 x。</p>
 <p>例如</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">fs</span> = [f1, f2, f3]</span><br><span class="line"><span class="title">xs</span> = [x1, x2]</span><br><span class="line"><span class="title">fs</span> &lt;*&gt; xs === [f1 x1, f1 f2, f2 x1, f2 x2, f3 x1, f3 x2]</span><br></pre></td></tr></table></figure>
-<h3 id="函数-r-也是-Applicative-Functor-很有意思">函数 <code>(-&gt;) r</code> 也是 Applicative Functor 很有意思</h3>
+<h3 id="han-shu-code-gt-r-code-ye-shi-applicative-functor-hen-you-yi-si">函数 <code>(-&gt;) r</code> 也是 Applicative Functor 很有意思</h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Function</span> :: ((-&gt;) r)</span><br><span class="line"><span class="type">Function</span> a = ((-&gt;) r) a </span><br><span class="line">           = r -&gt; a</span><br></pre></td></tr></table></figure>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Applicative</span> ((-&gt;) r) <span class="keyword">where</span></span></span><br><span class="line">  pure x = (\_ -&gt; x)</span><br><span class="line">  f &lt;*&gt; g = \x -&gt; f x (g x)</span><br></pre></td></tr></table></figure>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(pure <span class="number">3</span>) <span class="string">"blah"</span> <span class="comment">-- 3</span></span><br><span class="line">(+) &lt;$&gt; (+<span class="number">3</span>) &lt;*&gt; (*<span class="number">100</span>) $ <span class="number">5</span> <span class="comment">-- 508</span></span><br></pre></td></tr></table></figure>
 <p><code>&lt;$&gt;</code> + <code>&lt;*&gt;</code> 大致对标 Ramda 中的 converge</p>
-<h2 id="Laws">Laws</h2>
-<h3 id="1-Functor-Laws">1. <a href="https://en.wikibooks.org/wiki/Haskell/The_Functor_class" target="_blank" rel="noopener">Functor Laws</a></h3>
+<h2 id="laws">Laws</h2>
+<h3 id="1-a-href-https-en-wikibooks-org-wiki-haskell-the-functor-class-functor-laws-a">1. <a href="https://en.wikibooks.org/wiki/Haskell/The_Functor_class" target="_blank" rel="noopener">Functor Laws</a></h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">fmap</span> id = id</span><br><span class="line"><span class="title">fmap</span> (g . f) = fmap g . fmap f</span><br></pre></td></tr></table></figure>
-<h3 id="2-Applicative-Functor-Laws">2. <a href="https://en.wikibooks.org/wiki/Haskell/Applicative_functors" target="_blank" rel="noopener">Applicative Functor Laws</a></h3>
+<h3 id="2-a-href-https-en-wikibooks-org-wiki-haskell-applicative-functors-applicative-functor-laws-a">2. <a href="https://en.wikibooks.org/wiki/Haskell/Applicative_functors" target="_blank" rel="noopener">Applicative Functor Laws</a></h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pure</span> id &lt;*&gt; v = v                             <span class="comment">-- Identity</span></span><br><span class="line"><span class="title">pure</span> f &lt;*&gt; pure x = pure (f x)                <span class="comment">-- Homomorphism</span></span><br><span class="line"><span class="title">u</span> &lt;*&gt; pure y = pure ($ y) &lt;*&gt; u               <span class="comment">-- Interchange</span></span><br><span class="line"><span class="title">pure</span> (.) &lt;*&gt; u &lt;*&gt; v &lt;*&gt; w = u &lt;*&gt; (v &lt;*&gt; w)  <span class="comment">-- Composition</span></span><br></pre></td></tr></table></figure>
 <p>a bonus law</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmap f x = pure f &lt;*&gt; x</span><br></pre></td></tr></table></figure>
-<h3 id="3-Monad-Laws">3. <a href="https://wiki.haskell.org/Monad_laws" target="_blank" rel="noopener">Monad Laws</a></h3>
+<h3 id="3-a-href-https-wiki-haskell-org-monad-laws-monad-laws-a">3. <a href="https://wiki.haskell.org/Monad_laws" target="_blank" rel="noopener">Monad Laws</a></h3>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">return</span> a &gt;&gt;= k  =  k a</span><br><span class="line"><span class="title">m</span> &gt;&gt;= return  =  m</span><br><span class="line"><span class="title">m</span> &gt;&gt;= (x -&gt; k x &gt;&gt;= h)  =  (m &gt;&gt;= k) &gt;&gt;= h</span><br></pre></td></tr></table></figure>
 
       
@@ -1016,7 +1016,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
 
           
@@ -1032,7 +1032,7 @@
       
           <p>本文是 Transducer Explained 教程的第二篇。在<a href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">第一篇</a>中，从 <em>reducer</em> 开始讲起，到 <em>transformers</em>，再到在 <code>transduce</code> 中使用 <code>map</code> <em>transducers</em>。本文将介绍四个新的 <em>transducers</em>：<code>filter</code>、<code>remove</code>、<code>drop</code> 和 <code>take</code>。我们将展示如何将 <em>transducers</em> 组合成 流（<em>pipeline</em>s），并讨论转换的顺序。我们还将改变 <code>reduce</code> 的实现，使其能够借助 <code>reduced</code> 提前终止迭代操作。</p>
 <p>那么，上次讲到哪了呢？</p>
-<h2 id="Transformer">Transformer</h2>
+<h2 id="transformer">Transformer</h2>
 <p>在<a href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">第一篇</a>文章中，通过定义 <em>transformer</em> 协议来规范了 <code>reduce</code> 的步骤。</p>
 <p>所有 transformers 都包含3个方法：</p>
 <ol>
@@ -1043,7 +1043,7 @@
 <p>在第一篇文章中，我们使用下面的 <em>reducer</em> 来转换输入源: <code>mult</code>、<code>add</code> 和 <code>append</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> append = <span class="function">(<span class="params">value, item</span>) =&gt;</span> &#123;</span><br><span class="line">  value.push(item);</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>本文只会用到 <code>append</code>，将元素拼接到数组的尾部。</p>
-<h2 id="Reduce">Reduce</h2>
+<h2 id="reduce">Reduce</h2>
 <p>我们定义了自己的 <code>reduce</code> 实现，它接受以下参数：</p>
 <ol>
 <li>一个 transformer 或者将被封装成 transformer 的 <em>reducer</em></li>
@@ -1053,7 +1053,7 @@
 <p>目前的实现使用 transformer 的 <code>step</code> 函数作为对原生数组进行归并的 <em>reducer</em>，我们稍后将修改这一实现。</p>
 <p>在迭代过程中，<code>step</code> 函数接受两个参数：<code>result</code> 和 <code>item</code>。初始的 <code>result</code> 值 由调用者提供，后续的每个 <code>result</code> 使用当前 <code>step</code> 函数的返回值。</p>
 <p><code>item</code> 由迭代过程内部提供。在第一篇文章中展示了两个过程：1. 归并数组的每个元素; 2. 手动调用 <code>step</code> 函数处理每个元素。（在后续文章中将看到更多例子）。</p>
-<h2 id="Transducer">Transducer</h2>
+<h2 id="transducer">Transducer</h2>
 <p>我们创建了 mapping <em>transducer</em>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="function"><span class="params">f</span> =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">  step: <span class="function">(<span class="params">result, item</span>) =&gt;</span> xf.step(result, f(item)),</span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> xf.result(result),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p><code>map</code> transducer 接受一个映射函数：<code>f</code>，并返回一个真正的 transducer：</p>
@@ -1065,7 +1065,7 @@
 <p>函数 <code>f</code>，可以是对数据进行映射（转换）的任意函数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus1 = <span class="function"><span class="params">input</span> =&gt;</span> input + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> plus2 = <span class="function"><span class="params">input</span> =&gt;</span> input + <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
 <p>在本文的例子中将继续使用这两个简单的映射函数。</p>
-<h2 id="Transduce">Transduce</h2>
+<h2 id="transduce">Transduce</h2>
 <p>我们定义了一个新函数，<code>transduce</code>, 其接受：</p>
 <ol>
 <li>一个 transducer: 定义转换的过程</li>
@@ -1075,12 +1075,12 @@
 </ol>
 <p>通过 transducer 和 <code>stepper</code>（reducer） 函数，可以创建一个 transformer, 然后将该 transformer、初始值和输入源一同传入 <code>reduce</code>。</p>
 <p>我们已经展示过，同一 transducer 可以生成不同的结果，只要改变传入 <code>transduce</code> 的初始值和 <code>stepper</code> 函数。</p>
-<h2 id="Composition">Composition</h2>
+<h2 id="composition">Composition</h2>
 <p>最后，我们展示了可以通过组合已有 transducers 来创建新的 transducers</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose2 = <span class="function">(<span class="params">fn1, fn2</span>) =&gt;</span> <span class="function"><span class="params">item</span> =&gt;</span> fn1(fn2(item));</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = compose2(</span><br><span class="line">      compose2(map(plus1), map(plus2)),</span><br><span class="line">      map(plus1));</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [6,7,8]</span></span><br></pre></td></tr></table></figure>
 <p>被组合的 transducer 从左向右对输入源进行转换。</p>
 <p>本文从这里开始讲起。如果对上面这个例子不太熟悉，可以参考<a href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">第一篇文章的讲解</a></p>
-<h2 id="Pipelines-流水线">Pipelines (流水线)</h2>
+<h2 id="pipelines-liu-shui-xian">Pipelines (流水线)</h2>
 <p>首先，定义一个新的函数，用它可以组合任意数量的函数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose = <span class="function">(<span class="params">...fns</span>) =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> i = fns.length - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span>(; i &gt;=<span class="number">0</span>; i--) &#123; xf = fns[i](xf); &#125;</span><br><span class="line">  <span class="keyword">return</span> xf;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p><code>compose</code> 是对 <code>compose2</code> 的扩展。<code>compose</code> 从右向左进行函数组合：组合出来的函数调用时，右侧函数的返回值，作为左侧函数的输入，不断重复该过程，知道最后一个函数的输出，作为整个函数的结果输出。</p>
@@ -1091,7 +1091,7 @@
 <p>每个 transducer 旁边的注释将每个转换通过数组展示出来，这样每次可以完整的查看整个转换。</p>
 <p>然而，需要注意的是，在整个转换过程中，transducers 每次只顺序转换一个 item，并且不会产生中间结果。注释仅仅表示 pipeline 的每步的转换结果。我们将在下面继续讨论这个问题。</p>
 <p>实际上，虽然组合是从右向左，转换的顺序实际上是从左向右的（在示例中是从上向下）。（需要将 transducers 的组合顺序 和 组合后 transducers 对输入源的转换顺序区分开)。在本例中顺序并不重要，但下一个例子中，便需要考虑调用顺序了。</p>
-<h2 id="Filter">Filter</h2>
+<h2 id="filter">Filter</h2>
 <p>我们来定义 <code>filter</code> transducer</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> filter = <span class="function"><span class="params">predicate</span> =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">  step: <span class="function">(<span class="params">value, item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> allow = predicate(item);</span><br><span class="line">    <span class="keyword">if</span>(allow)&#123;</span><br><span class="line">      value = xf.step(value, item);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">  &#125;,</span><br><span class="line">  result: <span class="function">(<span class="params">value</span>) =&gt;</span> xf.result(value),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>注意，通过 <code>filter</code> 创建的 transformer，只有在判断函数 <code>predicate</code> 返回 真值 时，才会调用给下一个 transformer。当 <code>predicate</code> 返回 false 时，当前元素会被忽略，并返回上次的迭代结果。</p>
@@ -1105,7 +1105,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> not = <span class="function"><span class="params">predicate</span> =&gt;</span> <span class="function"><span class="params">x</span> =&gt;</span> !predicate(x);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = filter(not(isEqual(<span class="number">2</span>)));</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [1,3,4,5]</span></span><br></pre></td></tr></table></figure>
 <p>我们修改了前面的例子：对判断函数 <code>isEqual(2)</code> 取反，由此创建了一个移除输入源中所有数字 2 的 transducer。</p>
 <p>现在在我们的 pipeline 库中添加了另一件武器（<code>filter</code>），一起来玩一下吧。</p>
-<h2 id="Pipeline-顺序">Pipeline 顺序</h2>
+<h2 id="pipeline-shun-xu">Pipeline 顺序</h2>
 <p>我们来对每个元素加 1，然后过滤出奇数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = compose(</span><br><span class="line">  map(plus1),         <span class="comment">// [2,3,4,5,6]</span></span><br><span class="line">  filter(isOdd));     <span class="comment">// [3,5]</span></span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [3,5]</span></span><br></pre></td></tr></table></figure>
 <p>首先调用 <code>map(plus1)</code> transducer 对每个元素加 1，然后调用下一步转换：过滤出所有奇数。</p>
@@ -1118,14 +1118,14 @@
 <li>越早使用 transducers 减少 pipeline 中元素的数量，效率可能会越高。</li>
 </ol>
 <p>注意到，在最后一个例子中，<code>map(plus1)</code> 仅仅使用所有元素的子集调用。同样的，并未创建中间数组，仅仅作为注释便于理解而已。</p>
-<h2 id="Remove">Remove</h2>
+<h2 id="remove">Remove</h2>
 <p>准备好了吗？现在开始讲另一个 transducer。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> remove = <span class="function"><span class="params">predicate</span> =&gt;</span> filter(not(predicate));</span><br></pre></td></tr></table></figure>
 <p>很简单吧。实际上，我们可以通过对 predicate 取反 和 复用 <code>filter</code> 来创建 <code>remove</code> transducer。</p>
 <p>现在来实践一下。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = compose(</span><br><span class="line">  filter(isOdd),        <span class="comment">// [1,3,5]</span></span><br><span class="line">  map(plus1),           <span class="comment">// [2,4,6] </span></span><br><span class="line">  remove(isEqual(<span class="number">4</span>)));  <span class="comment">// [2,6]</span></span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [2,6]</span></span><br></pre></td></tr></table></figure>
 <p>首先过滤出奇数，然后对每项加1，然后删除 <code>4</code>。</p>
-<h2 id="Drop">Drop</h2>
+<h2 id="drop">Drop</h2>
 <p>如果想在迭代开始时跳过前 <code>n</code> 个元素，该做么做呢？这正是 <code>drop</code> transducer 的作用。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> drop = <span class="function"><span class="params">n</span> =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> left = n;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">    step: <span class="function"><span class="keyword">function</span>(<span class="params">value, item</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(left &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        left--;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        value = xf.step(value, item);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    result: <span class="function"><span class="params">result</span> =&gt;</span> xf.result(result),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以这样使用 <code>drop</code>：</p>
@@ -1138,7 +1138,7 @@
 <p>哦噢，麻烦来了。我们知道如何逐步处理每个元素，并且通过 transformer 的状态来保持剩余元素的计数。但是，如何停止对剩余元素的迭代呢？</p>
 <p>为什么需要表明转换已经完成，不再接受任何额外元素呢？不仅因为继续接受元素是一种浪费，还因为无法保证迭代能够完成。有可能迭代是无限的。如果可以，我们当然想终止无限迭代。</p>
 <p>那么如何表示提前终止呢？我们需要在看一下迭代的源代码：<code>transduce</code>。</p>
-<h2 id="Reduce-redux-终极-Reduce">Reduce redux (终极 Reduce)</h2>
+<h2 id="reduce-redux-zhong-ji-reduce">Reduce redux (终极 Reduce)</h2>
 <p>下面是来自<a href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">第一篇文章</a>中 <code>transduce</code> 和 <code>reduce</code> 的定义，：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transduce = <span class="function">(<span class="params">transducer, stepper, init, input</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> stepper === <span class="string">'function'</span>)&#123;</span><br><span class="line">    stepper = wrap(stepper);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> xf = transducer(stepper);</span><br><span class="line">  <span class="keyword">return</span> reduce(xf, init, input);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reduce(xf, init, input) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> xf === <span class="string">'function'</span>)&#123;</span><br><span class="line">    xf = wrap(xf);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 怎样才能结束呢?? </span></span><br><span class="line">  <span class="keyword">var</span> value = input.reduce(xf.step, init); </span><br><span class="line">  <span class="keyword">return</span> xf.result(value);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wrap = <span class="function"><span class="params">stepper</span> =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'init not supported'</span>),</span><br><span class="line">  step: stepper,</span><br><span class="line">  result: <span class="function"><span class="params">value</span> =&gt;</span> value,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>从上面的实现可知，我们正在使用原生数组 <code>reduce</code> 方法进行迭代，<code>reduce</code> 的 <code>reducer</code> 来自 transformer。后续文章中，我们将删除输入源是数组的假设，但现在还需继续使用该假设。我们来定义自己的 <code>arrayReduce</code> 实现。</p>
@@ -1158,7 +1158,7 @@
 <p>现在我们可以调整一下 <code>arrayReduce</code> 的实现，来来处理提前终止的 reduced 的值。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arrayReduce =&gt; <span class="function">(<span class="params">xf, init, array</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> value = init;</span><br><span class="line">  <span class="keyword">var</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> length = array.length;</span><br><span class="line">  <span class="keyword">for</span>(; idx &lt; length; idx++)&#123;</span><br><span class="line">    value = xf.step(value, array[idx]);</span><br><span class="line">    <span class="keyword">if</span>(isReduced(value))&#123;</span><br><span class="line">      value = deref(value);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> xf.result(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>现在可以像以前一样对每个元素进行迭代，但每次调用 <code>step</code> 之后，会先检查是否当前值是否 reduced。如果是，则提取当前值并终止迭代。我们仍然对最终值调用 <code>result</code> 方法，不管它来自 reduced value 还是完整的迭代。</p>
-<h2 id="Take-2">Take 2</h2>
+<h2 id="take-2">Take 2</h2>
 <p>现在可以完成 <code>take</code> 的实现了：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> take = <span class="function"><span class="params">n</span> =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> left = n;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">    step: <span class="function"><span class="keyword">function</span>(<span class="params">value, item</span>)</span>&#123;</span><br><span class="line">      value = xf.step(value, item);</span><br><span class="line">      <span class="keyword">if</span>(--left &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">// 任务完成，发出 reduced 信号</span></span><br><span class="line">        value = reduced(value);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    result: <span class="function"><span class="params">value</span> =&gt;</span> xf.result(value),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>我们之前唯一缺失的是：当检测到转换完成后使用 <code>reduced</code> 对值进行封装。(现在已经补上了)</p>
@@ -1168,16 +1168,16 @@
 <p>就像任何其他的 transducer，你可以将 <code>drop</code> 和 <code>take</code> 组合成一个 pipeline</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = compose(</span><br><span class="line">  drop(<span class="number">1</span>),    <span class="comment">// [2,3,4,5]</span></span><br><span class="line">  take(<span class="number">3</span>),    <span class="comment">// [2,3,4]</span></span><br><span class="line">  drop(<span class="number">1</span>));   <span class="comment">// [3,4]</span></span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [3,4]</span></span><br></pre></td></tr></table></figure>
 <p>第一个 <code>drop</code> 跳过第一个元素，然后将剩余元素传给下一个 transformer。<code>take</code>  transformer 获取从第一个 <code>drop</code> 传过来的数组中的前三个元素，然后停止迭代。最后一个 <code>drop</code> 删除从 <code>take</code> 传过来的数组中的首个元素，并且在终止之前逐一发送剩余的两个元素。</p>
-<h2 id="第二部分总结">第二部分总结</h2>
+<h2 id="di-er-bu-fen-zong-jie">第二部分总结</h2>
 <p>我们首先总结了在第一篇文章中学到的内容，然后添加了 4 个新的 transducers：<code>filter</code>、<code>remove</code>、<code>take</code>、<code>drop</code>。我们通过组合 transducers 来创建 transformer pipelines，并看到数据变换的顺序是从左到右。</p>
 <p>我们看到，除了在转换期间改变元素，transformer 还可以决定跳过任意元素，通过不调用下一个 transformer 的 <code>step</code> 来实现。每一个 transformer 的实现决定了什么会传递到下个 transformer。有些情况下， transformer 可能会发送多个值，例如 <code>cat</code> 或 <a href="https://github.com/transduce/transduce-string" target="_blank" rel="noopener"><code>transduce-string</code></a>。</p>
 <p>我们还看到了可以创建有状态变换的 transducer 的一些例子。状态由 transformer 管理，而不是 transducer。这允许无状态 transducer 的重用，即时它们创建的 transformers 管理状态。</p>
 <p>当实现 <code>take</code> 时，我们意识到需要添加一个用于提前终止迭代的方法。我们改变了 <code>reduce</code> 的实现来处理和解包 reduced 的值，并且实现 <code>take</code> 用于在取完数据时，终止迭代。</p>
-<h2 id="还有别的吗？">还有别的吗？</h2>
+<h2 id="huan-you-bie-de-ma">还有别的吗？</h2>
 <p>在入门教程的最后一篇文章中还有一些需要解释的相关问题。我们仍未解释 transformer 的 <code>init</code> 和 <code>reduce</code> 的作用。我们将添加 <code>into</code> 并一般化 <code>reduce</code> 的实现来支持迭代器。</p>
 <p>我们还看到输入元素可以是产生 sequence 值的任意东西：惰性列表、无限序列生成器、<a href="http://phuu.net/2014/08/31/csp-and-transducers.html" target="_blank" rel="noopener">CSP</a>、<a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a>、迭代器、生成器、immutable-js 数据结构等。</p>
 <p>想要获取新文章的通知吗？可以关注 获取 <a href="https://twitter.com/simplectic" target="_blank" rel="noopener">simplectic</a> 的 Twitter。</p>
-<h2 id="我现在已经准备好了！">我现在已经准备好了！</h2>
+<h2 id="wo-xian-zai-yi-jing-zhun-bei-hao-liao">我现在已经准备好了！</h2>
 <p>已经准备使用 transducers 了吗？如果通读了这篇文章，你应该已经具备良好的知识体系： <a href="https://github.com/cognitect-labs/transducers-js" target="_blank" rel="noopener">transducers-js</a> 和 <a href="https://github.com/jlongster/transducers.js" target="_blank" rel="noopener">transducers.js</a>。我们主要参考 transducers-js 的实现，但这些概念同样适用于 transducers.js。</p>
 <p>如果你喜欢 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore.js</a>，可以查看 <a href="http://simplectic.com/projects/underarm" target="_blank" rel="noopener">underarm</a>。它是基于 <a href="https://github.com/transduce/transduce" target="_blank" rel="noopener">transduce</a> 的库，允许针对 transducers.js 和 transducer-js 支持的公共协议定义 API。</p>
 
@@ -1230,7 +1230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
 
           
@@ -1282,15 +1282,15 @@
 <hr>
 <p>本文使用 JavaScript 对 transducers 原理进行剖析。首先介绍数组的 reducing(归并) 过程，并定义用于 数据转换 的 transformers；然后逐步引入 transducers，并将其用于 transduce 中。文末会有总结、展望、一些补充链接，以及当前涉及 transducer 的一些库。</p>
 <p><strong>Transducers…</strong></p>
-<h2 id="什么是-Transducers-？">什么是 Transducers ？</h2>
+<h2 id="shi-yao-shi-transducers">什么是 Transducers ？</h2>
 <p><a href="http://clojure.org/reference/transducers" target="_blank" rel="noopener">原文</a>解释如下</p>
 <blockquote>
 <p>Transducers 是可组合的算法变换。它们独立于输入和输出的上下文，并且作为一个独立的单元提供最基本的 转换(transformation)。由于 transducers 与输入和输出相解耦，所以它们可以用于许多不同的处理场景：collections, streams, channels, observables（集合、流、管道、观察者模式）等。Transducers 可以直接组合，与输入无关,且不会产生额外的中间变量。</p>
 </blockquote>
 <p><strong>嗯…</strong></p>
-<h2 id="还是不太理解">还是不太理解</h2>
+<h2 id="huan-shi-bu-tai-li-jie">还是不太理解</h2>
 <p>我们来找一些相关的代码看看。当使用 transducers 时，所谓的 “算法变换” 就已经以函数的形式被定义好了（或至少部分定义好了）, transducer 类似于传入 reduce 的 <code>reducer</code>。<a href="http://clojure.org/reference/transducers" target="_blank" rel="noopener">Clojure 文档</a> 将这些 “算法变换” 称为 <em>reducing function</em>。这又是什么东西？好吧…… ，让我们从 <code>Array#reduce</code> 函数开始讲解。首先来看看 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener">MDN 的定义</a>。</p>
-<h2 id="Reduce">Reduce</h2>
+<h2 id="reduce">Reduce</h2>
 <blockquote>
 <p>reduce() 方法将一个二元函数，作用于一个累积值、以及数组中的每个元素（按从左到右的顺序）， 最终将数组 reduce（归并、折叠）成一个单值。</p>
 </blockquote>
@@ -1309,7 +1309,7 @@
 <li>将最后一次计算结果作为整体的返回值。</li>
 </ol>
 <p>注意，在上述两例中，<em>reducer</em> 是一个二元函数。第一个参数为累积值，其值为由外部传入的初始值，或上次 <em>reducer</em> 的计算结果；第二个参数是在迭代过程中传入的单个元素。在本例中，reduce 对数组中的每个元素进行迭代，并进行归并处理。我们稍后会看到其他的迭代方式。我们使用 <em>reducer</em> 函数来描述 “转换的本质”。</p>
-<h2 id="Transformer">Transformer</h2>
+<h2 id="transformer">Transformer</h2>
 <p>接下来，我们来明确 <em>transformer</em> 的归并过程：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> createTransformer = <span class="function"><span class="params">reducer</span> =&gt;</span> (&#123;</span><br><span class="line">  <span class="comment">// 1. 作为 reduce 的初始值</span></span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> <span class="number">1</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2. 每次输入一个元素，并将本次计算结果</span></span><br><span class="line">  <span class="comment">//    传给下次迭代的 reducer</span></span><br><span class="line">  step: reducer,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3. 将最后一次的计算结果作为最终输出</span></span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> result,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>我们创建一个对象来封装 reducer，并将其命名为 <code>step</code>；该对象还包含另外两个函数：1. <code>init</code> 函数用于初始化 transformer，<code>result</code> 函数用于将最后一次计算结果转换为最终输出。注意，本文将只关注 <code>step</code> 函数，<code>init</code> 和 <code>result</code> 函数将在后续文章中做深入分析。现在，你可以把它们当作管理 “转换” 生命周期的方法：<code>init</code> 用于初始化，<code>step</code> 用于迭代，<code>result</code> 用于输出整个结果。</p>
@@ -1332,12 +1332,12 @@
 <p>但我们仍然可以向 reduce 传 transformers。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = wrap(sum);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">2</span>, input);</span><br><span class="line"><span class="comment">// output = 11 (=2+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = wrap(mult);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">1</span>, input);</span><br><span class="line"><span class="comment">// output = 24 (=1*2*3*4)</span></span><br></pre></td></tr></table></figure>
 <p>注意，这里在外部使用 <code>wrap</code> 将已有的 <code>reducer</code> 转换为 transformer。这在使用 transducers 会经常碰到：开发者将转换定义为简单的函数，transducers 库会自动将将其转换为 transformer。</p>
-<h2 id="不一样的数组拷贝">不一样的数组拷贝</h2>
+<h2 id="bu-yi-yang-de-shu-zu-kao-bei">不一样的数组拷贝</h2>
 <p>目前，我们一直使用数字作为初始值和加法作为 <em>reducer</em> 。其实不一定非要这样，<code>reduce</code> 也可以将数组作为初始值。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> append = <span class="function">(<span class="params">result, item</span>) =&gt;</span> result.push(item);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = reduce(append, [], input);</span><br><span class="line"><span class="comment">// output = [2, 3, 4]</span></span><br></pre></td></tr></table></figure>
 <p>我们定义了一个步进函数（stepper/reducer）<code>append</code>，用于将每个元素拷贝到新数组中，并返回该数组。借助 <code>append</code>， reduce 便可以创建一份数组的拷贝。</p>
 <p>上述操作是否够酷？或许算不上…。当你在将元素拷贝到数组前，先对它变换一下，情况开始变得有趣起来。</p>
-<h2 id="最孤单的数字">最孤单的数字</h2>
+<h2 id="zui-gu-dan-de-shu-zi">最孤单的数字</h2>
 <p>（注：One is the loneliest number，一句英文歌词，引出 <code>plus1</code> 转换）</p>
 <p>假设我们想让每个元素加1，定义一个加1函数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus1 = <span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
@@ -1353,12 +1353,12 @@
 <p>但是，有时我们想立即查看替换 <em>reducer</em> 后的结果，因为涉及到的改变仅仅只是将 <code>append</code> 替换成了 <code>sum</code>。因此我们希望有一个能够创建 转换 的函数，该函数不依赖于用于组合结果的 transformer。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducerPlus1 = <span class="function">(<span class="params">xf</span>) =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">  step: <span class="function">(<span class="params">result, item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> plus1ed = plus1(item);</span><br><span class="line">    <span class="keyword">return</span> xf.step(result, plus1ed);</span><br><span class="line">  &#125;,</span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> xf.result(result),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>该函数接受一个 transformer：<code>xf</code>，返回一个基于 <code>xf</code> 的新 transformer。新 transformer 将经过 <code>plus1</code> 转换的值传给 <code>xf</code>，相当于对 <code>xf</code> 进行代理。由于使用 <code>step</code> 函数可以完全定义这个转换，所以新 transformer 可以复用旧 transformer – <code>xf</code> 的 <code>init</code> 和 <code>result</code> 函数。新 transformer 每次对元素进行 <code>plus1</code> 转换后，利用转换的值对封装的 transformer 的 <code>step</code> 函数进行调用。</p>
-<h2 id="Transducer">Transducer</h2>
+<h2 id="transducer">Transducer</h2>
 <p>我们刚刚创建了第一个 transducer：一个接受已有 transformer，返回新 transformer 的函数。transducer 会将一些额外的处理行为委托给新 transformer。</p>
 <p>我们来尝试一下，使用刚才的 transducer 来重新实现前面的例子。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus1;</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [3] (=append([], 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [3,4] (=append([3], 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [3,4,5] (=append([3,4], 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [3,4,5]</span></span><br></pre></td></tr></table></figure>
 <p>运行过程和结果与之前相同，很好。唯一的区别是 transformer：<code>xf</code> 的创建。我们使用 <code>wrap</code> 将 <code>append</code> 转换成名为 <code>stepper</code> 的 transformer，然后使用 transducer 封装这个 stepper 并返回一个 <code>plus1</code> 转换。然后我们就可以像从前一样使用转换函数：xf 对每个元素逐步操作，并得到结果。</p>
-<h2 id="中间辅助元素">中间辅助元素</h2>
+<h2 id="zhong-jian-fu-zhu-yuan-su">中间辅助元素</h2>
 <p>从现在开始，事情变得有趣起来：我们可以用同一 transducer，仅在改变 stepper 和初始值的情况下，获得最终的累加和，而不需要中间辅助数组。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stepper = wrap(sum);</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus1;</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 3 (=sum(0, 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// 7 (=sum(3, 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// 12 (=sum(7, 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// 12</span></span><br></pre></td></tr></table></figure>
 <p>不需要计算中间数组，一次遍历即可得到结果。<code>sum</code> 与 <code>append</code> 例子只有两处不同：</p>
@@ -1369,7 +1369,7 @@
 <p>仅此两处差异，其他完全一样。</p>
 <p>需要注意的是，只有 <code>stepper</code> 转换知道 <code>result</code> 的数据类型。当封装 <code>sum</code> 时，<code>result</code> 的类型为数字，封装 <code>append</code> 时，<code>result</code> 的类型是数组。初始值类型与 stepper 的 <code>result</code> 参数类型相同。每次迭代元素的类型不限，因为 <code>stepper</code> 知道如何组合上次输出的结果和当前的元素，并返回一个新的组合的结果；本次输出结果可能会用于下次迭代中的组合，如此迭代循环。</p>
 <p>这些特性允许我们定义独立于输出的转换。</p>
-<h2 id="可能会像-1-一样糟糕">可能会像 1 一样糟糕</h2>
+<h2 id="ke-neng-hui-xiang-1-yi-yang-zao-gao">可能会像 1 一样糟糕</h2>
 <p>(注：第二句歌词，Can be as bad as one，作者意思应该是，如果 <code>plus2</code> 还跟 <code>plus1</code> 一样从头重新实现一遍，就比较坑了)</p>
 <p>假如我们想要 <code>plus2</code>，需要做哪些改变呢？我们可以像定义 <code>transducerPlus1</code> 那样，定义一个新的 <code>transducerPlus2</code> 。看看 <code>transducerPlus1</code> 是如何实现的，并决定做哪些改变。但这样做违反了 DRY 原则。</p>
 <p>有更好的方案吗？</p>
@@ -1379,7 +1379,7 @@
 <p>我们定义了 mapping transducer，我们使用它来单步执行转换过程。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus2 = <span class="function"><span class="params">input</span> =&gt;</span> input + <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [4] (=append([], 2+2)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [4,5] (=append([4], 3+2)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [4,5,6] (=append([4,5], 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [4,5,6]</span></span><br></pre></td></tr></table></figure>
 <p>本例相较于之前 <code>plus1</code> 和 <code>append</code> 的例子，唯一的区别在于使用 <code>map</code> 创建 transducer。我们可以类似地使用 <code>map(plus1)</code> 来创建 <code>plus1</code> transducer。<code>transducerPlus1</code> 虽然只是短暂的出现便被 <code>map(plus1)</code> 代替，但它对我们理解 transduce 的内部原理帮助很大。</p>
-<h2 id="Transduce">Transduce</h2>
+<h2 id="transduce">Transduce</h2>
 <p>上面的例子讲解了如何使用 transducers 对一系列输入进行转换。我们来分解一下其中的步骤。</p>
 <p>首先调用一个包含 stepper 转换的 transducer 来初始化转换，并定义 transduce 的初始值。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br></pre></td></tr></table></figure>
@@ -1397,7 +1397,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = sum;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 12 (=3+4+5)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = sum;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 15 (=4+5+6)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = mult;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 60 (=3*4*5)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = mult;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 120 (=4*5*6)</span></span><br></pre></td></tr></table></figure>
 <p><img src="./transduce.png" alt="transduce"></p>
 <p>这里我们只是改变了 stepper 和初始值，便可以得到不同的结果。我们可以在不依赖中间结果的情况下，遍历一次便可求得累加和或乘积。</p>
-<h2 id="组合">组合</h2>
+<h2 id="zu-he">组合</h2>
 <p>如果我们想加3，该怎么办呢？我们可以定义 <code>plus3</code> 并且使用 <code>map</code>，但利用 transducers 的一个特性来进行优化。</p>
 <p>事实上，可以通过已有的两个函数：<code>plus1</code> 和 <code>plus2</code>，来定义 <code>plus3</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus3 = <span class="function"><span class="params">item</span> =&gt;</span> puls2(plus1(item));</span><br></pre></td></tr></table></figure>
@@ -1418,17 +1418,17 @@
 <p>事实上，虽然函数组合的顺序从右向左，而转换本身是自左向右的（译者注：这也是理解 transduce 的难点之一，理解了这个，也就基本理解了 transduce。可以通过单个 transducer 和 transformer 的组合，来理解转换的调用顺序。transduce 本质上做的事情是 <strong>在对每个元素进行归并之前先对其进行转换</strong> ，将这句话在自己心里默念三遍：），这也是 transduce 区别于 reduce 的“唯一”不同点）。</p>
 <p>在上面的 <code>transducersPlus4</code> 示例中，每个元素先进行 <code>plus3</code> 转换，然后进行 <code>plus1</code> 转换。</p>
 <p>虽然在本例中 transducers 的调用顺序对结果没有影响，但是<strong>从左向右</strong>的变换顺序还是需要牢记在心。变换的调用顺序让你在阅读代码时更容易理解，因为它与你的阅读顺序是一致的。</p>
-<h2 id="part-1-总结">part 1 总结</h2>
+<h2 id="part-1-zong-jie">part 1 总结</h2>
 <p>Transducers 将 “可组合的算法转换” 抽象出来，使其独立于输入、输出，甚至迭代的整个过程。</p>
 <p>本文演示了如何使用 transducers 来抽象算法转换，transducer 将一个 transformer 转换为另一个 transformer。transformer 可以用于 transduce，进行迭代和转换输入源。</p>
 <p><a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore.js</a> 或 <a href="https://lodash.com/" target="_blank" rel="noopener">Lo-Dash</a> 在进行数组或对象计算时，往往会产生中间结果。而 transducers 以一系列函数的方式定义转换，类似于 reduce 的处理方式：将初始值作为首次迭代的累积值，使用累积值和当前元素进行计算，返回转换后的累积值，并将其作为下次迭代的累积值参数。一旦将这些转换从数据中抽象出来，就可以将相同的转换应用于不同的处理过程，这些处理过程以某个初始的累积值开始，不断对变换后的元素累积。</p>
 <p>我们已经展示了同一 transducer 可以应用于不同的 “输出源”，只需改变初始累积值和 reducer 函数。这种抽象的好处之一为：可以只通过一轮计算便得到结果，且不会产生中间辅助数组。</p>
 <p>尽管没有明确说明，我们还是展示了 transducer 是与迭代过程及输入源解耦的。在迭代过程中，我们使用相同的 transducer 对元素进行转换，并将转换结果传给 step 函数，并且使用数组的 reduce 从数组中拉取待处理的数据元素。</p>
-<h2 id="还想了解更多！">还想了解更多！</h2>
+<h2 id="huan-xiang-liao-jie-geng-duo">还想了解更多！</h2>
 <p><a href="http://simplectic.com/blog/2014/transducers-explained-pipelines/" target="_blank" rel="noopener">看这里</a> ，之后的文章中将会在本文基础上探讨更多主题，例如：transducers 并不一定需要每步都输出元素；并且迭代过程可以提前终止，并返回终止前已经归并的结果。本文只讨论了 step，未讨论 init 和 result，将来也会进行补充。</p>
 <p>我们还将会学习到，输入源可以是任意产生一系列值的模型：惰性列表，不确定的序列生成器，CSP（通信顺序进程），<a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a><br>
 lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08/31/csp-and-transducers.html" target="_blank" rel="noopener">http://phuu.net/2014/08/31/csp-and-transducers.html</a>), [push streams][12], <a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a>, iterators, generators, immutable-js data structures, 等等。</p>
-<h2 id="等不及了！">等不及了！</h2>
+<h2 id="deng-bu-ji-liao">等不及了！</h2>
 <p>在此期间，可以看看 <a href="http://clojure.org/transducers" target="_blank" rel="noopener">Clojure文档</a>, 或者看看 <a href="https://www.youtube.com/watch?v=6mTbuzafcII" target="_blank" rel="noopener">这个视频</a> 或 <a href="http://phuu.net/2014/08/31/csp-and-transducers.html" target="_blank" rel="noopener">这篇文章</a>。其他更多更好的介绍，可以自行 Google 。</p>
 <p>想要立刻实践一下？已经有三个库实现了相似的API：<a href="https://github.com/cognitect-labs/transducers-js" target="_blank" rel="noopener">transducers-js</a>、<a href="https://github.com/jlongster/transducers.js" target="_blank" rel="noopener">transducers.js</a>、<a href="https://github.com/ramda/ramda/blob/v0.22.1/src/transduce.js" target="_blank" rel="noopener">ramda</a>(译者注：ramda 中 transducer 部分也是本文作者写的）。本文是按照 transducers-js 的实现进行讲解和演示的，但这些概念同样适用于 transducers.js。</p>
 <p><a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore.js</a> 的爱好者？可以查看 <a href="http://simplectic.com/projects/underarm/" target="_blank" rel="noopener">underarm</a>，基于 <a href="https://github.com/transduce/transduce" target="_blank" rel="noopener">transduce</a> 库（译者注：本文作者写的库）写的。</p>
@@ -1484,7 +1484,7 @@ lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
 
           
@@ -1499,10 +1499,10 @@ lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08
 
       
           <p>map、reduce 和 filter 是函数式编程中用到频率非常高的三个函数，对类Array 类型操作非常方便，被称为 FP 中的三板斧。还有几个相关的稍微复杂的函数也一并介绍： chain（flattenMap）、transduce、into、reduced。</p>
-<h2 id="图解-map-reduce-filter">图解 map/reduce/filter</h2>
+<h2 id="tu-jie-map-reduce-filter">图解 map/reduce/filter</h2>
 <p>虽然这是 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 方式的写法，但不影响对三个概念的理解.</p>
 <p><img src="./mapFilterReduce.jpg" alt="map/reduce/filter"></p>
-<h2 id="源码分析">源码分析</h2>
+<h2 id="yuan-ma-fen-xi">源码分析</h2>
 <ul>
 <li>
 <p>map</p>
@@ -1559,7 +1559,7 @@ lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
 
           
@@ -1573,10 +1573,10 @@ lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Ramda-目录说明">Ramda 目录说明</h2>
+          <h2 id="ramda-mu-lu-shuo-ming">Ramda 目录说明</h2>
 <p><a href="http://ramdajs.com" target="_blank" rel="noopener">Ramda</a> API 的源码都在 src/ 文件夹中，src/ 下包含一个 internal/ 文件夹和若干外部模块。直接在 <strong>src/</strong> 下编写的模块（函数）供<strong>外部调用</strong>，在 <strong>internal/</strong> 下编写的模块仅供<strong>内部使用</strong>，属于帮助函数，<strong>内部函数以下划线 “_” 开头</strong>。</p>
 <p>本次源码分析使用版本号为：Ramda v0.22.1。</p>
-<h2 id="源码分析">源码分析</h2>
+<h2 id="yuan-ma-fen-xi">源码分析</h2>
 <ul>
 <li>
 <p>__ 占位符</p>

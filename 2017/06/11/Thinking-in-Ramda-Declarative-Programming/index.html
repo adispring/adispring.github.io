@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Declarative Programming》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第四篇。 在第三节中，讨论了使用 “部分应用” 和 “柯里化” 技术来组合多元（多参数）函数。 当我们开始编写小的函数式构建块并组合它们时，发现必须写">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 声明式编程">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Declarative Programming》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第四篇。 在第三节中，讨论了使用 “部分应用” 和 “柯里化” 技术来组合多元（多参数）函数。 当我们开始编写小的函数式构建块并组合它们时，发现必须写">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -210,7 +210,7 @@
 <p>在<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">第三节</a>中，讨论了使用 “部分应用” 和 “柯里化” 技术来组合多元（多参数）函数。</p>
 <p>当我们开始编写小的函数式构建块并组合它们时，发现必须写好多函数来包裹 JavaScript 操作符，比如算术、比较、逻辑操作符和控制流。这可能比较乏味，但 Ramda 将我们拉了回来，让事情变得有趣起来。</p>
 <p>开始之前，先介绍一些背景知识。</p>
-<h2 id="命令式-vs-声明式">命令式 vs 声明式</h2>
+<h2 id="ming-ling-shi-vs-sheng-ming-shi">命令式 vs 声明式</h2>
 <p>存在很多编程语言分类的方式，如静态语言和动态语言，解释型语言和编译型语言，底层和高层语言等等。</p>
 <p>另一种划分的方式是命令式编程和声明式编程。</p>
 <p>简单地说，命令式编程中，程序员需要告诉计算机怎么做来完成任务。命令式编程带给我们每天会用到的大量的基本结构：控制流（<code>if</code>-<code>then</code>-<code>else</code> 语句和循环），算术运算符（<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>），比较运算符（<code>===</code>、<code>&gt;</code>、<code>&lt;</code> 等），和逻辑运算符（<code>&amp;&amp;</code>、<code>||</code>、<code>!</code>）。</p>
@@ -218,10 +218,10 @@
 <p>其中一种经典的声明式编程语言是 Prolog。在 Prolog 中，程序是由一组 “facts” (谓词) 和 一组 “rules” (规则) 组成。可以通过提问来启动程序。Prolog 的推理机使用 facts 和 rules 来回答问题。</p>
 <p>函数式编程被认为是声明式编程的一个子集。在一段函数式程序中，我们定义函数，然后通过组合这些函数告诉计算机做什么。</p>
 <p>即使在声明式程序中，也需要做一些命令式程序中的工作。控制流，算术、比较和逻辑操作仍然是必须使用的基本构建块。但我们需要找到一种声明式的方式来描述这些基本构建块。</p>
-<h2 id="声明式替换">声明式替换</h2>
+<h2 id="sheng-ming-shi-ti-huan">声明式替换</h2>
 <p>由于我们使用 JavaScript （一种命令式语言）编程，所以在编写 “普通” JavaScript 代码时，使用标准的命令式结构也是正常的。</p>
 <p>但当使用 “pipeline” 或类似的结构编写函数式变换时，命令式的结构并不能很好的工作。</p>
-<h2 id="算术">算术</h2>
+<h2 id="suan-zhu">算术</h2>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> ，我们实现了一系列算术变换来演示 “pipeline”：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a * b</span><br><span class="line"><span class="keyword">const</span> addOne = <span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> x * x</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = pipe(</span><br><span class="line">  multiply,</span><br><span class="line">  addOne,</span><br><span class="line">  square</span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line">operate(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// =&gt; ((3 * 4) + 1)^2 =&gt; (12 + 1)^2 =&gt; 13^2 =&gt; 169</span></span><br></pre></td></tr></table></figure>
 <p>注意我们是如何编写函数来实现我们想要的基本构建块的。</p>
@@ -232,7 +232,7 @@
 <p>所以可以进一步简化我们的 “pipeline”：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> multiply(x, x)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = pipe(</span><br><span class="line">  multiply,</span><br><span class="line">  inc,</span><br><span class="line">  square</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p><code>subtract</code> 是二元操作符 <code>-</code> 的替代，但还有一个表示取反的一元操作符 <code>-</code>。我们可以使用 <code>multiply(-1)</code>，但 Ramda 也提供了 <code>negate</code> 来实现相同的功能。</p>
-<h2 id="Comparison-比较">Comparison (比较)</h2>
+<h2 id="comparison-bi-jiao">Comparison (比较)</h2>
 <p>还是在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a>，我们写了一些函数来确定一个人是否有资格投票。该代码的最终版本如下所示：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> wasBornInCountry = <span class="function"><span class="params">person</span> =&gt;</span> person.birthCountry === OUR_COUNTRY</span><br><span class="line"><span class="keyword">const</span> wasNaturalized = <span class="function"><span class="params">person</span> =&gt;</span> <span class="built_in">Boolean</span>(person.naturalizationDate)</span><br><span class="line"><span class="keyword">const</span> isOver18 = <span class="function"><span class="params">person</span> =&gt;</span> person.age &gt;= <span class="number">18</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
 <p>注意，上面的一些函数使用了标准比较运算符（<code>===</code> 和 <code>&gt;=</code>）。正如你现在所怀疑的，Ramda 也提供了这些运算符的替代。</p>
@@ -242,7 +242,7 @@
 <p>注意，这些函数保持正常的参数顺序（<code>gt</code> 表示第一个参数是否大于第二个参数）。这在单独使用时没有问题，但在组合函数时，可能会让人产生困惑。这些函数似乎违反了 Ramda 的 “待处理数据放在最后” 的原则，所以我们在 pipeline 或类似的情况下使用它们时，要格外小心。这时，<code>flip</code> 和 占位符 (<code>__</code>) 就派上了用场。</p>
 <p>除了 <code>equals</code>，还有一个 <code>identical</code>，可以用来判断两个值是否引用了同一块内存。</p>
 <p><code>===</code> 还有一些其他的用途：可以检测字符串或数组是否为空（<code>str === ''</code> 或 <code>arr.length === 0</code>），也可以检查变量是否为 <code>null</code> 或 <code>undefined</code>。Ramda 为这两种情况提供了方便的判断函数：<code>isEmpty</code> 和 <code>isNil</code>。</p>
-<h2 id="Logic-逻辑">Logic (逻辑)</h2>
+<h2 id="logic-luo-ji">Logic (逻辑)</h2>
 <p>在 <a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a> 中（参见上面的相关代码）。我们使用 <code>both</code> 和 <code>either</code> 来代替 <code>&amp;&amp;</code> 和 <code>||</code> 运算符。我们还提到使用 <code>complement</code> 代替 <code>!</code>。</p>
 <p>当组合的函数作用于同一份输入值时，这些组合函数帮助很大。上述示例中，<code>wasBornInCountry</code>、<code>wasNaturalized</code> 和 <code>isOver18</code> 都作用于同一个人上。</p>
 <p>但有时我们需要将 <code>&amp;&amp;</code>、<code>||</code> 和 <code>!</code> 作用于不同的数值。对于这些情况， Ramda 提供了 <code>and</code>、<code>or</code> 和 <code>not</code> 函数。我以下列方式进行分类：<code>and</code>、<code>or</code> 和 <code>not</code> 用于处理数值；<code>both</code>、<code>either</code> 和 <code>complement</code> 用于处理函数。</p>
@@ -252,9 +252,9 @@
 <p>我们可以使用上面刚学到的 <code>isNil</code> 函数，但 Ramda 提供了一个更好的选择：<code>defaultTo</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lineWidth = defaultTo(<span class="number">80</span>, settings.lineWidth)</span><br></pre></td></tr></table></figure>
 <p><code>defaultTo</code> 检查第二个参数是否为空（<code>isNil</code>）。如果非空，则返回该值；否则返回第一个值。</p>
-<h2 id="Conditionals-条件">Conditionals (条件)</h2>
+<h2 id="conditionals-tiao-jian">Conditionals (条件)</h2>
 <p>控制流在函数式编程中不是必要的，但偶尔也会有些用处。在 <a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一节</a> 中讨论的集合迭代函数在大部分情况下都可以很好的取代循环，但 “条件” 仍然非常重要。</p>
-<h2 id="ifElse">ifElse</h2>
+<h2 id="if-else">ifElse</h2>
 <p>我们来写一个函数，<code>forever21</code>，接受一个年龄，并返回下一个年龄。但正如名字所示，一旦成长到 21 岁，就一直保持这样。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> age &gt;= <span class="number">21</span> ? <span class="number">21</span> : age + <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>注意，条件（<code>age &gt;= 21</code>）和第二个分支（<code>age + 1</code>）都可以写作 <code>age</code> 的函数。第一个分支（<code>21</code>）也可以重写成一个常量函数（<code>() =&gt; 21</code>）。现在我们有三个接受（或忽略）<code>age</code> 为参数的函数。</p>
@@ -263,18 +263,18 @@
 <p>如上所示，比较函数在进行组合时，可能并不是以我们想要的形式进行工作。所以在这里被迫引入了占位符（<code>__</code>）。我们也可以使用 <code>lte</code>：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lte(<span class="number">21</span>), () =&gt; <span class="number">21</span>, inc)(age)</span><br></pre></td></tr></table></figure>
 <p>在这种情况下，我们不得不读作：“21岁小于或等于给定年龄”。但这样可读性很低、比较乱，所以我坚持使用占位符版本的函数。</p>
-<h2 id="constants-常量">constants (常量)</h2>
+<h2 id="constants-chang-liang">constants (常量)</h2>
 <p>常量函数在这种情形下非常有用。你可能已经想到了，Ramda 为我们提供了一些便捷的方法。本例中，这个方法是 <code>always</code>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> forever21 = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(gte(__, <span class="number">21</span>), always(<span class="number">21</span>), inc)(age)</span><br></pre></td></tr></table></figure>
 <p>Ramda 还提供了 <code>T</code> 和 <code>F</code>，作为 <code>always(true) 和 always(false)</code> 的缩写。</p>
-<h2 id="identity-恒等">identity (恒等)</h2>
+<h2 id="identity-heng-deng">identity (恒等)</h2>
 <p>再来写一个函数：<code>alwaysDrivingAge</code>。该函数接受一个年龄，如果 <code>gte</code> 16，则将该年龄返回；但如果小于 16，则返回 16。这样任何人都可以伪造他们的驾驶年龄了，即使他们还没有达到。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lt(__, <span class="number">16</span>), always(<span class="number">16</span>), a =&gt; a)(age)</span><br></pre></td></tr></table></figure>
 <p>条件中的第二个分支（<code>a =&gt; a</code>）是函数式编程中的另一种常见的模式。它被称为恒等函数。也即，输出永远等于输入的函数。</p>
 <p>正如你所想的，Ramda 为我们提供了 <code>identity</code> 函数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> ifElse(lt(__, <span class="number">16</span>), always(<span class="number">16</span>), identity)(age)</span><br></pre></td></tr></table></figure>
 <p><code>identity</code> 可以接受多个参数，但总是返回首个参数。如果想要返回除首个参数之外的参数，可以使用更通用的 <code>nthArg</code> 函数。但 <code>nthArg</code> 不如 <code>identity</code> 用的频繁。</p>
-<h2 id="when-和-unless">when 和 unless</h2>
+<h2 id="when-he-unless">when 和 unless</h2>
 <p>在 <code>ifElse</code> 代码中，其中一个条件分支为 <code>identity</code> 也很常见。所以 Ramda 也提供了便捷的方法。</p>
 <p>如果像上例所示，第二个分支是 <code>identity</code>，可以用 <code>when</code> 代替 <code>ifElse</code>：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alwaysDrivingAge = <span class="function"><span class="params">age</span> =&gt;</span> when(lt(__, <span class="number">16</span>), always(<span class="number">16</span>))(age)</span><br></pre></td></tr></table></figure>
@@ -285,9 +285,9 @@
 <p>这里采用 Ramda 文档中的例子来展示 <code>cond</code> 的用法：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> water = <span class="function"><span class="params">temperature</span> =&gt;</span> cond([</span><br><span class="line">  [equals(<span class="number">0</span>),   always(<span class="string">'water freezes at 0°C'</span>)],</span><br><span class="line">  [equals(<span class="number">100</span>), always(<span class="string">'water boils at 100°C'</span>)],</span><br><span class="line">  [T,           temp =&gt; <span class="string">`nothing special happens at <span class="subst">$&#123;temp&#125;</span>°C`</span>]</span><br><span class="line">])(temperature)</span><br></pre></td></tr></table></figure>
 <p>我目前还不需要在 Ramda 代码中使用 <code>cond</code>。但我很多年前编写过 Common Lisp 代码，所以 <code>cond</code> 函数感觉就像是位老朋友。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>本节中展示了很多将命令式代码转为函数声明式代码的 Ramda 函数。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>你可能已经注意到了，最后我们编写的几个函数（<code>forever21</code>、<code>alwaysDrivingAge</code> 和 <code>water</code>）都接受一个参数，构建一个新函数，然后将该函数作用于参数。</p>
 <p>这也是一种常见的模式，并且 Ramda 照例提供了一些简化这些代码的便捷方法。下一节中，<a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">Pointfree Style</a> 将演示如何简化符合这种模式的代码。</p>
 
@@ -370,7 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令式-vs-声明式"><span class="nav-number">1.</span> <span class="nav-text">命令式 vs 声明式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明式替换"><span class="nav-number">2.</span> <span class="nav-text">声明式替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算术"><span class="nav-number">3.</span> <span class="nav-text">算术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Comparison-比较"><span class="nav-number">4.</span> <span class="nav-text">Comparison (比较)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logic-逻辑"><span class="nav-number">5.</span> <span class="nav-text">Logic (逻辑)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conditionals-条件"><span class="nav-number">6.</span> <span class="nav-text">Conditionals (条件)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ifElse"><span class="nav-number">7.</span> <span class="nav-text">ifElse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constants-常量"><span class="nav-number">8.</span> <span class="nav-text">constants (常量)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#identity-恒等"><span class="nav-number">9.</span> <span class="nav-text">identity (恒等)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#when-和-unless"><span class="nav-number">10.</span> <span class="nav-text">when 和 unless</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cond"><span class="nav-number">11.</span> <span class="nav-text">cond</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">12.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">13.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ming-ling-shi-vs-sheng-ming-shi"><span class="nav-number">1.</span> <span class="nav-text">命令式 vs 声明式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sheng-ming-shi-ti-huan"><span class="nav-number">2.</span> <span class="nav-text">声明式替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#suan-zhu"><span class="nav-number">3.</span> <span class="nav-text">算术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comparison-bi-jiao"><span class="nav-number">4.</span> <span class="nav-text">Comparison (比较)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logic-luo-ji"><span class="nav-number">5.</span> <span class="nav-text">Logic (逻辑)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conditionals-tiao-jian"><span class="nav-number">6.</span> <span class="nav-text">Conditionals (条件)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if-else"><span class="nav-number">7.</span> <span class="nav-text">ifElse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constants-chang-liang"><span class="nav-number">8.</span> <span class="nav-text">constants (常量)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#identity-heng-deng"><span class="nav-number">9.</span> <span class="nav-text">identity (恒等)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#when-he-unless"><span class="nav-number">10.</span> <span class="nav-text">when 和 unless</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cond"><span class="nav-number">11.</span> <span class="nav-text">cond</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">12.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">13.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

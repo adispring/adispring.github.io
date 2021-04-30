@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Combining Functions》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第二篇。 在第一节中，介绍了 Ramda 和函数式编程的一些基本思想，如函数、纯函数和数据不变性。并介绍了如何入门：可以从集合迭代函数（如 forEach、m">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-04-30T10:55:32.889Z">
+<meta property="og:updated_time" content="2021-04-30T11:47:48.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thinking in Ramda: 函数组合">
 <meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Combining Functions》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第二篇。 在第一节中，介绍了 Ramda 和函数式编程的一些基本思想，如函数、纯函数和数据不变性。并介绍了如何入门：可以从集合迭代函数（如 forEach、m">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 10:55:32" itemprop="dateModified" datetime="2021-04-30T10:55:32+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 11:47:48" itemprop="dateModified" datetime="2021-04-30T11:47:48+00:00">2021-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -208,10 +208,10 @@
 <hr>
 <p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第二篇。</p>
 <p>在<a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一节</a>中，介绍了 Ramda 和函数式编程的一些基本思想，如函数、纯函数和数据不变性。并介绍了如何入门：可以从集合迭代函数（如 <code>forEach</code>、<code>map</code>、<code>reduce</code>）开始。</p>
-<h2 id="简单组合">简单组合</h2>
+<h2 id="jian-dan-zu-he">简单组合</h2>
 <p>一旦熟悉了可以将函数传递给其他函数，你可能会开始找将多个函数组合在一起的场景。</p>
 <p>Ramda 为简单的函数组合提供了一些函数。我们来看看。</p>
-<h2 id="Complement">Complement</h2>
+<h2 id="complement">Complement</h2>
 <p>在上一节，我们使用 <code>find</code> 来查找列表中的首个偶数。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEven = <span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span></span><br><span class="line">find(isEven, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) <span class="comment">//=&gt; 2</span></span><br></pre></td></tr></table></figure>
 <p>如果想找首个奇数呢？我们可以随手写一个 <code>isOdd</code> 函数并使用它。但我们知道任何非偶整数都是奇数，所以可以重用 <code>isEven</code> 函数。</p>
@@ -230,7 +230,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isCitizen = either(wasBornInCountry, wasNaturalized)</span><br><span class="line"><span class="keyword">const</span> isEligibleToVote = both(isOver18, isCitizen)</span><br></pre></td></tr></table></figure>
 <p>注意，<code>both</code> 以函数的方式实现了逻辑与（<code>&amp;&amp;</code>）的功能，<code>either</code> 实现了逻辑或（<code>||</code>）的功能。</p>
 <p>Ramda 还提供了 <code>allPass</code> 和 <code>anyPass</code>，接受由任意多个函数组成的数组作为参数。如名称所示，<code>allPass</code> 类似于 <code>both</code>，而 <code>anyPass</code> 类似于 <code>either</code>。</p>
-<h2 id="Pipelines-管道">Pipelines(管道)</h2>
+<h2 id="pipelines-guan-dao">Pipelines(管道)</h2>
 <p>有时我们需要以 pipeline 的方式将多个函数依次作用于某些数据。例如，接受两个数字，将它们相乘，加 1 ，然后平方。我们可以这样写：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a * b</span><br><span class="line"><span class="keyword">const</span> addOne = <span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> square = <span class="function"><span class="params">x</span> =&gt;</span> x * x</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> operate = <span class="function">(<span class="params">x, y</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> product = multiply(x, y)</span><br><span class="line">  <span class="keyword">const</span> incremented = addOne(product)</span><br><span class="line">  <span class="keyword">const</span> squared = square(incremented)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> squared</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">operate(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// =&gt; ((3 * 4) + 1)^2 =&gt; (12 + 1)^2 =&gt; 13^2 =&gt; 169</span></span><br></pre></td></tr></table></figure>
 <p>注意，每次操作是对上次操作的结果进行处理。</p>
@@ -250,12 +250,12 @@
 <p>这与上面的 <code>pipe</code> 几乎一样，除了函数的顺序是相反的。实际上，Ramda 中的 <code>compose</code> 函数的内部是用 <code>pipe</code> 实现的。</p>
 <p>我一直这样思考 <code>compose</code> 的工作方式：<code>compose(f, g)(value)</code> 等价于 <code>f(g(value))</code>。</p>
 <p>注意，与 <code>pipe</code> 类似，<code>compose</code> 中的函数除最后一个外，其余都是一元函数。</p>
-<h2 id="compose-还是-pipe？">compose 还是 pipe？</h2>
+<h2 id="compose-huan-shi-pipe">compose 还是 pipe？</h2>
 <p>具有命令式编程背景的人可能觉得 <code>pipe</code> 更容易理解，因为可以按照从左往右的顺序进行阅读。但 <code>compose</code> 更容易对如上所示的嵌套函数进行转换。</p>
 <p>我也不太清楚什么时候该用 <code>compose</code>，什么时候该用 <code>pipe</code>。由于它们在 Ramda 中基本等价，所以选择用哪个可能并不重要。只要根据自己的情况选择合适的即可。</p>
-<h2 id="结论">结论</h2>
+<h2 id="jie-lun">结论</h2>
 <p>通过特定的方式进行函数组合，我们已经可以开始编写更强的函数了。</p>
-<h2 id="下一节">下一节</h2>
+<h2 id="xia-yi-jie">下一节</h2>
 <p>你可能已经注意到了，在进行函数组合时，我们多数情况下都可以省略函数参数。只有在最终调用组合好的函数时，才传入参数。</p>
 <p>这在函数式编程中非常常见，我们将在下一节 <a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener"><code>Partial Application</code> (部分应用)</a>进行更多详细介绍。我们还会讨论如何组合多元（多参数）函数。</p>
 
@@ -338,7 +338,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单组合"><span class="nav-number">1.</span> <span class="nav-text">简单组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Complement"><span class="nav-number">2.</span> <span class="nav-text">Complement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pipelines-管道"><span class="nav-number">3.</span> <span class="nav-text">Pipelines(管道)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe"><span class="nav-number">4.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compose"><span class="nav-number">5.</span> <span class="nav-text">compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compose-还是-pipe？"><span class="nav-number">6.</span> <span class="nav-text">compose 还是 pipe？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一节"><span class="nav-number">8.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#jian-dan-zu-he"><span class="nav-number">1.</span> <span class="nav-text">简单组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#complement"><span class="nav-number">2.</span> <span class="nav-text">Complement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipelines-guan-dao"><span class="nav-number">3.</span> <span class="nav-text">Pipelines(管道)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe"><span class="nav-number">4.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compose"><span class="nav-number">5.</span> <span class="nav-text">compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compose-huan-shi-pipe"><span class="nav-number">6.</span> <span class="nav-text">compose 还是 pipe？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">8.</span> <span class="nav-text">下一节</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
