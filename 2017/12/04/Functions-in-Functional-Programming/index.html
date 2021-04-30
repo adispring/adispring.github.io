@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.7.1">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://adispring.github.io/2017/12/04/Functions-in-Functional-Programming/functions_composition.png">
 <meta property="og:image" content="https://adispring.github.io/2017/12/04/Functions-in-Functional-Programming/closure.png">
 <meta property="og:image" content="https://adispring.github.io/2017/12/04/Functions-in-Functional-Programming/functions-in-memoize.png">
-<meta property="og:updated_time" content="2021-04-30T03:16:53.201Z">
+<meta property="og:updated_time" content="2021-04-30T10:54:36.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="函数式编程中的“函数们”">
 <meta name="twitter:description" content="函数式编程中的函数有三种不同的解读方式，分别为纯函数、高阶函数和一等函数。本文分别对这三者的概念、应用和联系进行详解。 纯函数 定义：   相同的输入必定产生相同的输出； 在计算的过程中，不会产生副作用。   满足上述两个条件，我们就说该函数是纯函数。 纯函数也即数学意义上的函数，表达的是数据之间的转换（映射）关系，而非计算步骤的详述。数学函数的定义：  函数通常由定义域 X 、值域 Y 以及定义">
@@ -187,7 +187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-30 03:16:53" itemprop="dateModified" datetime="2021-04-30T03:16:53+00:00">2021-04-30</time>
+                <time title="Modified: 2021-04-30 10:54:36" itemprop="dateModified" datetime="2021-04-30T10:54:36+00:00">2021-04-30</time>
               </span>
 
           
@@ -379,7 +379,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">纯函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数组合"><span class="nav-number">1.1.</span> <span class="nav-text">函数组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用透明及缓存"><span class="nav-number">1.2.</span> <span class="nav-text">引用透明及缓存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">一等函数（First Class Functions）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用变量命名"><span class="nav-number">2.1.</span> <span class="nav-text">使用变量命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以包含在数据结构中"><span class="nav-number">2.2.</span> <span class="nav-text">可以包含在数据结构中</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">高阶函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">函数缓存 memoize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">纯函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数组合"><span class="nav-number">1.1.</span> <span class="nav-text">函数组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用透明及缓存"><span class="nav-number">1.2.</span> <span class="nav-text">引用透明及缓存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">一等函数（First Class Functions）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用变量命名"><span class="nav-number">2.1.</span> <span class="nav-text">使用变量命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以包含在数据结构中"><span class="nav-number">2.2.</span> <span class="nav-text">可以包含在数据结构中</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">高阶函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">函数缓存 memoize</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -393,7 +393,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
