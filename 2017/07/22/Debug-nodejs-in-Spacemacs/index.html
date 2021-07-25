@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Debug Nodejs in Spacemacs">
+<meta property="og:url" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/open-nodejs-repl.png">
+<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/import-lib.png">
+<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/eval.png">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.569Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Debug Nodejs in Spacemacs">
+<meta name="twitter:description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
+<meta name="twitter:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/open-nodejs-repl.png">
+
+<link rel="canonical" href="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Debug Nodejs in Spacemacs | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Debug Nodejs in Spacemacs
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-07-22 15:04:44" itemprop="dateCreated datePublished" datetime="2017-07-22T15:04:44+00:00">2017-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Emacs/" itemprop="url" rel="index"><span itemprop="name">Emacs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 <code>index.js</code>），另一个用来调试（如运行 <code>node index.js</code>），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。</p>
+<p>nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。</p>
+<p>这里有两条命令比较重要：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodejs-repl-send-region ;; 用于将选中的区域发送至 repl 中，但不求值，在引入库时比较有用</span><br><span class="line">nodejs-repl-send-last-sexp ;; 将当前行光标前面的内容发送至 repl，并进行运算</span><br></pre></td></tr></table></figure>
+<p>具体步骤：</p>
+<h2 id="yi-pei-zhi">一、配置</h2>
+<ol>
+<li>
+<p>在 <code>~/.spacemacs</code> <code>dotspacemacs-additional-packages '(nodejs-repl)</code> 中添加 <code>nodejs-repl</code></p>
+</li>
+<li>
+<p>在 <code>dotspacemacs/user-config ()</code> 中添加快捷键</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(add-hook &apos;js-mode-hook</span><br><span class="line">          (lambda ()</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-x C-e&quot;) &apos;nodejs-repl-send-last-sexp)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-r&quot;) &apos;nodejs-repl-send-region)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-l&quot;) &apos;nodejs-repl-load-file)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-z&quot;) &apos;nodejs-repl-switch-to-repl)))</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>运行 <code>M-m f e R</code>，安装 nodejs-repl</li>
+</ol>
+<h2 id="er-diao-shi">二、调试</h2>
+<ol>
+<li>使用 emacs 打开待调试文件；使用 <code>M-x</code> 运行命令 <code>nodejs-repl</code>，便会在编辑窗口相同 frame 里打开 nodejs 的 repl：</li>
+</ol>
+<p><img src="./open-nodejs-repl.png" alt="open-nodejs-repl"></p>
+<ol start="2">
+<li>选中文中的第三方库，使用 <code>nodejs-repl-send-region</code> 命令将其引入 repl 中。（注意，不能使用 <code>nodejs-repl-send-last-sexp</code>！）</li>
+</ol>
+<p><img src="./import-lib.png" alt="import-lib"></p>
+<ol start="3">
+<li>对于需要调试的代码行，运行 <code>nodejs-repl-send-last-sexp</code> ，便会将代码加入 repl 中，并进行运算：</li>
+</ol>
+<p><img src="./eval.png" alt="eval"></p>
+<h2 id="san-todo">三、TODO</h2>
+<ol>
+<li>快捷键配置在 js2-mode 中只能部分起作用，js-mode 中都可以。需要研究一下 emacs 快捷键配置和优先级。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/28/Why-Curry-Helps/" rel="prev" title="为什么柯里化有帮助">
+      <i class="fa fa-chevron-left"></i> 为什么柯里化有帮助
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/07/29/Product-Softwares-in-nix/" rel="next" title="Product Softwares in *nix">
+      Product Softwares in *nix <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yi-pei-zhi"><span class="nav-number">1.</span> <span class="nav-text">一、配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#er-diao-shi"><span class="nav-number">2.</span> <span class="nav-text">二、调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#san-todo"><span class="nav-number">3.</span> <span class="nav-text">三、TODO</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

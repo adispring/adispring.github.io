@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Partial Application》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第三篇。 在第二节中，讨论了各种函数组合的方式。最后，演示了 compose 和 pipe， 可以以 “pipeline” （管道）的形式对一系列函数进行调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thinking in Ramda: 部分应用">
+<meta property="og:url" content="https://adispring.github.io/2017/06/11/Thinking-in-Ramda-Partial-Application/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Partial Application》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第三篇。 在第二节中，讨论了各种函数组合的方式。最后，演示了 compose 和 pipe， 可以以 “pipeline” （管道）的形式对一系列函数进行调用">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.589Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thinking in Ramda: 部分应用">
+<meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Partial Application》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第三篇。 在第二节中，讨论了各种函数组合的方式。最后，演示了 compose 和 pipe， 可以以 “pipeline” （管道）的形式对一系列函数进行调用">
+
+<link rel="canonical" href="https://adispring.github.io/2017/06/11/Thinking-in-Ramda-Partial-Application/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Thinking in Ramda: 部分应用 | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/11/Thinking-in-Ramda-Partial-Application/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Thinking in Ramda: 部分应用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-11 06:01:57" itemprop="dateCreated datePublished" datetime="2017-06-11T06:01:57+00:00">2017-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/06/07/thinking-in-ramda-partial-application/" target="_blank" rel="noopener">Thinking in Ramda: Partial Application</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第三篇。</p>
+<p>在<a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">第二节</a>中，讨论了各种函数组合的方式。最后，演示了 <code>compose</code> 和 <code>pipe</code>， 可以以 “pipeline” （管道）的形式对一系列函数进行调用。</p>
+<p>在上篇文章中，简单的函数链式调用（“pipeline”）时，其中的被调用函数都是一元的（除了首个函数）。但如果要使用多元函数呢？</p>
+<p>例如，假设有一个书籍对象的集合，我们想要找到特定年份出版的所有图书的标题。可以使用 Ramda 的集合迭代函数完成该需求：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(<span class="function"><span class="params">book</span> =&gt;</span> publishedInYear(book, year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果能将 <code>filter</code> 和 <code>map</code> 组合成 “pipeline” 就好了，但我们并不知道该如何处理，因为 <code>filter</code> 和 <code>map</code> 都是二元函数。</p>
+<p>如果不需要在 <code>filter</code> 中使用箭头函数会更好些。先来解决这个问题，并借此展示一些制作 “pipeline” 的知识。</p>
+<h2 id="gao-jie-han-shu">高阶函数</h2>
+<p>在本系列文章的<a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">第一篇</a>中，我们将函数视为 “一等结构”。一等函数可以作为参数传递给其他函数，也可以作为其他函数的返回值。我们一直在使用前者，但还没有见过后者（函数作为其他函数的返回值）。</p>
+<p>获取或返回其他函数的函数称为 “高阶函数”。</p>
+<p>在上面的示例中，我们传递了一个箭头函数给 <code>filter</code>：<code>book =&gt; publishedInYear(book, year)</code>，但我们想去掉箭头函数。为了做到这点，需要一个函数：输入一本书，若该书是在指定年份出版的则返回 <code>true</code>。但还需要一个指定的年份，让该操作更加灵活。</p>
+<p>为了解决这个问题，可以将 <code>publishedInYear</code> 变为返回另一个函数的函数。我将使用普通的语法来实现该函数，以便能够清晰地展示其内部具体实现，然后使用箭头函数实现一个更短版本的函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Full function version:</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">publishedInYear</span>(<span class="params">year</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">book</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> book.year === year</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Arrow function version:</span></span><br><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function"><span class="params">year</span> =&gt;</span> <span class="function"><span class="params">book</span> =&gt;</span> book.year === year</span><br></pre></td></tr></table></figure>
+<p>利用新实现的 <code>publishedInYear</code>，可以重写 <code>filter</code> 调用，从而消除箭头函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function"><span class="params">year</span> =&gt;</span> <span class="function"><span class="params">book</span> =&gt;</span> book.year === year</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，当调用 <code>filter</code> 时，<code>publishedInYear(year)</code> 会立即调用，并返回一个接受 <code>book</code> 为参数的函数，这正是 <code>filter</code> 需要的。</p>
+<h2 id="bu-fen-ying-yong-han-shu">部分应用函数</h2>
+<p>可以按上面的方式重写任何多参数函数。但我们不可能拥有所有我们想要的函数的源码；另外，很多情况下，我们可能还是希望以普通的方式调用多参数函数。</p>
+<p>例如，在其他一些代码中，只是想检查一本书是否是在指定年份出版的，我们可能想要 <code>publishedInYear(book, 2012)</code>，但现在不能再那么做了。相反，我们必须要用这种方式：<code>publishedInYear(book)(2012)</code>。这样做降低了代码的可读性，也很烦人。</p>
+<p>幸运的是，Ramda 提供了两个函数：<code>partial</code> 和 <code>partialRight</code>，来帮我们解决这个问题。</p>
+<p>这两个函数可以让我们不必一次传递所有需要的参数，也可以调用函数。它们都返回一个接受剩余参数的新函数，当所有参数都传入后，才会真正调用被包裹的原函数。</p>
+<p><code>partial</code> 和 <code>partialRight</code> 的区别在于参数传递的顺序：<code>partial</code> 先传递原函数左侧的参数，而 <code>partialRight</code> 先传递右侧的参数。</p>
+<p>回到刚开始的例子，使用上面的一个函数来代替原来对 <code>publishedInYear</code> 的重写。由于刚开始我们只需要最右侧的参数：<code>year</code>，所以需要使用 <code>partialRight</code>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = <span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(partialRight(publishedInYear, [year]), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 <code>pubilshedInYear</code> 原本参数的顺序为 <code>(year, book)</code> ，而非 <code>(book, year)</code> ，则需要用 <code>partial</code> 代替 <code>partialRight</code>。</p>
+<p>注意，为被 <code>partial</code> 和 <code>partialRight</code> 包裹的函数提供的参数必须包裹在数组中，即使只有一个参数。我不会告诉你我已经忘记了多少次，导致出现令人困惑的错误信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">First argument to _arity must be a non-negative <span class="built_in">integer</span> no greater than ten</span><br></pre></td></tr></table></figure>
+<h2 id="ke-li-hua-curry">柯里化(Curry)</h2>
+<p>如果到处使用 <code>partial</code> 和 <code>partialRight</code> 的话，会让代码变得冗长乏味；但是，将多元函数以一系列一元函数的形式调用同样不好。</p>
+<p>幸运的是，Ramda 给我们提供了一个解决方案：<code>curry</code>。</p>
+<p><a href="https://en.wikipedia.org/wiki/Currying" target="_blank" rel="noopener">Currying（柯里化）</a> 是函数式编程的另一个核心概念。从技术角度讲，一个柯里化了的函数是一系列高阶一元函数，这也是我刚刚抱怨过的。在纯函数式语言中，柯里化函数在调用时，语法上看起来和调用多个参数没有什么区别。</p>
+<p>但由于 Ramda 是一个 JavaScript 库，而 JavaScript 并没有很好的语法来支持一系列一元函数的调用，所以作者对传统柯里化的定义放宽了一些。</p>
+<p>在 Ramda 中，一个柯里化的函数只能用其参数的子集来调用，它会返回一个接受其余参数的新函数。当使用它的所有参数调用，真正的原函数将被调用。</p>
+<p>柯里化的函数在下列两种情况下工作的都很好：</p>
+<ol>
+<li>可以按正常情况下使用所有参数调用它，它可以像普通函数一样正常工作；</li>
+<li>也可以使用部分参数来调用它，这时它会像使用 <code>partial</code> 一样工作。</li>
+</ol>
+<p>注意，这种灵活性带来了一些性能上的损失，因为 <code>curry</code> 需要搞清楚函数的调用方式，然后确定该做什么。一般来说，我只有需要在多个地方对同一个函数使用 <code>partial</code> 的时候，才会对函数进行柯里化。</p>
+<p>接下来写一个柯里化版本的 <code>publishedInYear</code> 函数。注意，<code>curry</code> 会像 <code>partial</code> 一样工作；并且没有 <code>partialRight</code> 版本的 <code>curry</code> 函数。对这方面后续会有更多讨论，但现在我们需要将 <code>publishedInYear</code> 的参数翻转一下，以便让参数 <code>year</code> 在最前面。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在可以只使用参数 <code>year</code> 来调用 <code>publishedInYear</code>，并返回一个新函数，该函数接受参数 <code>book</code> 并执行原函数。但是，仍然可以按普通方式对它调用：<code>publishedInYear(2012, book)</code>，不需要写烦人的语法 <code>)(</code>。所以，柯里化的函数在两种情况下都能很好地工作。</p>
+<h2 id="can-shu-de-shun-xu">参数的顺序</h2>
+<p>注意，为了让 <code>curry</code> 工作，我们不得不对参数的顺序进行翻转。这在函数式编程中非常常见，所以几乎所有的 Ramda 函数都将待处理的数据放到参数列表的最后面。</p>
+<p>你可以将先期传入的参数看作对操作的配置。所以，对于 <code>publishedInYear</code>，参数 <code>year</code> 作为配置（需要查找的年份），而参数 <code>book</code> 作为被处理的数据（被查找的对象）。</p>
+<p>我们已经在集合迭代函数中见过这样的例子。它们都将集合作为最后一个参数，这样可以使这种风格的编程更容易些。</p>
+<h2 id="shun-xu-cuo-wu-de-can-shu">顺序错误的参数</h2>
+<p>如果不改变 <code>publishedInYear</code> 的顺序，还可以继续使用柯里化特性的优势吗？</p>
+<p>当然可以了，Ramda 提供了几个选择。</p>
+<h2 id="flip">flip</h2>
+<p>第一个选择是 <code>flip</code>。<code>flip</code> 接受一个多元函数（元数 &gt;= 2），返回一个元数相同的新函数，但前 2 个参数的顺序调换了。它主要用于二元函数，但也可以用于一般函数。</p>
+<p>使用 <code>flip</code>，我们可以恢复 <code>publishedInYear</code> 参数的初始的顺序：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(flip(publishedInYear)(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多数情况下，我更喜欢使用方便的参数顺序，但如果用到不能自己掌控的函数，<code>flip</code> 是一个好的选择。</p>
+<h2 id="placeholder-zhan-wei-fu">placeholder (占位符)</h2>
+<p>更通用的选择是使用 “placeholder” 参数（<code>__</code>）</p>
+<p>假设有一个三元柯里化的函数，并且我们想传入第一个和最后一个参数，中间参数后续再传，应该怎么办呢？我们可以使用 “占位符” 作为中间参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> threeArgs = curry(<span class="function">(<span class="params">a, b, c</span>) =&gt;</span> &#123; <span class="comment">/* ... */</span> &#125;)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> middleArgumentLater = threeArgs(<span class="string">'value for a'</span>, __, <span class="string">'value for c'</span>)</span><br></pre></td></tr></table></figure>
+<p>可以在函数调用中多次使用 “占位符”。例如，如果只想传递中间参数呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> threeArgs = curry(<span class="function">(<span class="params">a, b, c</span>) =&gt;</span> &#123; <span class="comment">/* ... */</span> &#125;)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> middleArgumentOnly = threeArgs(__, <span class="string">'value for b'</span>, __)</span><br></pre></td></tr></table></figure>
+<p>也可以使用 “占位符” 代替 <code>flip</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">book, year</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(__, year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我觉得这个版本的可读性更好，但如果需要频繁使用参数顺序翻转的 <code>publishedInYear</code>，我可能会使用 <code>flip</code> 定义一个辅助函数，然后在任何用到它的地方使用辅助函数。在后续文章中会看到一些示例。</p>
+<p>注意， <code>__</code> 仅适用于柯里化的函数，而 <code>partial</code>、<code>partialRight</code> 和 <code>flip</code> 适用于任何函数。如果需要对某个普通函数使用 <code>__</code>，可以先用 <code>curry</code> 将其包裹起来。</p>
+<h2 id="lai-zuo-yi-tiao-guan-dao-pipeline">来做一条管道（pipeline）</h2>
+<p>现在看看能否将我们的 <code>filter</code> 和 <code>map</code> 调用放入 “pipeline” (管道)中？下面是代码当前的状态，使用了方便的参数顺序的 <code>publishedInYear</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> selected = filter(publishedInYear(year), books)</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">return</span> map(<span class="function"><span class="params">book</span> =&gt;</span> book.title, selected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上一节中，我们了解了 <code>pipe</code> 和 <code>compose</code>，但我们还需要另一部分信息，以便能够使用上面所学的知识。</p>
+<p>缺少的信息是：几乎所有的 Ramda 函数都是默认柯里化的，包括 <code>filter</code> 和 <code>map</code>。所以 <code>filter(publishedInYear(year))</code> 是完全合法的，它会返回一个新函数，该函数等待我们传递 <code>books</code> 给它，<code>map(book =&gt; book.title)</code> 也是如此。</p>
+<p>现在可以编写 “pipeline” 了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = <span class="function">(<span class="params">books, year</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br></pre></td></tr></table></figure>
+<p>我们来更进一步，将 <code>titlesForYear</code> 的参数顺序也调换一下，这样更符合 Ramda 中待处理数据放在最后的约定。也可以将该函数进行柯里化，以便其在后续的 “pipeline” 中使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> publishedInYear = curry(<span class="function">(<span class="params">year, book</span>) =&gt;</span> book.year === year)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> titlesForYear = curry(<span class="function">(<span class="params">year, books</span>) =&gt;</span></span><br><span class="line">  pipe(</span><br><span class="line">    filter(publishedInYear(year)),</span><br><span class="line">    map(<span class="function"><span class="params">book</span> =&gt;</span> book.title)</span><br><span class="line">  )(books)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="jie-lun">结论</h2>
+<p>本文可能是这个系列中讲解最深的一篇。部分应用和柯里化可能需要花一些时间和精力来熟悉和掌握。但一旦学会，他们会以一种强大的方式将数据处理变得更加函数式。</p>
+<p>它们引导你通过创建包含许多小而简单代码块的 “pipeline” 的方式，来构建数据处理程序。</p>
+<h2 id="xia-yi-jie">下一节</h2>
+<p>为了以函数式的方式编写代码，我们需要用 “声明式” 的思维代替 “命令式” 思维。要做到这点，需要找到一种函数式的方式来表示命令式的结构。<a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">声明式编程</a> 将会讨论这些想法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/10/Thinking-in-Ramda-Combining-Functions/" rel="prev" title="Thinking in Ramda: 函数组合">
+      <i class="fa fa-chevron-left"></i> Thinking in Ramda: 函数组合
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" rel="next" title="Thinking in Ramda: 声明式编程">
+      Thinking in Ramda: 声明式编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gao-jie-han-shu"><span class="nav-number">1.</span> <span class="nav-text">高阶函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bu-fen-ying-yong-han-shu"><span class="nav-number">2.</span> <span class="nav-text">部分应用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ke-li-hua-curry"><span class="nav-number">3.</span> <span class="nav-text">柯里化(Curry)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#can-shu-de-shun-xu"><span class="nav-number">4.</span> <span class="nav-text">参数的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shun-xu-cuo-wu-de-can-shu"><span class="nav-number">5.</span> <span class="nav-text">顺序错误的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flip"><span class="nav-number">6.</span> <span class="nav-text">flip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#placeholder-zhan-wei-fu"><span class="nav-number">7.</span> <span class="nav-text">placeholder (占位符)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lai-zuo-yi-tiao-guan-dao-pipeline"><span class="nav-number">8.</span> <span class="nav-text">来做一条管道（pipeline）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">9.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">10.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

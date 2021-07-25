@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="(又名 “代数 JavaScript 规范”)  该项目规定了通用代数数据结构的互操作性：  Setoid Ord Semigroupoid Category Semigroup Monoid Group Filterable Functor Contravariant Apply Applicative Alt Plus Alternative Foldable Traversable Chai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fantasy-Land-Specification">
+<meta property="og:url" content="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="(又名 “代数 JavaScript 规范”)  该项目规定了通用代数数据结构的互操作性：  Setoid Ord Semigroupoid Category Semigroup Monoid Group Filterable Functor Contravariant Apply Applicative Alt Plus Alternative Foldable Traversable Chai">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/logo.png">
+<meta property="og:image" content="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/dependencies.png">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.573Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fantasy-Land-Specification">
+<meta name="twitter:description" content="(又名 “代数 JavaScript 规范”)  该项目规定了通用代数数据结构的互操作性：  Setoid Ord Semigroupoid Category Semigroup Monoid Group Filterable Functor Contravariant Apply Applicative Alt Plus Alternative Foldable Traversable Chai">
+<meta name="twitter:image" content="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/logo.png">
+
+<link rel="canonical" href="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Fantasy-Land-Specification | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2018/09/08/Fantasy-Land-Specification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Fantasy-Land-Specification
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-08 16:45:36" itemprop="dateCreated datePublished" datetime="2018-09-08T16:45:36+00:00">2018-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>(又名 “代数 JavaScript 规范”)</p>
+<p><img src="./logo.png" alt="logo"></p>
+<p>该项目规定了通用代数数据结构的互操作性：</p>
+<ul>
+<li><a href="#setoid">Setoid</a></li>
+<li><a href="#ord">Ord</a></li>
+<li><a href="#semigroupoid">Semigroupoid</a></li>
+<li><a href="#category">Category</a></li>
+<li><a href="#semigroup">Semigroup</a></li>
+<li><a href="#monoid">Monoid</a></li>
+<li><a href="#group">Group</a></li>
+<li><a href="#filterable">Filterable</a></li>
+<li><a href="#functor">Functor</a></li>
+<li><a href="#contravariant">Contravariant</a></li>
+<li><a href="#apply">Apply</a></li>
+<li><a href="#applicative">Applicative</a></li>
+<li><a href="#alt">Alt</a></li>
+<li><a href="#plus">Plus</a></li>
+<li><a href="#alternative">Alternative</a></li>
+<li><a href="#foldable">Foldable</a></li>
+<li><a href="#traversable">Traversable</a></li>
+<li><a href="#chain">Chain</a></li>
+<li><a href="#chainrec">ChainRec</a></li>
+<li><a href="#monad">Monad</a></li>
+<li><a href="#extend">Extend</a></li>
+<li><a href="#comonad">Comonad</a></li>
+<li><a href="#bifunctor">Bifunctor</a></li>
+<li><a href="#profunctor">Profunctor</a></li>
+</ul>
+<p><img src="./dependencies.png" alt="dependencies"></p>
+<h2 id="gai-lan">概览</h2>
+<p>代数是遵循一定法则的、具有封闭性的，一系列值及一系列操作的集合。</p>
+<p>每个 Fantasy Land 代数是一个单独的规范。一个代数可能依赖于其他必需实现的代数。</p>
+<h2 id="zhu-yu">术语</h2>
+<ol>
+<li>
+<p>“值”：任何 JavaScript 值，包括下面定义的结构的任何值。</p>
+</li>
+<li>
+<p>“等价”：对给定值的等价性的恰当定义。这个定义应该保证两个值可以在其对应的抽象的程序中，能够安全地进行交换。例如：</p>
+<ul>
+<li>当两个列表对应的索引上的值都相等时，它们是等价的。</li>
+<li>当两个普通的 JavaScript 对象所有键值对都相等时，它们（作为字典）是等价的。</li>
+<li>当两个 promises 生成相等的值时，它们是等价的。</li>
+<li>当两个函数给定相同的输入，产生相同的输出时，它们是等价的。</li>
+</ul>
+</li>
+</ol>
+<h2 id="lei-xing-qian-ming-fu-hao">类型签名符号</h2>
+<p>本文档使用的类型签名符号如下所述：[^1]</p>
+<ul>
+<li><code>::</code> _<em>“是 xx 的成员”。</em>
+<ul>
+<li><code>e :: t</code> 读作：“表达式 <code>e</code> 是类型 <code>t</code> 的成员”。</li>
+<li><code>true :: Boolean</code> - “<code>true</code> 是类型 <code>Boolean</code> 的成员”。</li>
+<li><code>42 :: Integer, Number</code> - “<code>42</code> 是类型 <code>Integer</code> 和 <code>Number</code> 的成员”。</li>
+</ul>
+</li>
+<li><em>新类型可以通过类型构造函数创建。</em>
+<ul>
+<li>类型构造函数可以接受零或多个类型参数。</li>
+<li><code>Array</code> 是一个接受单个参数的类型构造函数。</li>
+<li><code>Array String</code> 代表包含字符串的数组的类型。后面每个都是 <code>Array String</code> 类型的：<code>[]</code>，<code>['foo', 'bar', 'baz']</code>。</li>
+<li><code>Array (Array String)</code> 代表包含字符串的数组的数组的类型。后面每个都是 <code>Array (Array String)</code> 类型的：<code>[]</code>，<code>[[], []]</code>， <code>[[], ['foo'], ['bar', 'baz']]</code>。</li>
+</ul>
+</li>
+<li><em>小写字母代表类型变量。</em>
+<ul>
+<li>类型变量可以接受任何类型，除非受到类型约束的限制（参见下面的胖箭头）。</li>
+<li><code>-&gt;</code> (箭头) <em>函数类型的构造函数</em></li>
+<li><code>-&gt;</code> 是一个 <em>中缀</em> 构造函数，它接受两个类型参数，左侧参数为输入的类型，右侧参数为输出的类型。</li>
+<li><code>-&gt;</code> 的输入类型可以通过一组类型创建出来，该函数接受零个或多个参数。其语法是：<code>(&lt;input-types&gt;) -&gt; &lt;output-type&gt;</code>，其中 <code>&lt;input-types&gt;</code> 包含零个或多个 “逗号-空格” （<code>, </code>）分开的类型表示，对于一元函数，圆括号也可以省略。</li>
+<li><code>String -&gt; Array String</code> 是一种接受一个 <code>String</code> 并返回一个 <code>Array String</code> 的函数的类型。</li>
+<li><code>String -&gt; Array String -&gt; Array String</code> 是一种函数类型，它接受一个 <code>String</code> 并返回一个函数，返回的函数接受一个 <code>Array String</code> 并返回一个 <code>Array String</code>。</li>
+<li><code>(String, Array String) -&gt; Array String</code> 是一种函数类型，它接受一个 <code>String</code> 和 <code>Aray String</code> 作为参数，并返回一个 <code>Array String</code> 。</li>
+<li><code>() -&gt; Number</code> 是一种不带输入参数，返回 <code>Number</code> 的函数类型。</li>
+</ul>
+</li>
+<li><code>~&gt;</code> (波浪形箭头) <em>方法类型的构造函数。</em>
+<ul>
+<li>当一个函数是一个对象（Object）的属性时，它被称为方法。所有方法都有一个隐含的参数类型 - 它是属性所在对象的类型。</li>
+<li><code>a ~&gt; a -&gt; a</code> 是一种对象中方法的类型，它接受 <code>a</code> 类型的参数，并返回一个 <code>a</code> 类型的值。</li>
+</ul>
+</li>
+<li><code>=&gt;</code> (胖箭头) 表示对类型变量的约束。
+<ul>
+<li>在 <code>a ~&gt; a -&gt; a</code>（参见上面的波浪形箭头）中，<code>a</code> 可以为任意类型。半群 <code>a =&gt; a ~&gt; a -&gt; a</code> 会添加一个约束，使得类型 <code>a</code> 现在必须满足该半群的类型类。满足类型类意味着，须合法地实现该类型类指定所有函数/方法。</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">traverse :: Applicative f, Traversable t =&gt; t a ~&gt; (TypeRep f, a -&gt; f b) -&gt; f (t b)</span><br><span class="line">&apos;------&apos;    &apos;--------------------------&apos;    &apos;-&apos;    &apos;-------------------&apos;    &apos;-----&apos;</span><br><span class="line"> &apos;           &apos;                               &apos;      &apos;                        &apos;</span><br><span class="line"> &apos;           &apos; - type constraints            &apos;      &apos; - argument types       &apos; - return type</span><br><span class="line"> &apos;                                           &apos;</span><br><span class="line"> &apos;- method name                              &apos; - method target type</span><br></pre></td></tr></table></figure>
+<p>[^1]: 更多相关信息，请参阅 Sanctuary 文档中的 <a href="https://sanctuary.js.org/#types" target="_blank" rel="noopener">Types</a> 部分。</p>
+<h2 id="qian-zhui-fang-fa-ming">前缀方法名</h2>
+<p>为了使数据类型与 Fantasy Land 兼容，其值必须具有某些属性。这些属性都以 <code>fantasy-land/</code> 为前缀。例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  MyType#fantasy-land/map :: MyType a ~&gt; (a -&gt; b) -&gt; MyType b</span></span><br><span class="line">MyType.prototype[<span class="string">'fantasy-land/map'</span>] = ...</span><br></pre></td></tr></table></figure>
+<p>在本文中，不使用前缀的名称，只是为了减少干扰。</p>
+<p>为了方便起见，你可以使用 <code>fantasy-land</code> 包：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fl = <span class="built_in">require</span>(<span class="string">'fantasy-land'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">MyType.prototype[fl.map] = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = bar[fl.map](<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="lei-xing-biao-shi-java-script-zhong-de-gou-zao-han-shu">类型表示 (JavaScript 中的构造函数？)</h2>
+<p>某些行为是从类型成员的角度定义的。而另外一些行为不需要类型成员。因此，某些代数需要一个类型来提供值层面上的表示（具有某些属性）。例如，Identity 类型可以提供 <code>Id</code> 作为其类型表示：<code>Id :: TypeRep Identity</code>。</p>
+<p>如果一个类型提供了类型表示，那么这个类型的每个成员都必须有一个指向该类型表示的 <code>contructor</code> 属性。</p>
+<h2 id="dai-shu">代数</h2>
+<h3 id="setoid">Setoid</h3>
+<ol>
+<li><code>a.equals(a) === true</code> (自反性)</li>
+<li><code>a.equals(b) === b.equals(a)</code> (对称性)</li>
+<li>如果 <code>a.equals(b)</code> 并且 <code>b.equals(a)</code>，则 <code>a.equals(c)</code> (传递性)</li>
+</ol>
+<h4 id="code-equals-code-fang-fa"><code>equals</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">equals</span> :: <span class="type">Setoid</span> a =&gt; a ~&gt; a -&gt; <span class="type">Boolean</span></span><br></pre></td></tr></table></figure>
+<p>具有 Setoid 的值必须提供 <code>equals</code> 方法。<code>equals</code> 方法接受一个参数：</p>
+<pre><code>a.equals(b)
+</code></pre>
+<ol>
+<li><code>b</code> 必须是相同 Setoid 的值
+<ol>
+<li>如果 <code>b</code> 不是相同的 Setoid，则 <code>equals</code> 的行为未指定（建议返回 <code>false</code>）。</li>
+<li><code>equals</code> 必须返回一个布尔值（<code>true</code> 或 <code>false</code>）。</li>
+</ol>
+</li>
+</ol>
+<h3 id="ord">Ord</h3>
+<p>实现 Ord 规范的值还必须实现 <a href="#setoid">Setoid</a> 规范。</p>
+<ol>
+<li><code>a.lte(b)</code> 或 <code>b.lte(a)</code> (完全性)</li>
+<li>如果 <code>a.lte(b)</code> 且 <code>b.lte(a)</code>，则 <code>a.equals(b)</code> (反对称性)</li>
+<li>如果 <code>a.lte(b)</code> 且 <code>b.lte(c)</code>，则 <code>a.lte(c)</code> (传递性)</li>
+</ol>
+<h4 id="code-lte-code-fang-fa"><code>lte</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">lte</span> :: <span class="type">Ord</span> a =&gt; a ~&gt; a -&gt; <span class="type">Boolean</span></span><br></pre></td></tr></table></figure>
+<p>具有 Ord 的值必须提供 <code>lte</code> 方法。<code>lte</code> 方法接受一个参数：</p>
+<pre><code>`a.lte(b)`
+</code></pre>
+<ol>
+<li><code>b</code> 必须是相同 Ord 的值。
+<ol>
+<li>如果 <code>b</code> 不是相同的 Ord，则 <code>lte</code> 的行为未指定 (建议返回 <code>false</code>)。</li>
+</ol>
+</li>
+<li><code>lte</code> 必须返回布尔值（<code>true</code> 或 <code>false</code>）。</li>
+</ol>
+<h3 id="semigroupoid">Semigroupoid</h3>
+<ol>
+<li><code>a.compose(b).compose(c) === a.compose(b.compose(c))</code> (结合性)</li>
+</ol>
+<h4 id="code-compose-code-fang-fa"><code>compose</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">compose</span> :: <span class="type">Semigroupoid</span> c =&gt; c i j ~&gt; c j k -&gt; c i k</span><br></pre></td></tr></table></figure>
+<p>具有 Semigoupoid 的值必须提供 <code>compose</code> 组合方法。<code>compose</code> 方法接受一个参数：</p>
+<pre><code>a.compose(b)
+</code></pre>
+<ol>
+<li><code>b</code> 必须返回相同 Semigroupoid 规范。
+<ol>
+<li>如果 <code>b</code> 不是相同的 Semigroupoid，compose 的行为未指定。</li>
+</ol>
+</li>
+<li><code>compose</code> 必须返回相同 Semigroupoid 的值。</li>
+</ol>
+<h3 id="category">Category</h3>
+<p>实现范畴规范的值还必须实现<a href="#semigroupoid">半群</a>规范。</p>
+<ol>
+<li><code>a.compose(C.id())</code> 等价于 <code>a</code> (右同一性)</li>
+<li><code>C.id().compose(a)</code> 等价于 <code>a</code> (左同一性)</li>
+</ol>
+<h4 id="code-id-code-fang-fa"><code>id</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">id</span> :: <span class="type">Category</span> c =&gt; () -&gt; c a a</span><br></pre></td></tr></table></figure>
+<p>具有范畴的值必须在其<a href="#type-representatives">类型表示</a>中提供一个 <code>id</code> 函数。</p>
+<pre><code>C.id()
+</code></pre>
+<p>给定值 <code>c</code>，可以通过 <code>contructor</code> 属性来访问其类型表示：</p>
+<pre><code>c.constructgor.id()
+</code></pre>
+<ol>
+<li><code>id</code> 必须返回相同范畴的值。</li>
+</ol>
+<h3 id="semigroup">Semigroup</h3>
+<ol>
+<li><code>a.concat(b).concat(c)</code> 等价于 <code>a.concat(b.concat(c))</code> （结合性）</li>
+</ol>
+<h4 id="code-concat-code-fang-fa"><code>concat</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">concat</span> :: <span class="type">Semigroup</span> a =&gt; a ~&gt; a -&gt; a</span><br></pre></td></tr></table></figure>
+<p>具有 Semigroup 的值必须提供 <code>concat</code> 方法。<code>concat</code> 方法接受一个参数：</p>
+<pre><code>s.concat(b)
+</code></pre>
+<ol>
+<li><code>b</code> 必须是相同 Semigroup 的值
+<ol>
+<li>如果 <code>b</code> 不是相同的 Semigroup，则 <code>concat</code> 的行为未指定。</li>
+</ol>
+</li>
+<li><code>concat</code> 必须返回相同 Semigroup 的值。</li>
+</ol>
+<h3 id="monoid">Monoid</h3>
+<p>实现 Monoid 规范的值还必须实现 <a href="#semigroup">Semigroup</a> 规范</p>
+<ol>
+<li><code>m.concat(M.empty())</code> 等价于 <code>m</code> (右结合性)</li>
+<li><code>M.empty().concat(m)</code> 等价于 <code>m</code> (左结合性)</li>
+</ol>
+<h4 id="code-empty-code-fang-fa"><code>empty</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">empty</span> :: <span class="type">Monoid</span> m =&gt; () -&gt; m</span><br></pre></td></tr></table></figure>
+<p>具有 Monoid 的值必须在其类型表示上提供 <code>empty</code> 方法：</p>
+<pre><code>M.empty()
+</code></pre>
+<p>给定值<code> </code>m，可以通过 <code>constructor</code> 属性来访问其类型表示：</p>
+<pre><code>m.constructor.empty()
+</code></pre>
+<ol>
+<li><code>empty</code> 必须返回相同 Monoid 的值。</li>
+</ol>
+<h3 id="group">Group</h3>
+<p>实现 Group 规范的值还必须实现 <a href="#monoid">Monoid</a> 规范。</p>
+<ol>
+<li><code>g.concat(g.invert())</code> 等价于 <code>g.constructor.empty()</code> (右反转性??)</li>
+<li><code>g.invert().concat(g)</code> 等价于 <code>g.constructor.empty()</code> (左翻转性??)</li>
+</ol>
+<h4 id="code-invert-code-fang-fa"><code>invert</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">invert</span> :: <span class="type">Group</span> g =&gt; g ~&gt; () -&gt; g</span><br></pre></td></tr></table></figure>
+<p>具有 Semigroup 的值必须提供 <code>invert</code> 方法。<code>invert</code> 方法接受零个参数：</p>
+<pre><code>g.invert()
+</code></pre>
+<ol>
+<li><code>invert</code> 必须返回相同 Group 的值。</li>
+</ol>
+<h3 id="filterable">Filterable</h3>
+<ol>
+<li><code>v.filter(x =&gt; p(x) &amp;&amp; q(x))</code> 等价于 <code>v.filter(p).filter(q)</code> (分配性)</li>
+<li><code>v.filter(x =&gt; true)</code> 等价于 <code>v</code> (同一性)</li>
+<li><code>v.filter(x -&gt; false)</code> 等价于 <code>w.filter(x =&gt; false)</code>，如果 <code>v</code> 和 <code>w</code> 具有相同的 Filterable 值 (湮灭??)</li>
+</ol>
+<h4 id="code-filter-code-fang-fa"><code>filter</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">filter</span> :: <span class="type">Filterable</span> f =&gt; f a ~&gt; (a -&gt; <span class="type">Boolean</span>) -&gt; f a</span><br></pre></td></tr></table></figure>
+<p>具有 Filterable 的值必须提供 <code>filter</code> 方法。<code>filter</code> 方法接受一个参数：</p>
+<pre><code>v.filter(p)
+</code></pre>
+<ol>
+<li>
+<p><code>p</code> 必须是一个函数。</p>
+<ol>
+<li>如果 <code>p</code> 不是函数，则 <code>filter</code> 的行为未指定。</li>
+<li><code>p</code> 必须返回 <code>ture</code> 或 <code>false</code>。如果返回任何其它值，<code>filter</code> 的行为未指定。</li>
+</ol>
+</li>
+<li>
+<p><code>filter</code> 必须返回相同 Filterable 的值。</p>
+</li>
+</ol>
+<h3 id="functor">Functor</h3>
+<ol>
+<li><code>u.map(a =&gt; a)</code> 等价于 <code>u</code> (同一性)</li>
+<li><code>u.map(x =&gt; f(g(x)))</code> 等价于 <code>u.map(g).map(f)</code> (组合性)</li>
+</ol>
+<h4 id="code-map-code-fang-fa"><code>map</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">map</span> :: <span class="type">Functor</span> f =&gt; f a ~&gt; (a -&gt; b) -&gt; f b</span><br></pre></td></tr></table></figure>
+<p>具有 Functor 的值必须提供 <code>map</code> 方法。<code>map</code> 方法接受一个参数：</p>
+<pre><code>u.map(f)
+</code></pre>
+<ol>
+<li>
+<p><code>f</code> 必须是一个函数，</p>
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>map</code> 的行为未指定。</li>
+<li><code>f</code> 可以返回任何值。</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查(??)。</li>
+</ol>
+</li>
+<li>
+<p><code>map</code> 必须返回相同 Functor 的值。</p>
+</li>
+</ol>
+<h3 id="contravariant">Contravariant</h3>
+<ol>
+<li><code>u.contramap(a =&gt; a)</code> 等价于 <code>u</code> (同一性)</li>
+<li><code>u.contramap(x =&gt; f(g(x)))</code> 等价于 <code>u.contramap(f).contramap(g)</code> (组合性)</li>
+</ol>
+<h4 id="code-contramap-code-fang-fa"><code>contramap</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">contramap</span> :: <span class="type">Contravariant</span> f =&gt; f a ~&gt; (b -&gt; a) -&gt; f b</span><br></pre></td></tr></table></figure>
+<p>具有 Contravariant 的值必须提供 <code>contramap</code> 方法。<code>contramap</code> 方法接受一个参数：</p>
+<pre><code>u.contramap(f)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个函数，
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>contramap</code> 的行为未指定。</li>
+<li><code>f</code> 可以返回任何值。</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查(??)。</li>
+</ol>
+</li>
+<li><code>contramap</code> 必须返回相同 Contravariant 的值。</li>
+</ol>
+<h3 id="apply">Apply</h3>
+<p>实现 Apply 规范的值还必须实现 <a href="#functor">Functor</a> 规范。</p>
+<ol>
+<li><code>v.ap(u.ap(a.map(f =&gt; g =&gt; x =&gt; f(g(x)))))</code> 等价于 <code>v.ap(u).ap(a)</code> (组合型)，推导过程??</li>
+</ol>
+<h4 id="code-ap-code-fang-fa"><code>ap</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">ap</span> :: <span class="type">Apply</span> f =&gt; f a ~&gt; f (a -&gt; b) -&gt; f b</span><br></pre></td></tr></table></figure>
+<p>具有 Apply 的值必须提供 <code>ap</code> 方法。<code>ap</code> 方法接受一个参数：</p>
+<pre><code>a.ap(b)
+</code></pre>
+<ol>
+<li><code>b</code> 必须是一个函数的 Apply
+<ol>
+<li>如果 <code>b</code> 不代表函数，则 <code>ap</code> 的行为未指定。</li>
+<li><code>b</code> 必须与 a 具有相同的 Apply。</li>
+</ol>
+</li>
+<li><code>a</code> 可以是任意值的 Apply。(??)</li>
+<li><code>ap</code> 必须能将 Apply <code>b</code> 内的函数应用于 Apply <code>a</code> 的值上
+<ol>
+<li>函数返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li>由 <code>ap</code> 返回的 <code>Apply</code> 必须与 <code>a</code> 和 <code>b</code> 的相同。</li>
+</ol>
+<h3 id="applicative">Applicative</h3>
+<p>实现 Applicative 规范的值还必须实现 <a href="#apply">Apply</a> 规范。</p>
+<ol>
+<li><code>v.ap(A.of(x =&gt; x))</code> 等价于 <code>v</code> (同一性)</li>
+<li><code>A.of(x).ap(A.of(f))</code> 等价于 <code>A.of(f(x))</code> (同态性, homomorphism)</li>
+<li><code>A.of(y).ap(u)</code> 等价于 <code>u.ap(A.of(f =&gt; f(y)))</code> (交换性)</li>
+</ol>
+<h4 id="code-of-code-fang-fa"><code>of</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">of</span> :: <span class="type">Applicative</span> f =&gt; a -&gt; f a</span><br></pre></td></tr></table></figure>
+<p>具有 Applicative 的值必须在其类型表示中提供 <code>of</code> 函数。<code>of</code> 函数接受一个参数：</p>
+<pre><code>F.of(a)
+</code></pre>
+<p>给定值 <code>f</code>，可以通过 <code>contructor</code> 属性访问其类型表示：</p>
+<pre><code>f.contructor.of(a)
+</code></pre>
+<ol>
+<li><code>of</code> 必须提供相同的 Applicative
+<ol>
+<li>a 的任何部分都不应该被检查</li>
+</ol>
+</li>
+</ol>
+<h3 id="alt">Alt</h3>
+<p>实现 Alt 规范的值还必须实现 <a href="#functor">Functor</a> 规范。</p>
+<ol>
+<li><code>a.alt(b).alt(c)</code> 等价于 <code>a.alt(b.alt(c))</code> (结合性)</li>
+<li><code>a.alt(b).map(f)</code> 等价于 <code>a.map(f).alt(b.map(f))</code> (分配性) (看起来像乘法，有什么实际用途呢？)</li>
+</ol>
+<h4 id="code-alt-code-fang-fa"><code>alt</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">alt</span> :: <span class="type">Alt</span> f =&gt; f a ~&gt; f a -&gt; f a</span><br></pre></td></tr></table></figure>
+<p>具有 Alt 的值必须提供 <code>alt</code> 方法。<code>alt</code> 方法接受一个参数：</p>
+<pre><code>a.alt(b)
+</code></pre>
+<ol>
+<li><code>b</code> 必须是相同 Alt 的值
+<ol>
+<li>如果 <code>b</code> 不是相同的 Alt，则 <code>alt</code> 的行为未指定。</li>
+<li><code>a</code> 和 <code>b</code> 可以包含相同类型的任何值。</li>
+<li><code>a</code> 和 <code>b</code> 包含值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>alt</code> 必须返回相同 Alt 的值。</li>
+</ol>
+<h3 id="plus">Plus</h3>
+<p>实现 Plus 规范的值还必须实现 <a href="#alt">Alt</a> 规范。</p>
+<ol>
+<li><code>x.alt(A.zero())</code> 等价于 <code>x</code> (右同一性)</li>
+<li><code>A.zero().alt(x)</code> 等价于 <code>x</code> (左同一性)</li>
+<li><code>A.zero().map(f)</code> 等价于 <code>A.zero()</code> (湮灭??)</li>
+</ol>
+<h4 id="code-zero-code-fang-fa"><code>zero</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">zero</span> :: <span class="type">Plus</span> f =&gt; () -&gt; f a</span><br></pre></td></tr></table></figure>
+<p>具有 Plus 的值必须在其类型表示中提供 <code>zero</code> 函数：</p>
+<pre><code>A.zero()
+</code></pre>
+<p>给定值 <code>x</code>，可以通过 <code>contructor</code> 属性访问其类型表示：</p>
+<pre><code>x.contructor.zero()
+</code></pre>
+<p><code>zero</code> 必须返回相同 Plus 的值。</p>
+<h3 id="alternative">Alternative</h3>
+<p>实现 Alternative 规范的值还必须实现 <a href="#applicative">Applicative</a> 和 <a href="#plus">Plus</a> 规范。</p>
+<ol>
+<li><code>x.ap(f.alt(g))</code> 等价于 <code>x.ap(f).alt(x.ap(g))</code> (分配性)</li>
+<li><code>x.ap(A.zero())</code> 等价于 <code>A.zero()</code> (湮灭)</li>
+</ol>
+<h3 id="foldable">Foldable</h3>
+<p><code>u.reduce</code> 等价于 <code>u.reduce((acc, x) =&gt; acc.concat([x]), []).reduce</code></p>
+<h4 id="code-reduce-code-fang-fa"><code>reduce</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">reduce</span> :: <span class="type">Foldable</span> f =&gt; f a ~&gt; ((b, a) -&gt; b, b) -&gt; b</span><br></pre></td></tr></table></figure>
+<p>具有 Foldable 的值必须在其类型表示中提供 <code>reduce</code> 函数。<code>reduce</code> 函数接受两个参数：</p>
+<pre><code>u.reduce(f, x)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个二元函数
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>reduce</code> 的行为未指定。</li>
+<li><code>f</code> 的第一个参数类型必须与 <code>x</code> 的相同。</li>
+<li><code>f</code> 的返回值类型必须与 <code>x</code> 的相同。</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>x</code> 是归约的初始累积值
+<ol>
+<li><code>x</code> 的任何部分都不应该被检查</li>
+</ol>
+</li>
+</ol>
+<h3 id="traversable">Traversable</h3>
+<p>实现 Traversable 规范的值还必须实现 <a href="#functor">Functor</a> 和 <a href="#foldable">Foldable</a> 规范。</p>
+<ol>
+<li>对于任意 <code>t</code>，<code>t(u.traverse(F, x =&gt; x))</code> 等价于 <code>u.traverse(G, t)</code> ，因为 <code>t(a).map(f)</code> 等价于 <code>t(a.map(f))</code> (自然性)</li>
+<li>对于任意 Applicative <code>F</code>，<code>u.traverse(F, F.of)</code> 等价于 <code>F.of(u)</code> (同一性)</li>
+<li><code>u.traverse(Compose, x =&gt; new Compose(x))</code> 等价于 <code>new Compose(u.traverse(F, x =&gt; x).map(x =&gt; x.traverse(G, x =&gt; x)))</code>，对下面定义的 <code>Compose</code> 和 任意 Applicatives <code>F</code> 和 <code>G</code> 都适用 (组合性)</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Compose = <span class="function"><span class="keyword">function</span>(<span class="params">c</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.c = c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Compose.of = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Compose(F.of(G.of(x)));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Compose.prototype.ap = <span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Compose(<span class="keyword">this</span>.c.ap(f.c.map(<span class="function"><span class="params">u</span> =&gt;</span> <span class="function"><span class="params">y</span> =&gt;</span> y.ap(u))))</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Compose.prototype.map = <span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Compose(<span class="keyword">this</span>.c.map(<span class="function"><span class="params">y</span> =&gt;</span> y.map(f)));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="code-traverse-code-fang-fa"><code>traverse</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">traverse</span> :: <span class="type">Applicative</span> f, <span class="type">Traversable</span> t =&gt; t a ~&gt; (<span class="type">TypeRep</span> f, a -&gt; f b) -&gt; f (t b)</span><br></pre></td></tr></table></figure>
+<p>具有 Traversable 的值必须提供 <code>traverse</code> 函数。<code>traverse</code> 函数接受两个参数：</p>
+<pre><code>u.traverse(A, f)
+</code></pre>
+<ol>
+<li><code>A</code> 必须是一个 Applicative 的类型表示。</li>
+<li><code>f</code> 必须是一个返回值的函数
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>traverse</code> 的行为未指定。</li>
+<li><code>f</code> 必须返回类型表示为 <code>A</code> 的值。</li>
+</ol>
+</li>
+<li><code>traverse</code> 必须返回类型表示为 <code>A</code> 的值。</li>
+</ol>
+<h3 id="chain">Chain</h3>
+<p>实现 Chain 规范的值还必须实现 <a href="#apply">Apply</a> 规范。</p>
+<ol>
+<li><code>m.chain(f).chain(g)</code> 等价于 <code>m.chain(x =&gt; f(x).chain(g))</code> (结合性)</li>
+</ol>
+<h4 id="code-chain-code-fang-fa"><code>chain</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">chain</span> :: <span class="type">Chain</span> m =&gt; m a ~&gt; (a -&gt; m b) -&gt; m b</span><br></pre></td></tr></table></figure>
+<p>具有 Chain 的值必须提供 <code>chain</code> 函数。<code>chain</code> 函数接受一个参数：</p>
+<pre><code>m.chain(f)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个返回值的函数
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>chain</code> 的行为未指定。</li>
+<li><code>f</code> 必须返回相同 Chain 的值。</li>
+</ol>
+</li>
+<li><code>chain</code> 必须返回相同 Chain 的值。</li>
+</ol>
+<h3 id="chain-rec">ChainRec</h3>
+<p>实现 ChainRec 规范的值还必须实现 <a href="#chain">Chain</a> 规范。</p>
+<ol>
+<li><code>M.chainRec((next, done, v) =&gt; p(v) ? d(v).map(done) : n(v).map(next), i)</code> 等价于 <code>function step(v) { return p(v) ? d(v) : n(v).chain(step); }(i)</code> (等价性)</li>
+<li><code>M.chainRec(f, i)</code> 栈的用量必须是 <code>f</code> 自身栈用量的常数倍。</li>
+</ol>
+<h4 id="code-chain-rec-code-fang-fa"><code>chainRec</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">chainRec</span> :: <span class="type">ChainRec</span> m =&gt; ((a -&gt; c), b -&gt; c, a) -&gt; m b</span><br></pre></td></tr></table></figure>
+<p>具有 ChainRec 的值必须在其类型表示中提供 <code>chainRec</code> 函数。<code>chainRec</code> 函数接受两个参数：</p>
+<pre><code>M.chainRec(f, i)
+</code></pre>
+<p>给定值 <code>m</code>，可以通过 <code>contructor</code> 属性访问其类型表示：</p>
+<pre><code>m.constructor.chainRec(f, i)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个返回值的函数
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>chainRec</code> 的行为未指定。</li>
+<li><code>f</code> 接受三个参数 <code>next</code>，<code>done</code>，<code>value</code>
+<ol>
+<li><code>next</code> 是一个函数，其接受一个与 i 类型相同的参数，可以返回任意值</li>
+<li><code>done</code> 也是一个函数，其接受一个参数，并返回一个与 <code>next</code> 返回值类型相同的值</li>
+<li><code>value</code> 是一个与 i 类型相同的值。</li>
+</ol>
+</li>
+<li><code>f</code> 必须返回一个相同 ChainRec 的值，其中包含的是从 <code>done</code> 或 <code>next</code> 返回的值。</li>
+</ol>
+</li>
+<li><code>chainRec</code> 必须返回一个相同 ChainRec 的值，其中包含的值的类型与 <code>done</code> 的参数类型相同。</li>
+</ol>
+<h3 id="monad">Monad</h3>
+<p>实现 Monad 规范的值还必须实现 <a href="#applicative">Applicative</a> 和 <a href="#chain">Chain</a> 规范。</p>
+<ol>
+<li><code>M.of(a).chain(f)</code> 等价于 <code>f(a)</code> (左同一性)</li>
+<li><code>m.chain(M.of)</code> 等价于 <code>m</code> (右同一性)</li>
+</ol>
+<h3 id="extend">Extend</h3>
+<p>实现 Extend 规范的值还必须实现 <a href="#functor">Functor</a> 规范。</p>
+<ol>
+<li><code>w.extend(g).extend(f)</code> 等价于 <code>w.extend(\_w =&gt; f(\_w.extend(g)))</code></li>
+</ol>
+<p><code>extend</code> 方法</p>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">extend</span> :: <span class="type">Extend</span> w =&gt; w a ~&gt; (w a -&gt; b) -&gt; w b</span><br></pre></td></tr></table></figure>
+<p>具有 Extend 的值必须提供 <code>extend</code> 函数。<code>extend</code> 函数接受一个参数：</p>
+<pre><code>w.extend(f)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个返回值的函数，
+<ol>
+<li>如果 <code>f</code> 不是函数，则 extend 的行为未指定。</li>
+<li><code>f</code> 必须返回一个 <code>v</code> 类型的值，其中 <code>v</code> 是 <code>w</code> 中包含的某个变量 <code>v</code> (??)</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>extend</code> 必须返回相同 Extend 的值。</li>
+</ol>
+<h3 id="comonad">Comonad</h3>
+<p>实现 Comonad 规范的值还必须实现 <a href="#extend">Extend</a> 规范。</p>
+<ol>
+<li><code>w.extend(_w =&gt; _w.extract())</code> 等价于 <code>w</code> (左同一性)</li>
+<li><code>w.extend(f).extract()</code> 等价于 <code>f(w)</code> (右同一性)</li>
+</ol>
+<h4 id="code-extract-code-fang-fa"><code>extract</code> 方法</h4>
+<p>具有 Comonad 的值必须提供 <code>extract</code> 函数。<code>extract</code> 函数接受零个参数：</p>
+<pre><code>w.extract()
+</code></pre>
+<ol>
+<li><code>extract</code> 必须返回一个 <code>v</code> 类型的值，其中 <code>v</code> 是 <code>w</code> 中包含的某个变量 <code>v</code> (??)
+<ol>
+<li><code>v</code> 必须与在 <code>extend</code> 中的 <code>f</code> 返回的类型相同。</li>
+</ol>
+</li>
+</ol>
+<h3 id="bifunctor">Bifunctor</h3>
+<p>实现 Bifunctor 规范的值还必须实现 <a href="#functor">Functor</a> 规范。</p>
+<ol>
+<li><code>p.bimap(a =&gt; a, b =&gt; b)</code> 等价于 <code>p</code> (同一性)</li>
+<li><code>p.bimap(a =&gt; f(g(a)), b =&gt; h(i(b)))</code> 等价于 <code>p.bimap(g, i).bimap(f, h)</code> (组合性)</li>
+</ol>
+<h3 id="code-bimap-code-fang-fa"><code>bimap</code> 方法</h3>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">bimap</span> :: <span class="type">Bifunctor</span> f =&gt; f a c ~&gt; (a -&gt; b, c -&gt; d) -&gt; f b d</span><br></pre></td></tr></table></figure>
+<p>具有 Bifunctor 的值必须提供 <code>bimap</code> 函数。<code>bimap</code> 函数接受两个参数：</p>
+<pre><code>c.bimap(f, g)
+</code></pre>
+<ol>
+<li><code>f</code> 必须是一个返回值的函数，
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>bimap</code> 的行为未指定。</li>
+<li><code>f</code> 可以返回任意值</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>g</code> 必须是一个返回值的函数，
+<ol>
+<li>如果 <code>g</code> 不是函数，则 <code>bimap</code> 的行为未指定。</li>
+<li><code>g</code> 可以返回任意值<br>
+3.<code>g</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>bimap</code> 必须返回相同 Bifunctor 的值。</li>
+</ol>
+<h3 id="profunctor">Profunctor</h3>
+<p>实现 Profunctor 规范的值还必须实现 <a href="#functor">Functor</a> 规范。</p>
+<ol>
+<li><code>p.promap(a =&gt; a, b =&gt; b)</code> 等价于 <code>p</code> (同一性)</li>
+<li><code>p.promap(a =&gt; f(g(a)), b =&gt; h(i(b)))</code> 等价于 <code>p.promap(f, i).promap(g, h)</code> (组合性)</li>
+</ol>
+<h4 id="code-promap-code-fang-fa"><code>promap</code> 方法</h4>
+<figure class="highlight hs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">promap</span> :: <span class="type">Profunctor</span> p =&gt; p b c ~&gt; (a -&gt; b, c -&gt; d) -&gt; p a d</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>f</code> 必须是一个返回值的函数，
+<ol>
+<li>如果 <code>f</code> 不是函数，则 <code>promap</code> 的行为未指定。</li>
+<li><code>f</code> 可以返回任意值</li>
+<li><code>f</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>g</code> 必须是一个返回值的函数，
+<ol>
+<li>如果 <code>g</code> 不是函数，则 <code>promap</code> 的行为未指定。</li>
+<li><code>g</code> 可以返回任意值</li>
+<li><code>g</code> 返回值的任何部分都不应该被检查。</li>
+</ol>
+</li>
+<li><code>promap</code> 必须返回相同 Profunctor 的值。</li>
+</ol>
+<h2 id="tui-dao">推导</h2>
+<p>当创建满足多个代数的数据类型是，作者可以选择实现某些方法，然后推导出剩余的方法。推导：</p>
+<ul>
+<li>
+<p><a href="#code-equals-code-fang-fa"><code>equals</code></a> 可以由 <a href="#code-lte-code-fang-fa"><code>lte</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">other</span>) </span>&#123; retrun <span class="keyword">this</span>.lte(other) &amp;&amp; other.lte(<span class="keyword">this</span>) &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-map-code-fang-fa"><code>map</code></a> 可以由 <a href="#code-ap-code-fang-fa"><code>ap</code></a> 和 <a href="#code-of-code-fang-fa"><code>of</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.ap(<span class="keyword">this</span>.of(f))&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-map-code-fang-fa"><code>map</code></a> 可以由 <a href="#code-chain-code-fang-fa"><code>chain</code></a> 和 <a href="#code-of-code-fang-fa"><code>of</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.chain(<span class="function"><span class="params">a</span> =&gt;</span> <span class="keyword">this</span>.of(f(a))); &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-map-code-fang-fa"><code>map</code></a> 可以由 <a href="#code-bimap-code-fang-fa"><code>bimap</code></a> 推导出 (??)：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.bimap(<span class="function"><span class="params">a</span> =&gt;</span> a, f); &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-map-code-fang-fa"><code>map</code></a> 可以由 <a href="#code-promap-code-fang-fa"><code>promap</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.promap(<span class="function"><span class="params">a</span> =&gt;</span> a, f); &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-ap-code-fang-fa"><code>ap</code></a> 可以由 <a href="#code-chain-code-fang-fa"><code>chain</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">m</span>) </span>&#123; <span class="keyword">return</span> m.chain(<span class="function"><span class="params">f</span> =&gt;</span> <span class="keyword">this</span>.map(f)); &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-reduce-code-fang-fa"><code>reduce</code></a> 可以由下列推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f, acc</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Const</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line">  Const.of = <span class="function"><span class="keyword">function</span>(<span class="params">\_</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Const(acc);</span><br><span class="line">  &#125;</span><br><span class="line">  Const.prototype.map = <span class="function"><span class="keyword">function</span>(<span class="params">\_</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  Const.prototype.ap = <span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Const(f(b.value, <span class="keyword">this</span>.value));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.traverse(<span class="function"><span class="params">x</span> =&gt;</span> <span class="keyword">new</span> Const(x), Const.of).value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-map-code-fang-fa"><code>map</code></a> 的推导如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Id</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line">  Id.of = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Id(x);</span><br><span class="line">  &#125;</span><br><span class="line">  Id.prototype.map = <span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Id(f(b.value));</span><br><span class="line">  &#125;</span><br><span class="line">  Id.prototype.ap = <span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Id(<span class="keyword">this</span>.value(b.value));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.traverse(<span class="function"><span class="params">x</span> =&gt;</span> Id.of(f(x)), Id.of).value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-filter-code-fang-fa"><code>filter</code></a> 可以由 <a href="#code-of-code-fang-fa"><code>of</code></a>，<a href="#code-chain-code-fang-fa"><code>chain</code></a> 和 <a href="#code-zero-code-fang-fa"><code>zero</code></a> 推导出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">pred</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="keyword">this</span>.constructor;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.chain(<span class="function"><span class="params">x</span> =&gt;</span> pred(x) ? F.of(x) : F.zero());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><a href="#code-filter-code-fang-fa"><code>filter</code></a> 还可以由 <a href="#code-concat-code-fang-fa"><code>concat</code></a>，<a href="#code-of-code-fang-fa"><code>of</code></a>，<a href="#code-zero-code-fang-fa"><code>zero</code></a> 和 <a href="#code-reduce-code-fang-fa"><code>reduce</code></a>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">pred</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="keyword">this</span>.constructor;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.reduce(<span class="function">(<span class="params">f, x</span>) =&gt;</span> pred(x) ? f.concat(F.of(x)) : f, F.zero());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="zhu-yi">注意</h2>
+<ol>
+<li>如果实现的方法和规则不止一种，应该选择一种实现，并为其他用途提供包装。</li>
+<li>我们不鼓励重载特定的方法。那样会很容易造成崩溃和错误的行为。</li>
+<li>建议对未指定的行为抛出异常。</li>
+<li>在 <a href="https://github.com/sanctuary-js/sanctuary-identity" target="_blank" rel="noopener">sanctuary-identity</a> 中提供了一个实现了许多方法的 Id 容器。</li>
+</ol>
+<h2 id="bei-xuan-fang-an">备选方案</h2>
+<p>此外，还存在一个 Static Land 规范，其思想与 Fantasy Land 完全相同，但是是基于静态方法而非实例方法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/12/16/The-Philosophy-of-Ramda/" rel="prev" title="Ramda 的哲学">
+      <i class="fa fa-chevron-left"></i> Ramda 的哲学
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/09/Hexo-Init/" rel="next" title="Hexo-Init">
+      Hexo-Init <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gai-lan"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zhu-yu"><span class="nav-number">2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lei-xing-qian-ming-fu-hao"><span class="nav-number">3.</span> <span class="nav-text">类型签名符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qian-zhui-fang-fa-ming"><span class="nav-number">4.</span> <span class="nav-text">前缀方法名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lei-xing-biao-shi-java-script-zhong-de-gou-zao-han-shu"><span class="nav-number">5.</span> <span class="nav-text">类型表示 (JavaScript 中的构造函数？)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dai-shu"><span class="nav-number">6.</span> <span class="nav-text">代数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#setoid"><span class="nav-number">6.1.</span> <span class="nav-text">Setoid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-equals-code-fang-fa"><span class="nav-number">6.1.1.</span> <span class="nav-text">equals 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ord"><span class="nav-number">6.2.</span> <span class="nav-text">Ord</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-lte-code-fang-fa"><span class="nav-number">6.2.1.</span> <span class="nav-text">lte 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#semigroupoid"><span class="nav-number">6.3.</span> <span class="nav-text">Semigroupoid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-compose-code-fang-fa"><span class="nav-number">6.3.1.</span> <span class="nav-text">compose 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#category"><span class="nav-number">6.4.</span> <span class="nav-text">Category</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-id-code-fang-fa"><span class="nav-number">6.4.1.</span> <span class="nav-text">id 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#semigroup"><span class="nav-number">6.5.</span> <span class="nav-text">Semigroup</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-concat-code-fang-fa"><span class="nav-number">6.5.1.</span> <span class="nav-text">concat 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#monoid"><span class="nav-number">6.6.</span> <span class="nav-text">Monoid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-empty-code-fang-fa"><span class="nav-number">6.6.1.</span> <span class="nav-text">empty 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#group"><span class="nav-number">6.7.</span> <span class="nav-text">Group</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-invert-code-fang-fa"><span class="nav-number">6.7.1.</span> <span class="nav-text">invert 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filterable"><span class="nav-number">6.8.</span> <span class="nav-text">Filterable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-filter-code-fang-fa"><span class="nav-number">6.8.1.</span> <span class="nav-text">filter 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#functor"><span class="nav-number">6.9.</span> <span class="nav-text">Functor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-map-code-fang-fa"><span class="nav-number">6.9.1.</span> <span class="nav-text">map 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#contravariant"><span class="nav-number">6.10.</span> <span class="nav-text">Contravariant</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-contramap-code-fang-fa"><span class="nav-number">6.10.1.</span> <span class="nav-text">contramap 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apply"><span class="nav-number">6.11.</span> <span class="nav-text">Apply</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-ap-code-fang-fa"><span class="nav-number">6.11.1.</span> <span class="nav-text">ap 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#applicative"><span class="nav-number">6.12.</span> <span class="nav-text">Applicative</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-of-code-fang-fa"><span class="nav-number">6.12.1.</span> <span class="nav-text">of 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alt"><span class="nav-number">6.13.</span> <span class="nav-text">Alt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-alt-code-fang-fa"><span class="nav-number">6.13.1.</span> <span class="nav-text">alt 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plus"><span class="nav-number">6.14.</span> <span class="nav-text">Plus</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-zero-code-fang-fa"><span class="nav-number">6.14.1.</span> <span class="nav-text">zero 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alternative"><span class="nav-number">6.15.</span> <span class="nav-text">Alternative</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#foldable"><span class="nav-number">6.16.</span> <span class="nav-text">Foldable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-reduce-code-fang-fa"><span class="nav-number">6.16.1.</span> <span class="nav-text">reduce 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#traversable"><span class="nav-number">6.17.</span> <span class="nav-text">Traversable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-traverse-code-fang-fa"><span class="nav-number">6.17.1.</span> <span class="nav-text">traverse 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chain"><span class="nav-number">6.18.</span> <span class="nav-text">Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-chain-code-fang-fa"><span class="nav-number">6.18.1.</span> <span class="nav-text">chain 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chain-rec"><span class="nav-number">6.19.</span> <span class="nav-text">ChainRec</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-chain-rec-code-fang-fa"><span class="nav-number">6.19.1.</span> <span class="nav-text">chainRec 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#monad"><span class="nav-number">6.20.</span> <span class="nav-text">Monad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extend"><span class="nav-number">6.21.</span> <span class="nav-text">Extend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#comonad"><span class="nav-number">6.22.</span> <span class="nav-text">Comonad</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-extract-code-fang-fa"><span class="nav-number">6.22.1.</span> <span class="nav-text">extract 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bifunctor"><span class="nav-number">6.23.</span> <span class="nav-text">Bifunctor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-bimap-code-fang-fa"><span class="nav-number">6.24.</span> <span class="nav-text">bimap 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profunctor"><span class="nav-number">6.25.</span> <span class="nav-text">Profunctor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-promap-code-fang-fa"><span class="nav-number">6.25.1.</span> <span class="nav-text">promap 方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tui-dao"><span class="nav-number">7.</span> <span class="nav-text">推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zhu-yi"><span class="nav-number">8.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bei-xuan-fang-an"><span class="nav-number">9.</span> <span class="nav-text">备选方案</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

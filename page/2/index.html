@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="FE@Meituan.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="wangzengdi&#39;s Blog">
+<meta property="og:url" content="https://adispring.github.io/page/2/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="FE@Meituan.com">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="wangzengdi&#39;s Blog">
+<meta name="twitter:description" content="FE@Meituan.com">
+
+<link rel="canonical" href="https://adispring.github.io/page/2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/09/29/Functional-Programming-Abstract-and-Composition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/29/Functional-Programming-Abstract-and-Composition/" class="post-title-link" itemprop="url">Functional Programming: Abstract and Composition</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-29 10:10:16" itemprop="dateCreated datePublished" datetime="2017-09-29T10:10:16+00:00">2017-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Functional-Programming/" itemprop="url" rel="index"><span itemprop="name">Functional Programming</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/07/29/Product-Softwares-in-nix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/29/Product-Softwares-in-nix/" class="post-title-link" itemprop="url">Product Softwares in *nix</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-07-29 07:57:42" itemprop="dateCreated datePublished" datetime="2017-07-29T07:57:42+00:00">2017-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>总结一些在 *nix 操作系统中常用的软件</p>
+<h2 id="a-href-https-github-com-syl-20-bnr-spacemacs-spacemacs-a"><a href="https://github.com/syl20bnr/spacemacs" target="_blank" rel="noopener">Spacemacs</a></h2>
+<ul>
+<li><a href="http://orgmode.org/" target="_blank" rel="noopener">org-mode</a></li>
+</ul>
+<h2 id="a-href-https-github-com-robbyrussell-oh-my-zsh-oh-my-zsh-a"><a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">oh-my-zsh</a></h2>
+<ul>
+<li><a href="https://github.com/wting/autojump" target="_blank" rel="noopener">autojump</a></li>
+</ul>
+<h2 id="a-href-https-github-com-tmux-tmux-tmux-a"><a href="https://github.com/tmux/tmux" target="_blank" rel="noopener">tmux</a></h2>
+<h2 id="a-href-https-github-com-mooz-percol-percol-a"><a href="https://github.com/mooz/percol" target="_blank" rel="noopener">percol</a></h2>
+<h2 id="a-href-https-nodejs-org-en-nodejs-a"><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Nodejs</a></h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/22/Debug-nodejs-in-Spacemacs/" class="post-title-link" itemprop="url">Debug Nodejs in Spacemacs</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-07-22 15:04:44" itemprop="dateCreated datePublished" datetime="2017-07-22T15:04:44+00:00">2017-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Emacs/" itemprop="url" rel="index"><span itemprop="name">Emacs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 <code>index.js</code>），另一个用来调试（如运行 <code>node index.js</code>），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。</p>
+<p>nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。</p>
+<p>这里有两条命令比较重要：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodejs-repl-send-region ;; 用于将选中的区域发送至 repl 中，但不求值，在引入库时比较有用</span><br><span class="line">nodejs-repl-send-last-sexp ;; 将当前行光标前面的内容发送至 repl，并进行运算</span><br></pre></td></tr></table></figure>
+<p>具体步骤：</p>
+<h2 id="yi-pei-zhi">一、配置</h2>
+<ol>
+<li>
+<p>在 <code>~/.spacemacs</code> <code>dotspacemacs-additional-packages '(nodejs-repl)</code> 中添加 <code>nodejs-repl</code></p>
+</li>
+<li>
+<p>在 <code>dotspacemacs/user-config ()</code> 中添加快捷键</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(add-hook &apos;js-mode-hook</span><br><span class="line">          (lambda ()</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-x C-e&quot;) &apos;nodejs-repl-send-last-sexp)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-r&quot;) &apos;nodejs-repl-send-region)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-l&quot;) &apos;nodejs-repl-load-file)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-z&quot;) &apos;nodejs-repl-switch-to-repl)))</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>运行 <code>M-m f e R</code>，安装 nodejs-repl</li>
+</ol>
+<h2 id="er-diao-shi">二、调试</h2>
+<ol>
+<li>使用 emacs 打开待调试文件；使用 <code>M-x</code> 运行命令 <code>nodejs-repl</code>，便会在编辑窗口相同 frame 里打开 nodejs 的 repl：</li>
+</ol>
+<p><img src="./open-nodejs-repl.png" alt="open-nodejs-repl"></p>
+<ol start="2">
+<li>选中文中的第三方库，使用 <code>nodejs-repl-send-region</code> 命令将其引入 repl 中。（注意，不能使用 <code>nodejs-repl-send-last-sexp</code>！）</li>
+</ol>
+<p><img src="./import-lib.png" alt="import-lib"></p>
+<ol start="3">
+<li>对于需要调试的代码行，运行 <code>nodejs-repl-send-last-sexp</code> ，便会将代码加入 repl 中，并进行运算：</li>
+</ol>
+<p><img src="./eval.png" alt="eval"></p>
+<h2 id="san-todo">三、TODO</h2>
+<ol>
+<li>快捷键配置在 js2-mode 中只能部分起作用，js-mode 中都可以。需要研究一下 emacs 快捷键配置和优先级。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/28/Why-Curry-Helps/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/28/Why-Curry-Helps/" class="post-title-link" itemprop="url">为什么柯里化有帮助</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-28 23:26:34" itemprop="dateCreated datePublished" datetime="2017-06-28T23:26:34+00:00">2017-06-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ramda/" itemprop="url" rel="index"><span itemprop="name">Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 <a href="https://hughfdjackson.com/" target="_blank" rel="noopener">Hugh FD Jackson</a> 的 《<a href="https://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">Why Curry Helps</a>》，转载请与<a href="https://hughfdjackson.com/" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>程序员的梦想是编写代码，并能够非常容易地对其进行复用。还要有强表达力，因为你书写的方式就是在表达你想要的东西，并且它应该被复用，因为… 好吧，你正在复用。你还想要什么呢？</p>
+<p><a href="https://npmjs.org/package/curry" target="_blank" rel="noopener">curry</a> 可以帮忙。</p>
+<h2 id="shi-yao-shi-ke-li-hua-wei-shi-yao-ta-ru-ci-de-mei-wei">什么是柯里化，为什么它如此的美味？</h2>
+<p>JavaScript 中正常的函数调用如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123; <span class="keyword">return</span> a + b &#125;</span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">//= 3</span></span><br></pre></td></tr></table></figure>
+<p>一个函数接受多个参数，并返回一个值。我可以使用少于指定数量的参数调用它（可能得到奇怪的结果），或者多于指定的数量（超出的部分一般会被忽略）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">1</span>, <span class="number">2</span>, <span class="string">'IGNORE ME'</span>) <span class="comment">//= 3</span></span><br><span class="line">add(<span class="number">1</span>) <span class="comment">//= NaN</span></span><br></pre></td></tr></table></figure>
+<p>一个柯里化的函数需要借用一系列单参数函数来处理它的多个参数。例如，柯里化的加法会是这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> curry = <span class="built_in">require</span>(<span class="string">'curry'</span>)</span><br><span class="line"><span class="keyword">var</span> add = curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123; <span class="keyword">return</span> a + b &#125;)</span><br><span class="line"><span class="keyword">var</span> add100 = add(<span class="number">100</span>)</span><br><span class="line">add100(<span class="number">1</span>) <span class="comment">//= 101</span></span><br></pre></td></tr></table></figure>
+<p>接受多个参数的柯里化函数将被写成如下形式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum3 = curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b, c</span>)</span>&#123; <span class="keyword">return</span> a + b + c &#125;)</span><br><span class="line">sum3(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>) <span class="comment">//= 6</span></span><br></pre></td></tr></table></figure>
+<p>由于这在 JavaScript 语法中很丑，<a href="https://npmjs.org/package/curry" target="_blank" rel="noopener">curry</a> 允许你一次调用多个参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum3 = curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b, c</span>)</span>&#123; <span class="keyword">return</span> a + b + c &#125;)</span><br><span class="line">sum3(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">//= 6</span></span><br><span class="line">sum3(<span class="number">1</span>)(<span class="number">2</span>, <span class="number">3</span>) <span class="comment">//= 6</span></span><br><span class="line">sum3(<span class="number">1</span>, <span class="number">2</span>)(<span class="number">3</span>) <span class="comment">//= 6</span></span><br></pre></td></tr></table></figure>
+<h2 id="suo-yi-ni">所以呢？</h2>
+<p>如果你还未习惯这样一门语言：柯里化函数是其日常工作一部分（如 <a href="http://learnyouahaskell.com/" target="_blank" rel="noopener">Haskell</a>），那么它给我们带来的好处可能不太明显。在我看来，有两点非常重要：</p>
+<ul>
+<li>小的模块可以轻松地配置和复用，不杂乱。</li>
+<li>从头至尾都使用函数。</li>
+</ul>
+<h3 id="xiao-mo-kuai">小模块</h3>
+<p>我们来看一个明显的例子；映射一个集合来获取它的成员的 ids：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> objects = [&#123; <span class="attr">id</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">2</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">3</span> &#125;]</span><br><span class="line">objects.map(<span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>&#123; <span class="keyword">return</span> o.id &#125;)</span><br></pre></td></tr></table></figure>
+<p>如果你正想搞清楚第二行的真正逻辑，我来跟你解释一下吧：</p>
+<blockquote>
+<p>MAP over OBJECTS to get IDS (对Objects进行映射，来获得对应的ID)</p>
+</blockquote>
+<p>有很多种实现这种操作的方式；可以函数定义的形式实现。我们来理一理：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="keyword">get</span> = curry(function(property, object)&#123; <span class="keyword">return</span> object[property] &#125;)</span><br><span class="line">objects.map(<span class="keyword">get</span>('id')) //= [1, 2, 3]</span><br></pre></td></tr></table></figure>
+<p>现在我们正在探讨这个操作的真正逻辑 - 映射这些对象，获取它们的 ids 。BAM。我们在 <code>get</code> 函数中真正创建的是一个 <strong>可以部分配置的函数</strong>。</p>
+<p>如果想复用 ‘从对象列表中获取ids’ 这个功能，该怎么办呢？我们先用一种笨的方法实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getIDs = <span class="function"><span class="keyword">function</span>(<span class="params">objects</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> objects.map(<span class="keyword">get</span>('id'))</span><br><span class="line">&#125;</span><br><span class="line">getIDs(objects) //= [1, 2, 3]</span><br></pre></td></tr></table></figure>
+<p>Hrm，我们似乎从高雅和简洁的方式回到了混乱的方式。可以做些什么呢？Ah，如果 <code>map</code> 可以先部分配置一个函数，而不同时调用集合，会怎样呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> map = curry(<span class="function"><span class="keyword">function</span>(<span class="params">fn, value</span>)</span>&#123; <span class="keyword">return</span> value.map(fn) &#125;)</span><br><span class="line"><span class="keyword">var</span> getIDs = map(<span class="keyword">get</span>('id'))</span><br><span class="line"></span><br><span class="line">getIDs(objects) //= [1, 2, 3]</span><br></pre></td></tr></table></figure>
+<p>我们开始看到，如果基本的构建块是柯里化函数，我们可以轻松地从中创建新的功能。更令人兴奋的是，代码读起来也很像你所工作领域（语言、环境）的逻辑。</p>
+<h2 id="quan-shi-han-shu">全是函数</h2>
+<p>这种方法的另一个优点是它鼓励创建函数，而不是方法。虽然方法很好 - 允许多态，可读性也不错 - 但它们并不总是能拿来干活的工具，比如大量的异步代码。</p>
+<p>在这个示例中，我们从服务器获取一些数据，并对其进行处理。数据看起来像是这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"user"</span>: <span class="string">"hughfdjackson"</span>,</span><br><span class="line">    <span class="string">"posts"</span>: [</span><br><span class="line">        &#123; <span class="string">"title"</span>: <span class="string">"why curry?"</span>, <span class="string">"contents"</span>: <span class="string">"..."</span> &#125;,</span><br><span class="line">        &#123; <span class="string">"title"</span>: <span class="string">"prototypes: the short(est possible) story"</span>, <span class="string">"contents"</span>: <span class="string">"..."</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你的任务是提取每个用户的帖子的标签。赶紧来试一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fetchFromServer()</span><br><span class="line">    .then(<span class="built_in">JSON</span>.parse)</span><br><span class="line">    .then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123; <span class="keyword">return</span> data.posts &#125;)</span><br><span class="line">    .then(<span class="function"><span class="keyword">function</span>(<span class="params">posts</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> posts.map(<span class="function"><span class="keyword">function</span>(<span class="params">post</span>)</span>&#123; <span class="keyword">return</span> post.title &#125;)</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<p>好吧，这不公平，你在催我。（另外，我代表你写了这段代码 - 可能你会更有优雅地解决它，但我好像离题了…）。</p>
+<p>由于 Promises 链（或者，如果你喜欢，也可以用回调）需要与函数一起 <em>工作</em>，你不能轻易地映射从服务器获取的值，而无需首先显式地将其包裹在代码块中。（需要显式的写出参数）</p>
+<p>再来一次，这次使用已经定义好的工具：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fetchFromServer()</span><br><span class="line">    .then(<span class="built_in">JSON</span>.parse)</span><br><span class="line">    .then(<span class="keyword">get</span>('posts'))</span><br><span class="line">    .then(map(<span class="keyword">get</span>('title')))</span><br></pre></td></tr></table></figure>
+<p>这具有很强的逻辑性、表达力；如果不使用柯里化函数，我们几乎不可能轻易的将其实现。</p>
+<h2 id="zong-jie-tl-dr">总结（tl;dr）</h2>
+<p><a href="https://npmjs.org/package/curry" target="_blank" rel="noopener">curry</a> 赋予你一种强大的表达能力。</p>
+<p>我建议你下载下来，玩一会儿。如果你已经熟悉了这个概念，我觉得你可以直接找到合适的 API。如果没有的话，建议你和你的同事一起研究一下吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/27/Favoring-Curry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/27/Favoring-Curry/" class="post-title-link" itemprop="url">爱上柯里化 (Favoring Curry)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-27 07:49:41" itemprop="dateCreated datePublished" datetime="2017-06-27T07:49:41+00:00">2017-06-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ramda/" itemprop="url" rel="index"><span itemprop="name">Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 <a href="https://github.com/CrossEye" target="_blank" rel="noopener">Scott Sauyet</a> 的 《<a href="http://fr.umio.us/favoring-curry/" target="_blank" rel="noopener">Favoring Curry</a>》，转载请与<a href="https://github.com/CrossEye" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>我<a href="http://fr.umio.us/why-ramda/" target="_blank" rel="noopener">最近一篇</a> 关于 <a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Ramda</a> 函数式组合的文章阐述了一个重要的话题。为了使用 Ramda 函数做这种组合，需要这些函数是柯里化的。</p>
+<p>Curry，咖喱？某种辛辣的食物？是什么呢？又在哪里？</p>
+<p>实际上，<code>curry</code> 是为纪念 Haskell Curry 而命名的，他是第一个研究这种技术的人。（是的，人们还用他的姓氏–Haskell–作为一门函数式编程语言；不仅如此，Curry 的中间名字以 ‘B’ 开头，代表 <a href="http://en.wikipedia.org/wiki/Brainfuck" target="_blank" rel="noopener">Brainf*ck</a></p>
+<p>柯里化将多参数函数转化一个新函数：当接受部分参数时，返回等待接受剩余参数的新函数。</p>
+<p>原始函数看起来像是这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// uncurried version</span></span><br><span class="line"><span class="keyword">var</span> formatName1 = <span class="function"><span class="keyword">function</span>(<span class="params">first, middle, last</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> first + <span class="string">' '</span> + middle + <span class="string">' '</span> + last;</span><br><span class="line">&#125;;</span><br><span class="line">formatName1(<span class="string">'John'</span>, <span class="string">'Paul'</span>, <span class="string">'Jones'</span>);</span><br><span class="line"><span class="comment">//=&gt; 'John Paul Jones' // (Ah, but the musician or the admiral?)</span></span><br><span class="line">formatName1(<span class="string">'John'</span>, <span class="string">'Paul'</span>);</span><br><span class="line"><span class="comment">//=&gt; 'John Paul undefined');</span></span><br></pre></td></tr></table></figure>
+<p>但柯里化后的函数更有用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// curried version</span></span><br><span class="line"><span class="keyword">var</span> formatNames2 = R.curry(<span class="function"><span class="keyword">function</span>(<span class="params">first, middle, last</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> first + <span class="string">' '</span> + middle + <span class="string">' '</span> + last;</span><br><span class="line">&#125;);</span><br><span class="line">formatNames2(<span class="string">'John'</span>, <span class="string">'Paul'</span>, <span class="string">'Jones'</span>);</span><br><span class="line"><span class="comment">//=&gt; 'John Paul Jones' // (definitely the musician!)</span></span><br><span class="line"><span class="keyword">var</span> jp = formatNames2(<span class="string">'John'</span>, <span class="string">'Paul'</span>); <span class="comment">//=&gt; returns a function</span></span><br><span class="line">jp(<span class="string">'Jones'</span>); <span class="comment">//=&gt; 'John Paul Jones' (maybe this one's the admiral)</span></span><br><span class="line">jp(<span class="string">'Stevens'</span>); <span class="comment">//=&gt; 'John Paul Stevens' (the Supreme Court Justice)</span></span><br><span class="line">jp(<span class="string">'Pontiff'</span>); <span class="comment">//=&gt; 'John Paul Pontiff' (ok, so I cheated.)</span></span><br><span class="line">jp(<span class="string">'Ziller'</span>); <span class="comment">//=&gt; 'John Paul Ziller' (magician, a wee bit fictional)</span></span><br><span class="line">jp(<span class="string">'Georgeandringo'</span>); <span class="comment">//=&gt; 'John Paul Georgeandringo' (rockers)</span></span><br></pre></td></tr></table></figure>
+<p>或这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'Jones'</span>, <span class="string">'Stevens'</span>, <span class="string">'Ziller'</span>].map(jp);</span><br><span class="line"><span class="comment">//=&gt; ['John Paul Jones', 'John Paul Stevens', 'John Paul Ziller']</span></span><br></pre></td></tr></table></figure>
+<p>你也可以分多次传入参数，像这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> james = formatNames2(<span class="string">'James'</span>); <span class="comment">//=&gt; returns a function</span></span><br><span class="line">james(<span class="string">'Byron'</span>, <span class="string">'Dean'</span>); <span class="comment">//=&gt; 'James Byron Dean' (rebel)</span></span><br><span class="line"><span class="keyword">var</span> je = james(<span class="string">'Earl'</span>); also returns a <span class="function"><span class="keyword">function</span></span></span><br><span class="line"><span class="function"><span class="title">je</span>(<span class="params"><span class="string">'Carter'</span></span>); //=&gt; '<span class="title">James</span> <span class="title">Earl</span> <span class="title">Carter</span>' (<span class="params">president</span>)</span></span><br><span class="line"><span class="function"><span class="title">je</span>(<span class="params"><span class="string">'Jones'</span></span>); //=&gt; '<span class="title">James</span> <span class="title">Earl</span> <span class="title">Jones</span>' (<span class="params">actor, Vader</span>)</span></span><br></pre></td></tr></table></figure>
+<p>（有些人会坚持认为我们正在做的应该叫作 “部分应用(partial application)”，“柯里化” 的返回函数应该每次只接受一个参数，每次函数处理完单个参数后返回一个新的接受单参数的函数，直到所有必需的参数都已传入。他们可以坚持他们的观点，无所谓）</p>
+<h2 id="hao-wu-liao-a-ta-neng-wei-wo-zuo-shi-yao-ni">好无聊啊…! 它能为我做什么呢？</h2>
+<p>这里有一个稍有意义的示例。如果想计算一个数字集合的总和，可以这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Plain JS:</span></span><br><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;<span class="keyword">return</span> a + b;&#125;;</span><br><span class="line"><span class="keyword">var</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> sum = numbers.reduce(add, <span class="number">0</span>); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
+<p>而若想编写一个通用的计算数字列表总和的函数，可以这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> total = <span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> list.reduce(add, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> sum = total(numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
+<p>在 Ramda 中，<code>total</code> 和 <code>sum</code> 和上面的定义非常相似。可以这样定义 <code>sum</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = R.reduce(add, <span class="number">0</span>, numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
+<p>但由于 <code>reduce</code> 是柯里化函数，当跳过最后一个参数时，就类似于 <code>total</code> 的定义了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In Ramda:</span></span><br><span class="line"><span class="keyword">var</span> total = R.reduce(add, <span class="number">0</span>);  <span class="comment">// returns a function</span></span><br></pre></td></tr></table></figure>
+<p>上面将会获得一个可以调用的函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = total(numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
+<p>再次注意，函数的定义和将函数作用于数据是多么的相似：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> total = R.reduce(add, <span class="number">0</span>); <span class="comment">//=&gt; function:: [Number] -&gt; Number</span></span><br><span class="line"><span class="keyword">var</span> sum =   R.reduce(add, <span class="number">0</span>, numbers); <span class="comment">//=&gt; 15</span></span><br></pre></td></tr></table></figure>
+<h2 id="wo-bu-guan-xin-zhe-xie-wo-you-bu-shi-shu-xue-guai-li-shu">我不关心这些，我又不是数学怪黎叔</h2>
+<p>那么你做 web 开发吗？huh？会对服务器发起 AJAX 请求吗？使用的是 <a href="http://promises-aplus.github.io/promises-spec/" target="_blank" rel="noopener">Promises</a> 吗？必须要操作返回的数据，对其进行过滤，取子集等？或者你做 server 端开发？会异步查询一个 no-SQL 数据库，并操作这些结果？</p>
+<p>我最好的建议是，去看看 Hugh FD Jackson 的文章：<a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">为什么柯里化有帮助</a>。它是我读过的这方面最好的文章。如果你想要看视频，花上半个小时看一下 Dr. Boolean 的视频：<a href="http://www.youtube.com/watch?v=m3svKOdZijA" target="_blank" rel="noopener">Hey Underscore, 你错了</a>。（不要被标题吓到，他没有花太多时间批评那个库）</p>
+<p>一定要看看这些材料！它们比我解释的更好；你已经察觉到我有多么的啰嗦、夸夸其谈、冗长甚至愚笨。如果你已经看了上面的材料，可以跳过本文剩余小节了。它们解释的已经够清楚了。</p>
+<p>我已经警告过你了哦。</p>
+<hr>
+<p>假设我们希望得到一些这样的数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">    result: <span class="string">"SUCCESS"</span>,</span><br><span class="line">    interfaceVersion: <span class="string">"1.0.3"</span>,</span><br><span class="line">    requested: <span class="string">"10/17/2013 15:31:20"</span>,</span><br><span class="line">    lastUpdated: <span class="string">"10/16/2013 10:52:39"</span>,</span><br><span class="line">    tasks: [</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">104</span>, <span class="attr">complete</span>: <span class="literal">false</span>,            <span class="attr">priority</span>: <span class="string">"high"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-29"</span>,      <span class="attr">username</span>: <span class="string">"Scott"</span>,</span><br><span class="line">                  title: <span class="string">"Do something"</span>,      <span class="attr">created</span>: <span class="string">"9/22/2013"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">105</span>, <span class="attr">complete</span>: <span class="literal">false</span>,            <span class="attr">priority</span>: <span class="string">"medium"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-22"</span>,      <span class="attr">username</span>: <span class="string">"Lena"</span>,</span><br><span class="line">                  title: <span class="string">"Do something else"</span>, <span class="attr">created</span>: <span class="string">"9/22/2013"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">107</span>, <span class="attr">complete</span>: <span class="literal">true</span>,             <span class="attr">priority</span>: <span class="string">"high"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-22"</span>,      <span class="attr">username</span>: <span class="string">"Mike"</span>,</span><br><span class="line">                  title: <span class="string">"Fix the foo"</span>,       <span class="attr">created</span>: <span class="string">"9/22/2013"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">108</span>, <span class="attr">complete</span>: <span class="literal">false</span>,            <span class="attr">priority</span>: <span class="string">"low"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-15"</span>,      <span class="attr">username</span>: <span class="string">"Punam"</span>,</span><br><span class="line">                  title: <span class="string">"Adjust the bar"</span>,    <span class="attr">created</span>: <span class="string">"9/25/2013"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">110</span>, <span class="attr">complete</span>: <span class="literal">false</span>,            <span class="attr">priority</span>: <span class="string">"medium"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-15"</span>,      <span class="attr">username</span>: <span class="string">"Scott"</span>,</span><br><span class="line">                  title: <span class="string">"Rename everything"</span>, <span class="attr">created</span>: <span class="string">"10/2/2013"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">id</span>: <span class="number">112</span>, <span class="attr">complete</span>: <span class="literal">true</span>,             <span class="attr">priority</span>: <span class="string">"high"</span>,</span><br><span class="line">                  dueDate: <span class="string">"2013-11-27"</span>,      <span class="attr">username</span>: <span class="string">"Lena"</span>,</span><br><span class="line">                  title: <span class="string">"Alter all quuxes"</span>,  <span class="attr">created</span>: <span class="string">"10/5/2013"</span>&#125;</span><br><span class="line">        <span class="comment">// , ...</span></span><br><span class="line">    ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们需要一个函数 <code>getIncompleteTaskSummaries</code>，接受成员名字（<code>memebername</code>）为参数，然后从服务器（或其他地方）获取数据，挑选出该成员未完成的任务，返回它们的 id、优先级、标题和到期日期，并按到期日期排序。实际上，它返回一个用来解析出这个有序列表的 Promise。</p>
+<p>如果向 <code>getIncompleteTaskSummaries</code> 传入 “Scott”，它可能会返回：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;<span class="attr">id</span>: <span class="number">110</span>, <span class="attr">title</span>: <span class="string">"Rename everything"</span>, </span><br><span class="line">        dueDate: <span class="string">"2013-11-15"</span>, <span class="attr">priority</span>: <span class="string">"medium"</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">id</span>: <span class="number">104</span>, <span class="attr">title</span>: <span class="string">"Do something"</span>, </span><br><span class="line">        dueDate: <span class="string">"2013-11-29"</span>, <span class="attr">priority</span>: <span class="string">"high"</span>&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>好的，这就开始吧。下面这段代码是否看着很熟悉？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">getIncompleteTaskSummaries = <span class="function"><span class="keyword">function</span>(<span class="params">membername</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetchData()</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> data.tasks;</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> results = [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = tasks.length; i &lt; len; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (tasks[i].username == membername) &#123;</span><br><span class="line">                    results.push(tasks[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> results;</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> results = [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = tasks.length; i &lt; len; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!tasks[i].complete) &#123;</span><br><span class="line">                    results.push(tasks[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> results;</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> results = [], task;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = tasks.length; i &lt; len; i++) &#123;</span><br><span class="line">                task = tasks[i];</span><br><span class="line">                results.push(&#123;</span><br><span class="line">                    id: task.id,</span><br><span class="line">                    dueDate: task.dueDate,</span><br><span class="line">                    title: task.title,</span><br><span class="line">                    priority: task.priority</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> results;</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            tasks.sort(<span class="function"><span class="keyword">function</span>(<span class="params">first, second</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> a = first.dueDate, b = second.dueDate;</span><br><span class="line">                <span class="keyword">return</span> a &lt; b ? <span class="number">-1</span> : a &gt; b ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> tasks;</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面的代码是否更好些呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getIncompleteTaskSummaries = <span class="function"><span class="keyword">function</span>(<span class="params">membername</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetchData()</span><br><span class="line">        .then(R.get(<span class="string">'tasks'</span>))</span><br><span class="line">        .then(R.filter(R.propEq(<span class="string">'username'</span>, membername)))</span><br><span class="line">        .then(R.reject(R.propEq(<span class="string">'complete'</span>, <span class="literal">true</span>)))</span><br><span class="line">        .then(R.map(R.pick([<span class="string">'id'</span>, <span class="string">'dueDate'</span>, <span class="string">'title'</span>, <span class="string">'priority'</span>])))</span><br><span class="line">        .then(R.sortBy(R.get(<span class="string">'dueDate'</span>)));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果是的话，那么柯里化会更适合你。所有上面代码块中提及的 Ramda 函数都是柯里化的。（事实上，绝大多数 Ramda 的多参数函数都是柯里化的，除了极个别的几个之外）在很多情形下，柯里化是使代码能更容易组合成这么简洁优雅的模块的原因之一。</p>
+<p>让我们看看发生了什么。</p>
+<p><code>get</code> （也称为 <code>prop</code>）定义如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ramda.get = curry(<span class="function"><span class="keyword">function</span>(<span class="params">name, obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj[name];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>但是，当调用上面的代码时，我们只提供第一个参数：<code>name</code>。正如之前讨论的，这意味着我们会返回一个新函数，等待第一个 <code>then</code> 传入 <code>obj</code> 参数给它，这就意味着下面的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.then(R.get(<span class="string">'task'</span>))</span><br></pre></td></tr></table></figure>
+<p>可以看做是下面代码的缩写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> data.tasks;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>接下来是 <code>propEq</code>，定义如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ramda.propEq = curry(<span class="function"><span class="keyword">function</span>(<span class="params">name, val, obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj[name] === val;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>所以当使用参数 <code>username</code> 和 <code>membername</code> 调用它时，柯里化返给我们一个新函数，等价于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj[<span class="string">'username'</span>] === membername;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>membername</code> 的值绑定到了传递给我们的值上面。</p>
+<p>然后将该函数传给 <code>filter</code>。</p>
+<p>Ramda 的 <code>filter</code> 的工作原理很像原生的 <code>Array.prototype.filter</code> ，但类型签名为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ramda.filter = curry(<span class="function"><span class="keyword">function</span>(<span class="params">predicate, list</span>) </span>&#123; <span class="comment">/* ... */</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>所以，我们又进行柯里化了，只传入 “predicate” 函数（谓词），而没有一同传入从上一步输出的任务列表。（我已经告诉过你，所有的东西都是柯里化的，对吧？）</p>
+<p><code>propEq('complete', true) -&gt; reject</code> 与 <code>propEq('username', membername) -&gt; filter</code> 做了相似的事情。<code>reject</code> 和 <code>filter</code> 功能类似，除了它们的输出结果是相反的。它只保留使 predicate 函数返回 false 的元素。</p>
+<p>好了，你还在看吗？我的食指开始发酸了。（真的要学习盲打了！）不需要我来解释最后两行了吧？真的吗？你确定？好吧！好吧！那我再解释一下。</p>
+<p>接下来我们看看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">R.pick([<span class="string">'id'</span>, <span class="string">'dueDate'</span>, <span class="string">'title'</span>, <span class="string">'priority'</span>])</span><br></pre></td></tr></table></figure>
+<p><code>pick</code> 接受属性名称列表和一个对象，返回从原对象提取指定属性集的新对象。你看，我们又使用了柯里化。由于只传递了属性名称列表，我们得到了一个函数：一旦我们提供一个对象，就会返回一个相同类型的新对象。该函数被传给 <code>R.map</code>。与 <code>filter</code> 类似，它与原生 <code>Array.prototype.map</code> 功能基本相同，但签名如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ramda.map = curry(<span class="function"><span class="keyword">function</span>(<span class="params">fn, list</span>) </span>&#123; <span class="comment">/* ... */</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>不得不告诉你，这个函数也是柯里化的，因为我们只提供给它 <code>pick</code> 返回的函数（也是柯里化的！），而没有提供列表。<code>then</code> 将使用任务列表调用它。</p>
+<p>好的，还记得小时候坐在教室，等待上课结束的情形吗？手里时钟的分针像是卡住了，另一只手正伸向桌洞里的糖果；老师却还在一遍一遍地重复相同的事情。还记得吗？然后那一刻终于到了，可能是结束前的最后两分钟，结束的时刻已经在眼前了：谢天谢地！下面是最后一个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.then(R.sortBy(R.get(<span class="string">'dueDate'</span>)));</span><br></pre></td></tr></table></figure>
+<p>之前已经提到过 <code>get</code>。这也是柯里化的，它会返回一个函数：输入对象，输出该对象的 <code>dueDate</code> 属性值。我们将其传给 <code>sortBy</code>，它接受这样的函数和一个列表，并根据函数返回的值对列表中的元素进行排序。但等等，我们没有列表，对吧？当然没有。我们又在做柯里化。但当调用 <code>then</code> 时，它会接收到列表，将列表中的每个对象传给 <code>get</code>，并根据结果进行排序。</p>
+<h2 id="na-yao-ke-li-hua-you-duo-zhong-yao-ni">那么，柯里化有多重要呢？</h2>
+<p>这个例子展示了 Ramda 的一些实用函数和 Ramda 的柯里化特性。或许柯里化并没有那么重要。我们不加柯里化重写一遍：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getIncompleteTaskSummaries = <span class="function"><span class="keyword">function</span>(<span class="params">membername</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetchData()</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.get(<span class="string">'tasks'</span>, data)</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.filter(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.propEq(<span class="string">'username'</span>, membername, task)</span><br><span class="line">            &#125;, tasks)</span><br><span class="line">         &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.reject(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.propEq(<span class="string">'complete'</span>, <span class="literal">true</span>, task);</span><br><span class="line">            &#125;, tasks)</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.map(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.pick([<span class="string">'id'</span>, <span class="string">'dueDate'</span>, <span class="string">'title'</span>, <span class="string">'priority'</span>], task);</span><br><span class="line">            &#125;, tasks);</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">abbreviatedTasks</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> R.sortBy(<span class="function"><span class="keyword">function</span>(<span class="params">abbrTask</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> R.get(<span class="string">'dueDate'</span>, abbrTask);</span><br><span class="line">            &#125;, abbreviatedTasks);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面是等价的程序。它仍然比原来的代码好一些。Ramda 实用的函数… 确实比较实用，即使没有柯里化。但我不认为它的可读性有下面的好：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getIncompleteTaskSummaries = <span class="function"><span class="keyword">function</span>(<span class="params">membername</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetchData()</span><br><span class="line">        .then(R.get(<span class="string">'tasks'</span>))</span><br><span class="line">        .then(R.filter(R.propEq(<span class="string">'username'</span>, membername)))</span><br><span class="line">        .then(R.reject(R.propEq(<span class="string">'complete'</span>, <span class="literal">true</span>)))</span><br><span class="line">        .then(R.map(R.pick([<span class="string">'id'</span>, <span class="string">'dueDate'</span>, <span class="string">'title'</span>, <span class="string">'priority'</span>])))</span><br><span class="line">        .then(R.sortBy(R.get(<span class="string">'dueDate'</span>)));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这就是我们柯里化的原因。</p>
+<hr>
+<p>课程结束了。</p>
+<p>我警告过你的。</p>
+<p>下一次，当我让你去看别人的东西而不是我的的时候，你会注意了吧。现在不读我的文章可能已经来不及了，但是他们的作品真的很棒，强烈推荐大家看一下：</p>
+<ul>
+<li><a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">为什么柯里化有帮助</a> ，Hugh FD Jackson</li>
+<li><a href="http://www.youtube.com/watch?v=m3svKOdZijA" target="_blank" rel="noopener">嗨 Underscore，你做错了</a> ，Dr. Boolean, aka Brian Lonsdorf</li>
+</ul>
+<p>这里还有一篇我今天刚看到的新的文章。不知它是否会经的其时间的考验，但现在看来值得一读：</p>
+<ul>
+<li><a href="http://bahmutov.calepin.co/put-callback-first-for-elegance.html" target="_blank" rel="noopener">将回调放在首位，代码会更优雅</a> ，Gleb Bahmutov</li>
+</ul>
+<h2 id="yi-dian-bu-tai-hao-de-xiao-mi-mi">一点不太好的小秘密</h2>
+<p>柯里化尽管非常强大，但单独使用并不足以让你的代码变得 “那么” 优雅。</p>
+<p>应该有三个重要的组成部分：</p>
+<ul>
+<li>
+<p><a href="http://fr.umio.us/why-ramda/" target="_blank" rel="noopener">上次</a> 我讨论了 <strong>函数式组合</strong>。它可以轻松地将你所有好的想法组合在一起，而不必使用大量丑陋的胶水代码将它们聚合在一起。</p>
+</li>
+<li>
+<p><strong>柯里化</strong> 同样很有用，因为它很好的支持了组合，而且消除了大量的样板代码，正如上面所示。</p>
+</li>
+<li>
+<p>很多能操作有用数据结构（如对象类型的数组）的 <strong>实用函数</strong> 。</p>
+</li>
+</ul>
+<p><a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Ramda</a> 的目标之一便是：在一个简单的包里面提供所有这些功能。</p>
+<h2 id="zhi-xie">致谢</h2>
+<p><a href="http://buzzdecafe.github.io/" target="_blank" rel="noopener">buzzdecafe</a> 帮助编辑了本文和上一篇文章，并且这次还起了一个完美标题。谢谢，Mike！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/25/Why-Ramda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/25/Why-Ramda/" class="post-title-link" itemprop="url">Why Ramda</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-25 16:26:35" itemprop="dateCreated datePublished" datetime="2017-06-25T16:26:35+00:00">2017-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ramda/" itemprop="url" rel="index"><span itemprop="name">Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 <a href="https://github.com/CrossEye" target="_blank" rel="noopener">Scott Sauyet</a> 的 《<a href="http://fr.umio.us/why-ramda/" target="_blank" rel="noopener">Why Ramda</a>》，转载请与<a href="https://github.com/CrossEye" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>当 <a href="http://buzzdecafe.github.io/" target="_blank" rel="noopener">buzzdecafe</a> 最近将 <a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Ramda</a> <a href="http://buzzdecafe.github.io/code/2014/05/16/introducing-ramda/" target="_blank" rel="noopener">介绍给</a> 大家时，出现了两种截然相反的反应。那些熟悉函数式技术（在 JavaScript 或其他语言中）的人大部分的反应是：“Cool”。他们可能对此非常兴奋，也可能觉得只是另一个有潜力的工具而已，但他们都知道它的作用和目的。</p>
+<p>另一部分人的反应是：“Huh?”</p>
+<p><img src="./rbudiharso_tweet-2.png" alt="other-group-reponse"></p>
+<p>对于那些不熟悉函数式编程的人来说，Ramda 似乎没有什么帮助。Ramda 中的大部分功能在类似于 <a href="https://github.com/jashkenas/underscore" target="_blank" rel="noopener">Underscore</a> 和 <a href="https://github.com/lodash/lodash" target="_blank" rel="noopener">Lodash</a> 库中都已经有了。</p>
+<p>这些人是对的。如果你希望一直使用之前一直在用的命令式和面向对象的方式进行编程，那么 Ramda 可能没有太多价值。</p>
+<p>然而，它提供了一种不同的编码风格，这种编程风格天然适合于函数式编程语言：Ramda 可以让 “通过函数式组合构建复杂的逻辑” 变得更简单。注意，任何包含 <code>compose</code> 函数的库都可以进行函数式组合；这样做真正的意义是：<em>“make it simple(让编程变得简单)”</em>。</p>
+<p>来看看 Ramda 是如何工作的。</p>
+<p>“TODO lists” (待办事项列表) 似乎是用于比较 Web 框架的 “标准样例”，所以我们也借用它来进行演示。假设需要一个能够删除所有已完成项的 “TODO list”。</p>
+<p>使用内置的 Array 原型方法，我们可能会这样写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Plain JS</span></span><br><span class="line"><span class="keyword">var</span> incompleteTasks = tasks.filter(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !task.complete;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>使用 LoDash，似乎变得简单一些：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Lo-Dash</span></span><br><span class="line"><span class="keyword">var</span> incompleteTasks = _.filter(tasks, &#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>通过上述任一方法，我们都可以得到一个过滤的任务列表。</p>
+<p>在 Ramda 中，我们可以这样做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>(更新：<code>where</code> 函数被<a href="https://github.com/ramda/ramda/pull/1036" target="_blank" rel="noopener">拆分成两部分</a>：<a href="http://ramdajs.com/docs/#where" target="_blank" rel="noopener"><code>where</code></a> 和 <a href="http://ramdajs.com/docs/#whereEq" target="_blank" rel="noopener"><code>whereEq</code></a>，该段代码可能不会像现在这样工作了)。</p>
+<p>注意到有什么不同了吗？这里没有提到任务列表。Ramda 代码只给我们函数（没有给数据参数）。</p>
+<p>这就是重点所在。</p>
+<p>现在我们有了一个函数，可以很容易与其他函数组合，来处理任意我们选择的数据。假设现在有一个函数：<code>groupByUser</code>，可以通过用户对待办事项进行分类。我们可以简单地创建一个新函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> activeByUser = R.compose(groupByUser, incomplete);</span><br></pre></td></tr></table></figure>
+<p>用来选择未完成的任务，并对其按用户分类。</p>
+<p>如果给它提供数据，这就是一个函数调用。如果不借助 <code>compose</code> 手写出来，可能看起来会像这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (if created by hand)</span></span><br><span class="line"><span class="keyword">var</span> activeByUser = <span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> groupByUser(incomplete(tasks));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>“不必手动一步一步地去做” 是组合的关键所在。并且组合是函数式编程的一项关键技术。让我们看看，如果再进一步的话会发生什么。如果需要使用到期日期来对这些用户的待办事项进行排序，该怎么办呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(R.map(R.sortBy(R.prop(<span class="string">"dueDate"</span>))), activeByUser);</span><br></pre></td></tr></table></figure>
+<h2 id="yi-bu-dao-wei">一步到位？</h2>
+<p>善于观察的读者可能已经注意到了，我们可以组合上述所有需求。由于 <code>compose</code> 函数可以接受多个参数，为什么不一次完成上面所有的功能呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(</span><br><span class="line">    R.mapObj(R.sortBy(R.prop(<span class="string">'dueDate'</span>))),</span><br><span class="line">    groupByUser,</span><br><span class="line">    R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>我的答案是：如果中间函数 <code>activeByUser</code> 和 <code>incomplete</code> 没有其他的调用，上述方案可能更合理一些。但是这可能会使调试变得更麻烦，而且对代码的可读性也并没有什么帮助。</p>
+<p>事实上，可以换个思路。我们在内部使用可重用的复杂模块，这样做可能会更好些：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortByDate = R.sortBy(R.prop(<span class="string">'dueDate'</span>));</span><br><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(R.mapObj(sortByDate), activeByUser);</span><br></pre></td></tr></table></figure>
+<p>现在可以用 <code>sortByDate</code> 对任何任务列表，通过到期日期进行排序。（事实上，可以更灵活，它可以对任何符合下面条件的数组进行排序：数组元素为包含可排序的 “dueDate” 属性的对象。</p>
+<p>但是，等等，如果想要按日期降序排列呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sortByDateDescend = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="keyword">var</span> sortUserTasks = R.compose(R.mapObj(sortByDateDescend), activeByUser);</span><br></pre></td></tr></table></figure>
+<p>如果确定只需要按日期降序排列，可以将所有这些操作都在 <code>sortByDateDescend</code> 中进行组合。如果不确定会升序还是降序排列，我个人会将升序和降序方法都保留。</p>
+<h2 id="shu-ju-zai-na-li">数据在哪里？</h2>
+<p>我们 <strong>仍然</strong> 没有任何数据。这是怎么回事？没有数据的 “数据处理” 是…什么呢？是 “处理”。接下来恐怕需要你多一些耐心了。当进行函数式编程时，所有能获得只是组成 pipeline （管道）的函数。一个函数将数据提供给下一个，下一个函数将数据提供给下下个，依次类推，直到所需的结果从 pipeline 末端输出。</p>
+<p>到目前为止，我们已经创建的函数如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">incomplete: [Task] -&gt; [Task]</span><br><span class="line">sortByDate: [Task] -&gt; [Task]</span><br><span class="line">sortByDateDescend: [Task] -&gt; [Task]</span><br><span class="line">activeByUser: [Task] -&gt; &#123;<span class="attr">String</span>: [Task]&#125;</span><br><span class="line">sortUserTasks: &#123;<span class="attr">String</span>: [Task]&#125; -&gt; &#123;<span class="attr">String</span>: [Task]&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然我们使用了之前的函数来构建 <code>sortUserTasks</code> ，但它们单独可能都是有用的。我们可能掩盖了一些东西。我只是让你想象有一个构建 <code>activeByUser</code> 的函数 <code>byUser</code>，但并没有真正看到过它。那么我们如何构建这个函数呢？</p>
+<p>下面是一种方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> groupByUser = R.partition(R.prop(<span class="string">'username'</span>));</span><br></pre></td></tr></table></figure>
+<p><code>partition</code> 使用了 Ramda 中的 <code>reduce</code>（与 Array.prototype.reduce <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce" target="_blank" rel="noopener">类似</a>）。它也被叫做 <code>foldl</code>，一个在许多其他函数式语言中使用的名称。我们不会在这里做过多讨论。你可以在 <a href="https://www.google.com/?q=reduce+function+javascript" target="_blank" rel="noopener">网上</a> 获得所有关于 <code>reduce</code> 的信息。<code>partition</code> 只是使用 <code>reduce</code> 将一个列表分成具有相同键值的子列表，子列表通过函数来确定，本例中为 <code>prop('username')</code>，它只是简单地从每个数组元素中取出 “username” 属性。</p>
+<p>（所以，我是否使用 “闪亮” 的新函数来分散了你的注意力？我在这里仍然没有提到数据！对不住了，看！一大波 “闪亮” 的新函数又来了！）</p>
+<h2 id="dan-deng-deng-huan-you-geng-duo-han-shu">但等等，还有更多（函数）</h2>
+<p>如果我们愿意，可以继续这样下去。如果想从列表中选出前 5 个元素，可以使用 Ramda 的 <code>take</code> 函数。所以想要获取每个用户前 5 个任务，可以这样做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> topFiveUserTasks = R.compose(R.mapObj(R.take(<span class="number">5</span>)), sortUserTasks);</span><br></pre></td></tr></table></figure>
+<p>(会有人在这里想到 <a href="http://en.wikipedia.org/wiki/Take_Five" target="_blank" rel="noopener">Brubeck 和 Desmond</a> 吗)？</p>
+<p>然后，可以将返回的对象压缩为属性的子集。比如标题和到期日期。用户名在这个数据结构里显然是多余的，我们也可能不想将过多不需要的属性传递给其他系统。</p>
+<p>可以使用 Ramda 的 <code>project</code> 函数来模拟 SQL 的 <code>select</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> importantFields = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(importantFields), topFiveUserTasks);</span><br></pre></td></tr></table></figure>
+<p>我们一路创建的一些函数，看起来可以在 TODO 应用的其他地方复用。其他的一些函数或许只是创建出来放在那里，以供将来组合使用。所以，如果现在回顾一下，我们可能会组合出下面的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;));</span><br><span class="line"><span class="keyword">var</span> sortByDate = R.sortBy(R.prop(<span class="string">'dueDate'</span>));</span><br><span class="line"><span class="keyword">var</span> sortByDateDescend = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="keyword">var</span> importantFields = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="keyword">var</span> groupByUser = R.partition(R.prop(<span class="string">'username'</span>));</span><br><span class="line"><span class="keyword">var</span> activeByUser = R.compose(groupByUser, incomplete);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(R.compose(importantFields, </span><br><span class="line">    R.take(<span class="number">5</span>), sortByDateDescend)), activeByUser);</span><br></pre></td></tr></table></figure>
+<h2 id="hao-ba-gou-liao-wo-ke-yi-kan-yi-xie-shu-ju-ma">好吧，够了！我可以看一些数据吗？</h2>
+<p>好的，马上就可以了。</p>
+<p>现在是时候将数据传给我们的函数了。但关键是，这些函数都接受相同类型的数据，一个包含 TODO 元素的数组。我们还没有具体描述这些元素的数据结构，但我们知道它至少必须包含下列属性：</p>
+<ul>
+<li>complete: Boolean</li>
+<li>dueDate: String, formatted YYYY-MM-DD</li>
+<li>title: String</li>
+<li>userName: String</li>
+</ul>
+<p>所以，如果我们有一个任务数组，该如何使用呢？很简单：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> results = topDataAllUsers(tasks);</span><br></pre></td></tr></table></figure>
+<p>就这些吗？</p>
+<p>所有已经编写的程序，就只有这些？</p>
+<p>恐怕是这样。输出会是一个像下面这样的对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    Michael: [</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attr">title</span>: <span class="string">'Integrate types with main code'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attr">title</span>: <span class="string">'Finish algebraic types'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-06'</span>, <span class="attr">title</span>: <span class="string">'Types infrastucture'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-05-24'</span>, <span class="attr">title</span>: <span class="string">'Separating generators'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-05-17'</span>, <span class="attr">title</span>: <span class="string">'Add modulo function'</span>&#125;</span><br><span class="line">    ],</span><br><span class="line">    Richard: [</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attr">title</span>: <span class="string">'API documentation'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attr">title</span>: <span class="string">'Overview documentation'</span>&#125;</span><br><span class="line">    ],</span><br><span class="line">    Scott: [</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attr">title</span>: <span class="string">'Complete build system'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attr">title</span>: <span class="string">'Determine versioning scheme'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-09'</span>, <span class="attr">title</span>: <span class="string">'Add `mapObj`'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-05'</span>, <span class="attr">title</span>: <span class="string">'Fix `and`/`or`/`not`'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">dueDate</span>: <span class="string">'2014-06-01'</span>, <span class="attr">title</span>: <span class="string">'Fold algebra branch back in'</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但这里有件有趣的事情。你可以将相同的任务初始列表传给 <code>incomplete</code> ，然后得到一个过滤过的列表：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = incomplete(tasks);</span><br></pre></td></tr></table></figure>
+<p>返回的内容可能是下面这样子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        username: <span class="string">'Scott'</span>,</span><br><span class="line">        title: <span class="string">'Add `mapObj`'</span>,</span><br><span class="line">        dueDate: <span class="string">'2014-06-09'</span>,</span><br><span class="line">        complete: <span class="literal">false</span>,</span><br><span class="line">        effort: <span class="string">'low'</span>,</span><br><span class="line">        priority: <span class="string">'medium'</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        username: <span class="string">'Michael'</span>,</span><br><span class="line">        title: <span class="string">'Finish algebraic types'</span>,</span><br><span class="line">        dueDate: <span class="string">'2014-06-15'</span>,</span><br><span class="line">        complete: <span class="literal">true</span>,</span><br><span class="line">        effort: <span class="string">'high'</span>,</span><br><span class="line">        priority: <span class="string">'high'</span></span><br><span class="line">    &#125; <span class="comment">/*, ... */</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>当然，你也可以将任务列表传给 <code>sortByDate</code>、<code>sortByDateDescend</code>、<code>importantFields</code>、<code>byUser</code> 或者 <code>activeByUser</code>。因为它们都处理相似的数据类型：一系列任务的列表。我们可以通过简单的组合创建出大量的工具。</p>
+<h2 id="xin-xu-qiu">新需求</h2>
+<p>在游戏的最后，你刚刚被告知需要添加一个新特性。你需要过滤出仅属于特定用户的任务，然后对该用户进行与之前相同的过滤、排序和提取子集操作。</p>
+<p>这个逻辑当前嵌入到 <code>topDataAllUser</code> 里了…，或许我们组合的函数侵入太深。但也很容易重构。通常情况下，最难的是起一个好的名字。“gloss” 可能不太好，但已经是深夜了，这是我能想到最好的了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gloss = R.compose(importantFields, R.take(<span class="number">5</span>), sortByDateDescend);</span><br><span class="line"><span class="keyword">var</span> topData = R.compose(gloss, incomplete);</span><br><span class="line"><span class="keyword">var</span> topDataAllUsers = R.compose(R.mapObj(gloss), activeByUser);</span><br><span class="line"><span class="keyword">var</span> byUser = R.use(R.filter).over(R.propEq(<span class="string">"username"</span>));</span><br></pre></td></tr></table></figure>
+<p>如果想使用它，可以像下面这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> results = topData(byUser(<span class="string">'Scott'</span>, tasks));</span><br></pre></td></tr></table></figure>
+<h2 id="bai-tuo-wo-zhi-shi-xiang-yao-wo-de-shu-ju">拜托，我只是想要我的数据！</h2>
+<p>“好的”，你说，“也许这很酷，但现在我真的只是想要我的数据，我不想要不知猴年马月才能返回给我数据的函数。我还能用 Ramda 吗？”</p>
+<p>当然可以。</p>
+<p>让我们回到第一个函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;));</span><br></pre></td></tr></table></figure>
+<p>如何才能变成会返回数据的东西呢？非常简单：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = R.filter(R.where(&#123;<span class="attr">complete</span>: <span class="literal">false</span>&#125;), tasks);</span><br></pre></td></tr></table></figure>
+<p>所有其他主要的函数也是这样：只需要在调用的最后面添加一个 <code>tasks</code> 参数，即可返回数据。</p>
+<h2 id="gang-gang-fa-sheng-liao-shi-yao">刚刚发生了什么？</h2>
+<p>这是 Ramda 的另一个重要特性。Ramda 所有主要的函数都是自动柯里化的。这意味着，如果你不提供给函数需要的所有参数，不想立即调用函数，我们会返会一个接受剩余参数的新函数。所以，<code>filter</code> 的定义既包含数组，也包含了过滤数组元素的 “predicate” 函数（判断函数）。在初始版本中，我们没有提供数组值，所以 <code>filter</code> 会返回一个新的接受数组为参数的函数。在第二个版本中，我们传入了数组，并与 “predicate” 函数一起来计算结果。</p>
+<p>Ramda 函数的自动柯里化和 “函数优先，数据最后” 的 API 设计理念一起，使得 Ramda 能够非常简单地进行这种风格的函数式组合。</p>
+<p>但 Ramda 中柯里化的实现细节是另一篇文章的事情（更新：该文章已经发布了：<a href="http://fr.umio.us/favoring-curry/" target="_blank" rel="noopener">Favoring Curry</a>）。同时，Hugh Jackson 的这篇文章也绝对值得一读：<a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">为什么柯里化有帮助</a>。</p>
+<h2 id="dan-shi-zhe-xie-dong-xi-zhen-neng-gong-zuo-ma">但是，这些东西真能工作吗？</h2>
+<p>这是我们一直讨论的代码的 JSFiddle 示例：</p>
+<iframe scrolling="no" width="100%" height="300" src="//jsfiddle.net/CrossEye/Gk6uu/embedded/js,html,result/light" frameborder="0" allowfullscreen></iframe>
+<p>这段优雅的代码清楚的表明了使用 Ramda 的好处。</p>
+<h2 id="shi-yong-ramda">使用 Ramda</h2>
+<p><a href="http://ramda.cn/docs/" target="_blank" rel="noopener">可以参考 Ramda 非常不错的文档</a>。</p>
+<p>Ramda 代码本身非常有用，上面提到的技术也非常有帮助。你可以从 <a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Github 仓库</a> 获取代码，或 <a href="https://www.npmjs.org/package/ramda" target="_blank" rel="noopener">通过 npm 安装 Ramda</a>。</p>
+<p>在 Node 中使用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install ramda</span><br><span class="line"><span class="keyword">var</span> R = <span class="built_in">require</span>(<span class="string">'ramda'</span>)</span><br></pre></td></tr></table></figure>
+<p>在浏览器中使用，只需包含下列代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"path/to/yourCopyOf/ramda.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"path/to/yourCopyOf/ramda.min.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们会尽快将其放到 CDN 上。</p>
+<p>如果你有任何建议，<a href="https://github.com/ramda/ramda/issues?state=open" target="_blank" rel="noopener">欢迎随时跟我们联系</a>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/25/Introducing-Ramda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/25/Introducing-Ramda/" class="post-title-link" itemprop="url">Ramda 简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-25 14:49:18" itemprop="dateCreated datePublished" datetime="2017-06-25T14:49:18+00:00">2017-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ramda/" itemprop="url" rel="index"><span itemprop="name">Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 <a href="https://github.com/buzzdecafe" target="_blank" rel="noopener">Michael Hurley</a> 的 《<a href="http://buzzdecafe.github.io/code/2014/05/16/introducing-ramda/" target="_blank" rel="noopener">Introducing Ramda</a>》，转载请与<a href="https://github.com/buzzdecafe" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>在过去一年的时间里，我的同事 Scott Sauyet 和我一直在编写 <a href="https://github.com/ramda/ramda" target="_blank" rel="noopener">Ramda</a> ：“一个实用的 JavaScript 函数式编程库”。当我们为 Frontend Masters 注册 “使用 JavaScript 进行核心函数式编程” 工作室时，惊讶地发现，他们选择 Ramda 来说明他们的示例。这件事给了我们信心，我们认为现在是宣布 Ramda 到来的时候了。</p>
+<p>现在已经存在一些优秀的函数式库，如 <a href="https://github.com/jashkenas/underscore" target="_blank" rel="noopener">Underscore</a> 和 <a href="https://github.com/lodash/lodash" target="_blank" rel="noopener">Lodash</a>。Ramda 包含了所有你想要的列表操作函数，像 <code>map</code>、<code>filter</code>、<code>reduce</code> 和 <code>find</code> 等。但 Ramda 跟 Underscore 和 Lodash 有很大的区别。Ramda 的主要特性如下：</p>
+<ul>
+<li><strong>Ramda 先接受函数参数，最后接受数据参数。</strong> <a href="http://www.youtube.com/watch?v=m3svKOdZijA" target="_blank" rel="noopener">Brian Lonsdorf 解释了为什么这样的参数顺序很重要</a>。简言之，柯里化和 “函数优先” 这两者相结合，使开发者在最终传入数据之前，能够以非常少的代码（通常为 “point-free” 风格，也即无参数风格）来组合函数。例如，以下面代码为例：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Underscore/Lodash style:</span></span><br><span class="line"><span class="keyword">var</span> validUsersNamedBuzz = <span class="function"><span class="keyword">function</span>(<span class="params">users</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _.filter(users, <span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> user.name === <span class="string">'Buzz'</span> &amp;&amp; _.isEmpty(user.errors); </span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>现在可以这么写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Ramda style:</span></span><br><span class="line"><span class="keyword">var</span> validUsersNamedBuzz = R.filter(R.where(&#123;<span class="attr">name</span>: <span class="string">'Buzz'</span>, <span class="attr">errors</span>: R.isEmpty&#125;));</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Ramda 的函数是自动柯里化的</strong> 。当你需要对 Underscore 或 Lodash 中的函数进行手动柯里化（或部分柯里化）时，Ramda 在内部已经替你完成这项工作了。实际上，Ramda 中所有的多元（多参数）函数都默认是柯里化的。例如：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `prop` takes two arguments. If I just give it one, I get a function back</span></span><br><span class="line"><span class="keyword">var</span> moo = R.prop(<span class="string">'moo'</span>);</span><br><span class="line"><span class="comment">// when I call that function with one argument, I get the result.</span></span><br><span class="line"><span class="keyword">var</span> value = moo(&#123;<span class="attr">moo</span>: <span class="string">'cow'</span>&#125;); <span class="comment">// =&gt; 'cow'</span></span><br></pre></td></tr></table></figure>
+<p>这种自动柯里化使得 “通过组合函数来创建新函数” 变得非常容易。因为 API 都是函数优先、数据最后（先传函数，最后传数据参数），你可以不断地组合函数，直到创建出需要的新函数，然后将数据传入其中。（Hugh Jackson 发表了一遍描述这种风格优点的 <a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">非常优秀的文章</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// take an object with an `amount` property</span></span><br><span class="line"><span class="comment">// add one to it</span></span><br><span class="line"><span class="comment">// find its remainder when divided by 7</span></span><br><span class="line"><span class="keyword">var</span> amtAdd1Mod7 = R.compose(R.moduloBy(<span class="number">7</span>), R.add(<span class="number">1</span>), R.prop(<span class="string">'amount'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// we can use that as is:</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">17</span>&#125;); <span class="comment">// =&gt; 4</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">987</span>&#125;); <span class="comment">// =&gt; 1</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">68</span>&#125;); <span class="comment">// =&gt; 6</span></span><br><span class="line"><span class="comment">// etc. </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// But we can also use our composed function on a list of objects, e.g. to `map`:</span></span><br><span class="line"><span class="keyword">var</span> amountObjects = [</span><br><span class="line">  &#123;<span class="attr">amount</span>: <span class="number">903</span>&#125;, &#123;<span class="attr">amount</span>: <span class="number">2875654</span>&#125;, &#123;<span class="attr">amount</span>: <span class="number">6</span>&#125;</span><br><span class="line">]</span><br><span class="line">R.map(amtAdd1Mod7, amountObjects); <span class="comment">// =&gt; [1, 6, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// of course, `map` is also curried, so you can generate a new function </span></span><br><span class="line"><span class="comment">// using `amtAdd1Mod7` that will wait for a list of "amountObjects" to </span></span><br><span class="line"><span class="comment">// get passed in:</span></span><br><span class="line"><span class="keyword">var</span> amountsToValue = map(amtAdd1Mod7);</span><br><span class="line">amountsToValue(amountObjects); <span class="comment">// =&gt; [1, 6, 0]</span></span><br></pre></td></tr></table></figure>
+<p><a href="https://www.npmjs.org/package/ramda" target="_blank" rel="noopener">Ramda 提供了 npm 包</a>，可以下载下来尝试一下。如果你对 Ramda 库有什么想法或改进建议，<a href="https://github.com/CrossEye/ramda/issues" target="_blank" rel="noopener">请联系我们</a>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Wrap-Up/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/18/Thinking-in-Ramda-Wrap-Up/" class="post-title-link" itemprop="url">Thinking in Ramda: 概要总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-18 10:17:35" itemprop="dateCreated datePublished" datetime="2017-06-18T10:17:35+00:00">2017-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/07/19/thinking-in-ramda-wrap-up/" target="_blank" rel="noopener">Thinking in Ramda: Wrap-Up</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的总结篇。</p>
+<p>在过去的八篇文章中，我们一直在讨论 <a href="http://ramda.cn/" target="_blank" rel="noopener">Ramda JavsScipt 库</a>，它提供了一系列以函数式、声明式和数据不变性方式工作的函数。</p>
+<p>在这个系列中，我们了解了蕴含在 Ramda API 背后的一些指导原则：</p>
+<ul>
+<li>
+<p>数据放在最后：几乎所有的函数都将数据参数作为最后一个参数。</p>
+</li>
+<li>
+<p>柯里化：Ramda 几乎所有的函数都是自动柯里化的。也即，可以使用函数必需参数的子集来调用函数，这会返回一个接受剩余参数的新函数。当所有参数都传入后，原始函数才被调用。</p>
+</li>
+</ul>
+<p>这两个原则使我们能编写出非常清晰的函数式代码，可以将基本的构建模块组合成更强大的操作。</p>
+<h2 id="zong-jie">总结</h2>
+<p>作为参考，一下是本系列文章的简单概要。</p>
+<ul>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">入门</a>：介绍了函数、纯函数和数据不变性思想。作为入门，展示了一些集合迭代函数，如：<code>map</code>、<code>filter</code> 和 <code>reduce</code> 等。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">函数组合</a>：演示了可以使用工具（如 <code>both</code>、<code>either</code>、<code>pipe</code> 和 <code>compose</code>）以多种方式组合函数。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">部分应用(Partial Application)</a>：演示了一种非常有用的函数延时调用方式：可以先向函数传入部分参数，以后根据需要将其余参数传入。借助 <code>partial</code> 和 <code>curry</code> 可以实现部分应用。我们还学习了 <code>flip</code> 和占位符（<code>__</code>）。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">声明式编程</a>：介绍了命令式和函数式编程之间的区别。学习了如何使用 Ramda 的声明式函数代替算术、比较、逻辑和条件运算符。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">无参数风格编程(Pointfree Style)</a>：介绍了 pointfree 风格的思想，也被称为 “tatic” 式编程。在 pointfree 式编程时，实际上不会看到正在操作的数据参数，数据被隐含在函数中了。程序是由许多较小的、简单的构建模块组合而成。只有在最后才将组合后的函数应用于实际的数据上。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">数据不变性和对象</a>：该节让我们回到了声明式编程的思想，展示了读取、更新、删除和转换对象属性所需的工具。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">数据不变性和数组</a>：继续上一节的主题，展示了数据不变性在数组中的应用。</p>
+</li>
+<li>
+<p><a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Lenses/" target="_blank" rel="noopener">透镜(Lenses)</a>：引入了透镜的概念，该结构允许我们把重点聚焦在较大的数据结构的一小部分上。借助 <code>view</code>、<code>set</code> 和 <code>over</code> 函数，可以对较大数据结构的小部分被关注数据进行读取、更新和变换操作。</p>
+</li>
+</ul>
+<h2 id="hou-xu">后续</h2>
+<p>该系列文章并未覆盖到 Ramda 所有部分。特别是，我们没有讨论处理字符串的函数，也没有讨论一些更高阶的概念，如 <a href="http://ramda.cn/docs/#transduce" target="_blank" rel="noopener">transducers</a>。</p>
+<p>要了解更多 Ramda 的作用，我建议仔细阅读 <a href="http://ramda.cn/docs/" target="_blank" rel="noopener">官方文档</a>，那里有大量的信息。所有的函数都按照它们处理数据的类型进行了分类，尽管有一些重叠。比如，有几个处理数组的函数可以用于处理字符串，<code>map</code> 可以作用于数组和对象两种类型。</p>
+<p>如果你对更高级的函数式主题感兴趣，可以参考一下资料：</p>
+<ul>
+<li>
+<p>Transducers：这里有一篇 <a href="http://simplectic.com/blog/2015/ramda-transducers-logs/" target="_blank" rel="noopener">使用 transducers 解析日志</a> 的介绍性文章。（译者也翻译了该系列两篇文章：<a href="https://adispring.coding.me/2016/10/24/Transducers-Explained-Part-1/" target="_blank" rel="noopener">《Transducers Explained: Part 1 中文》</a> 和 <a href="https://adispring.coding.me/2016/11/01/Transducers-Explained-Pipelines/" target="_blank" rel="noopener">《Transducers Explained: Pipelines 中文》</a>）。</p>
+</li>
+<li>
+<p>代数数据类型：如果你已经阅读了很多关于函数式编程的知识，应该听过代数类型和相关术语，如 “Functor”、“Applicative” 和 “Monad”。如果有兴趣深入了解这方面的思想，及其在 Ramda 中的实现和应用，可以查看 <a href="https://github.com/ramda/ramda-fantasy" target="_blank" rel="noopener">ramda-fantasy</a> 项目，该项目实现了符合 <a href="https://github.com/fantasyland/fantasy-land" target="_blank" rel="noopener">Fantasy Land 规范</a> （又称为 JavaScript 代数规范）的一些数据类型。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Lenses/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/18/Thinking-in-Ramda-Lenses/" class="post-title-link" itemprop="url">Thinking in Ramda: 透镜（Lenses）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-18 07:27:42" itemprop="dateCreated datePublished" datetime="2017-06-18T07:27:42+00:00">2017-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/07/12/thinking-in-ramda-lenses/" target="_blank" rel="noopener">Thinking in Ramda: Lenses</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第八篇。</p>
+<p>在 <a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">第六节</a>  和 <a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">第七节</a> 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。</p>
+<p>Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。</p>
+<h2 id="shi-yao-shi-tou-jing">什么是透镜？</h2>
+<p>透镜将 “getter” 和 “setter” 函数组合为一个单一模块。Ramda 提供了一系列配合透镜一起工作的函数。</p>
+<p>可以将透镜视为对某些较大数据结构的特定部分的聚焦、关注。</p>
+<h2 id="ru-he-chuang-jian-tou-jing">如何创建透镜</h2>
+<p>在 Ramda 中，最常见的创建透镜的方法是 <code>lens</code> 函数。<code>lens</code> 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一个新透镜。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> person = &#123;</span><br><span class="line">  name: <span class="string">'Randy'</span>,</span><br><span class="line">  socialMedia: &#123;</span><br><span class="line">    github: <span class="string">'randycoulman'</span>,</span><br><span class="line">    twitter: <span class="string">'@randycoulman'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> nameLens = lens(prop(<span class="string">'name'</span>), assoc(<span class="string">'name'</span>))</span><br><span class="line"><span class="keyword">const</span> twitterLens = lens(</span><br><span class="line">  path([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>]),</span><br><span class="line">  assocPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里使用 <code>prop</code> 和 <code>path</code> 作为 “getter” 方法；<code>assoc</code> 和 <code>assocPath</code> 作为 “setter” 方法。</p>
+<p>注意，上面实现不得不重复传递属性和路径参数给 “getter” 和 “setter” 方法。幸运的是，Ramda 为最常见类型的透镜提供了便捷方法：<code>lensProp</code>、<code>lensPath</code> 和 <code>lensIndex</code>。</p>
+<ul>
+<li><code>LensProp</code>：创建关注对象某一属性的透镜。</li>
+<li><code>lensPath</code>: 创建关注对象某一嵌套属性的透镜。</li>
+<li><code>lensIndex</code>: 创建关注数组某一索引的透镜。</li>
+</ul>
+<p>可以用 <code>lensProp</code> 和 <code>lensPath</code> 来重写上述示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nameLens = lensProp(<span class="string">'name'</span>)</span><br><span class="line"><span class="keyword">const</span> twitterLens = lensPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br></pre></td></tr></table></figure>
+<p>这样便摆脱了向 “getter” 和 “setter” 重复输入两次相同参数的烦扰，变得简洁多了。在实际工作中，我发现我几乎从来不需要使用通用的 <code>lens</code> 函数。</p>
+<h2 id="wo-neng-yong-ta-zuo-shi-yao-ni">我能用它做什么呢？</h2>
+<p>我们创建了一些透镜，可以用它们做些什么呢？</p>
+<p>Ramda 提供了三个配合透镜一起使用的的函数：</p>
+<ul>
+<li><code>view</code>：读取透镜的值。</li>
+<li><code>set</code>：更新透镜的值。</li>
+<li><code>over</code>：将变换函数作用于透镜。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">view(nameLens, person) <span class="comment">// =&gt; 'Randy'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(twitterLens, '@randy', person)</span><br><span class="line">// =&gt; &#123;</span><br><span class="line"><span class="comment">//   name: 'Randy',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randy'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"> </span><br><span class="line">over(nameLens, toUpper, person)</span><br><span class="line"><span class="comment">// =&gt; &#123;</span></span><br><span class="line"><span class="comment">//   name: 'RANDY',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randycoulman'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+<p>注意，<code>set</code> 和 <code>over</code> 会按指定的方式对被透镜关注的属性进行修改，并返回整个新的对象。</p>
+<h2 id="jie-lun">结论</h2>
+<p>如果想从复杂数据结构的操作中抽象出简单、通用的方法，透镜可以提供很多帮助。我们只需暴露透镜；而不需要暴露整个数据结构、或者为每个可访问属性都提供 “setter”、“getter” 和 变换方法。</p>
+<h2 id="xia-yi-jie">下一节</h2>
+<p>我们现在已经了解了许多 Ramda 提供的方法，已经足以应对大部分编程需要。<a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Wrap-Up/" target="_blank" rel="noopener">总结</a> 将回顾整个系列的内容，并会提到一些可能需要自己进一步探索的其他主题。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" class="post-title-link" itemprop="url">Thinking in Ramda: 数据不变性和数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-17 22:21:48" itemprop="dateCreated datePublished" datetime="2017-06-17T22:21:48+00:00">2017-06-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/07/05/thinking-in-ramda-immutability-and-arrays/" target="_blank" rel="noopener">Thinking in Ramda: Immutability and Arrays</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第七篇。</p>
+<p>在 <a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">第六节</a> 中，讨论了以函数式和数据不变性（immutable）的方式来处理 JavaScript 对象。</p>
+<p>本节将继续用相同的方式讨论数组。</p>
+<h2 id="du-qu-shu-zu-yuan-su">读取数组元素</h2>
+<p>在 <a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">第六节</a> 中，展示了许多读取对象属性的 Ramda 函数，包括 <code>prop</code>、<code>pick</code> 和 <code>has</code>。Ramda 有更多的方法来读取数组的元素。</p>
+<p>数组中与 <code>prop</code> 类似的是 <code>nth</code>；与 <code>pick</code> 类似的是 <code>slice</code>，跟 <code>has</code> 类似的是 <code>contains</code>。来看一些例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">nth(<span class="number">3</span>, numbers) <span class="comment">// =&gt; 40  (0-based indexing)</span></span><br><span class="line"> </span><br><span class="line">nth(<span class="number">-2</span>, numbers) <span class="comment">// =&gt; 50 (negative numbers start from the right)</span></span><br><span class="line"> </span><br><span class="line">slice(<span class="number">2</span>, <span class="number">5</span>, numbers) <span class="comment">// =&gt; [30, 40, 50] (see below)</span></span><br><span class="line"> </span><br><span class="line">contains(<span class="number">20</span>, numbers) <span class="comment">// =&gt; true</span></span><br></pre></td></tr></table></figure>
+<p><code>slice</code> 接受两个索引，返回从第 1 个索引开始（以 0 为起始）到第 2 个索引结束（不包含）的所有元素组成的子数组。</p>
+<p>经常会访问首个（<code>nth(0)</code>）和最后一个（<code>nth(-1)</code>）元素，所以 Ramda 为这两种特殊情形提供的便捷方法：<code>head</code> 和 <code>last</code>。还提供了访问除首个元素之外的所有元素的函数：<code>tail</code>，除最后一个元素之外的所有元素的方法：<code>init</code>，前 <code>N</code> 个元素：<code>take(N)</code>，后 <code>N</code> 个元素：<code>takeLast(N)</code>。来看看这些函数的实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">head(numbers) <span class="comment">// =&gt; 10</span></span><br><span class="line">tail(numbers) <span class="comment">// =&gt; [20, 30, 40, 50, 60]</span></span><br><span class="line"> </span><br><span class="line">last(numbers) <span class="comment">// =&gt; 60</span></span><br><span class="line">init(numbers) <span class="comment">// =&gt; [10, 20, 30, 40, 50]</span></span><br><span class="line"> </span><br><span class="line">take(<span class="number">3</span>, numbers) <span class="comment">// =&gt; [10, 20, 30]</span></span><br><span class="line">takeLast(<span class="number">3</span>, numbers) <span class="comment">// =&gt; [40, 50, 60]</span></span><br></pre></td></tr></table></figure>
+<h2 id="zeng-shan-gai-shu-zu-yuan-su">增、删、改数组元素</h2>
+<p>对于对象，我们已经学了对其属性进行增、删、改的函数：<code>assoc</code>、<code>dissoc</code>、<code>evolve</code> 等。</p>
+<p>但数组是有序数据结构，有好多函数与 <code>assoc</code> 类似。最常用的是 <code>insert</code> 和 <code>update</code>，Ramda 还提供了 <code>append</code> 和 <code>prepend</code> 来在数组头部或尾部添加元素。<code>insert</code>、<code>append</code> 和 <code>prepend</code> 会给数组添加新元素；<code>update</code> 使用新值替换已有元素。</p>
+<p>正如一般函数式库应该具备的，所有这些函数都返回修改后的新数组，原有数组保持不变。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">insert(<span class="number">3</span>, <span class="number">35</span>, numbers) <span class="comment">// =&gt; [10, 20, 30, 35, 40, 50, 60]</span></span><br><span class="line"> </span><br><span class="line">append(<span class="number">70</span>, numbers) <span class="comment">// =&gt; [10, 20, 30, 40, 50, 60, 70]</span></span><br><span class="line"> </span><br><span class="line">prepend(<span class="number">0</span>, numbers) <span class="comment">// =&gt; [0, 10, 20, 30, 40, 50, 60]</span></span><br><span class="line"> </span><br><span class="line">update(<span class="number">1</span>, <span class="number">15</span>, numbers) <span class="comment">// =&gt; [10, 15, 30, 40, 50, 60]</span></span><br></pre></td></tr></table></figure>
+<p>为了将两个对象合并为一个，我们学习了 <code>merge</code>；Ramda 为数组合并提供了 <code>concat</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">concat(numbers, [<span class="number">70</span>, <span class="number">80</span>, <span class="number">90</span>]) <span class="comment">// =&gt; [10, 20, 30, 40, 50, 60, 70, 80, 90]</span></span><br></pre></td></tr></table></figure>
+<p>注意，第二个数组添加到第一个数组之后。当单独使用 <code>concat</code> 时，可以很好的工作；但类似于 <code>merge</code>，在 pipeline 中可能并不像预期的那样工作。可以为在 pipeline 中使用定义一个辅助函数 <code>concatAfter</code>：<code>const concatAfter = flip(concat)</code>。</p>
+<p>Ramda 还提供了几个删除元素的函数。<code>remove</code> 删除指定索引处的元素，<code>without</code> 通过值删除元素。还有常用到的删除前 <code>N</code> 或 后 <code>N</code> 个元素的函数：<code>drop</code> 和 <code>dropLast</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">remove(<span class="number">2</span>, <span class="number">3</span>, numbers) <span class="comment">// =&gt; [10, 20, 60]</span></span><br><span class="line"> </span><br><span class="line">without([<span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>], numbers) <span class="comment">// =&gt; [10, 20, 60]</span></span><br><span class="line"> </span><br><span class="line">drop(<span class="number">3</span>, numbers) <span class="comment">// =&gt; [40, 50, 60]</span></span><br><span class="line"> </span><br><span class="line">dropLast(<span class="number">3</span>, numbers) <span class="comment">// =&gt; [10, 20, 30]</span></span><br></pre></td></tr></table></figure>
+<p>注意，<code>remove</code> 接受一个索引和一个删除元素的数量，而 <code>slice</code> 接受两个索引。如果你不知道这种不一致，可能会造成使用上的困扰。</p>
+<h2 id="bian-huan-yuan-su">变换元素</h2>
+<p>与对象一样，我们可能希望通过将函数应用于元素的原始值来更新数组元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">update(<span class="number">2</span>, multiply(<span class="number">10</span>, nth(<span class="number">2</span>, numbers)), numbers) <span class="comment">// =&gt; [10, 20, 300, 40, 50, 60]</span></span><br></pre></td></tr></table></figure>
+<p>为了简化这个常见的用例， Ramda 提供了 <code>adjust</code>，其工作方式类似于操作对象的 <code>evolve</code>。与 <code>evolve</code> 不同的是， <code>adjust</code> 只能作用于数组的单个元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>]</span><br><span class="line"> </span><br><span class="line">adjust(multiply(<span class="number">10</span>), <span class="number">2</span>, numbers)</span><br></pre></td></tr></table></figure>
+<p>注意，与 <code>update</code> 相比，<code>adjust</code> 将前两个参数的位置交换了一下。这可能会引起困扰，但当进行部分应用时，这样做还是很有道理的。你可能会先提供一个调整函数，比如 <code>adjust(multiply(10))</code> ，然后再决定要调整的索引和数组。</p>
+<h2 id="jie-lun">结论</h2>
+<p>我们现在有了以声明式和不变式操作对象和数组的一系列方法。这允许我们在不改变已有数据的情况下，从较小的、函数式的构建模块来构建程序，通过对函数进行组合来实现我们想要的功能。</p>
+<h2 id="xia-yi-jie">下一节</h2>
+<p>我们学习了读取、更新和转换对象属性和数组元素的方法。Ramda 提供了更通用的进行这些操作的工具：lens（透镜）。<a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Lenses/" target="_blank" rel="noopener">Lenses</a> 向我们演示了它们的工作原理和方式。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

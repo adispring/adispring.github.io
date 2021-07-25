@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文整理了一些 npm 不常用、但非常有用的命令。主要分为以下几大类：   查看 npm 源(registry) 上的 npm 包信息  npm view    开发 npm 包时，用到的命令  npm publish npm pack npm link &amp;amp; npm unlink npm set-script    查看已安装的 npm 包的本地信息  npm ls npm edit np">
+<meta property="og:type" content="article">
+<meta property="og:title" content="npm 命令高级指南">
+<meta property="og:url" content="https://adispring.github.io/2021/04/30/npm-cli-advance-guide/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="本文整理了一些 npm 不常用、但非常有用的命令。主要分为以下几大类：   查看 npm 源(registry) 上的 npm 包信息  npm view    开发 npm 包时，用到的命令  npm publish npm pack npm link &amp;amp; npm unlink npm set-script    查看已安装的 npm 包的本地信息  npm ls npm edit np">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="npm 命令高级指南">
+<meta name="twitter:description" content="本文整理了一些 npm 不常用、但非常有用的命令。主要分为以下几大类：   查看 npm 源(registry) 上的 npm 包信息  npm view    开发 npm 包时，用到的命令  npm publish npm pack npm link &amp;amp; npm unlink npm set-script    查看已安装的 npm 包的本地信息  npm ls npm edit np">
+
+<link rel="canonical" href="https://adispring.github.io/2021/04/30/npm-cli-advance-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>npm 命令高级指南 | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2021/04/30/npm-cli-advance-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          npm 命令高级指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-30 11:23:56" itemprop="dateCreated datePublished" datetime="2021-04-30T11:23:56+00:00">2021-04-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文整理了一些 npm 不常用、但非常有用的命令。主要分为以下几大类：</p>
+<ul>
+<li>
+<p>查看 npm 源(registry) 上的 npm 包信息</p>
+<ul>
+<li>npm view</li>
+</ul>
+</li>
+<li>
+<p>开发 npm 包时，用到的命令</p>
+<ul>
+<li>npm publish</li>
+<li>npm pack</li>
+<li>npm link &amp; npm unlink</li>
+<li>npm set-script</li>
+</ul>
+</li>
+<li>
+<p>查看已安装的 npm 包的本地信息</p>
+<ul>
+<li>npm ls</li>
+<li>npm edit</li>
+<li>npm explore</li>
+<li>npm explain | npm why</li>
+</ul>
+</li>
+<li>
+<p>浏览器查看 npm 包信息</p>
+<ul>
+<li>npm docs</li>
+<li>npm repo</li>
+</ul>
+</li>
+<li>
+<p>使用 npm 包开发其他项目时，用到的命令</p>
+<ul>
+<li>npm outdated</li>
+<li>npm update</li>
+</ul>
+</li>
+<li>
+<p>其他 npm 命令</p>
+<ul>
+<li>npm config</li>
+<li>npm bin</li>
+<li>npm completion</li>
+</ul>
+</li>
+</ul>
+<h1 id="cha-kan-npm-yuan-registry-shang-de-npm-bao-xin-xi">查看 npm 源(registry) 上的 npm 包信息</h1>
+<ul>
+<li>npm view: 最为灵活、最为强大的 查看 npm 包信息的命令；</li>
+</ul>
+<p>由于 <code>npm view</code> 太灵活，所以需要单独一小节进行讲解。</p>
+<h2 id="npm-view">npm view</h2>
+<p>查看 npm 源上包的信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm view [&lt;@scope&gt;/]&lt;name&gt;[@&lt;version&gt;] [&lt;field&gt;[.&lt;subfield&gt;]...]</span><br><span class="line"></span><br><span class="line">aliases: info, show, v</span><br></pre></td></tr></table></figure>
+<h3 id="cha-kan-bao-de-ji-ben-xin-xi">查看包的基本信息</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view &lt;pkg&gt;</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">› npm view ramda</span><br><span class="line"></span><br><span class="line">ramda@0.27.1 | MIT | deps: none | versions: 52</span><br><span class="line">A practical functional library <span class="keyword">for</span> JavaScript programmers.</span><br><span class="line">https://ramdajs.com/</span><br><span class="line"></span><br><span class="line">dist</span><br><span class="line">.tarball: http://r.npm.sankuai.com/ramda/download/ramda-0.27.1.tgz</span><br><span class="line">.shasum: 66fc2df3ef873874ffc2da6aa8984658abacf5c9</span><br><span class="line"></span><br><span class="line">maintainers:</span><br><span class="line">- aromano &lt;aromano@preemptsecurity.com&gt;</span><br><span class="line">- bradcomp &lt;notpmoc84@hotmail.com&gt;</span><br><span class="line">- ...</span><br><span class="line"></span><br><span class="line">dist-tags:</span><br><span class="line">0.2.0: 0.2.0          es-rc: 0.24.1-es.rc3  latest: 0.27.1</span><br><span class="line"></span><br><span class="line">published 9 months ago by davidchambers &lt;dc@davidchambers.me&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="geng-jia-ling-huo-de-cha-kan-bao-de-xiang-xi-xin-xi">更加灵活的查看包的详细信息</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view &lt;pkg&gt;@&lt;version&gt; &lt;field&gt;[.&lt;subfield&gt;]...</span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-bao-de-yi-lai">查看包的依赖</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">› npm view http-server dependencies</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">'basic-auth'</span>: <span class="string">'^1.0.3'</span>,</span><br><span class="line">  colors: <span class="string">'^1.4.0'</span>,</span><br><span class="line">  corser: <span class="string">'^2.0.1'</span>,</span><br><span class="line">  ecstatic: <span class="string">'^3.3.2'</span>,</span><br><span class="line">  <span class="string">'http-proxy'</span>: <span class="string">'^1.18.0'</span>,</span><br><span class="line">  minimist: <span class="string">'^1.2.5'</span>,</span><br><span class="line">  opener: <span class="string">'^1.5.1'</span>,</span><br><span class="line">  portfinder: <span class="string">'^1.0.25'</span>,</span><br><span class="line">  <span class="string">'secure-compare'</span>: <span class="string">'3.0.1'</span>,</span><br><span class="line">  union: <span class="string">'~0.5.0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-bao-de-zui-xin-ban-ben">查看包的最新版本</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">› npm view ramda version</span><br><span class="line">0.27.1</span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-bao-fa-bu-de-suo-you-ban-ben">查看包发布的所有版本</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">› npm view ramda versions</span><br><span class="line">[</span><br><span class="line">  <span class="string">'0.1.0'</span>,         <span class="string">'0.1.1'</span>,         <span class="string">'0.1.2'</span>,</span><br><span class="line">  <span class="string">'0.1.4'</span>,         <span class="string">'0.1.5'</span>,         <span class="string">'0.2.0'</span>,</span><br><span class="line">  <span class="string">'0.2.1'</span>,         <span class="string">'0.2.2'</span>,         <span class="string">'0.2.3'</span>,</span><br><span class="line">  <span class="string">'0.2.4'</span>,         <span class="string">'0.3.0'</span>,         <span class="string">'0.4.0'</span>,</span><br><span class="line">  <span class="string">'0.4.1'</span>,         <span class="string">'0.4.2'</span>,         <span class="string">'0.4.3'</span>,</span><br><span class="line">  <span class="string">'0.5.0'</span>,         <span class="string">'0.6.0'</span>,         <span class="string">'0.7.0'</span>,</span><br><span class="line">  <span class="string">'0.7.1'</span>,         <span class="string">'0.7.2'</span>,         <span class="string">'0.8.0'</span>,</span><br><span class="line">  <span class="string">'0.9.0'</span>,         <span class="string">'0.9.1'</span>,         <span class="string">'0.10.0'</span>,</span><br><span class="line">  <span class="string">'0.11.0'</span>,        <span class="string">'0.12.0'</span>,        <span class="string">'0.13.0'</span>,</span><br><span class="line">  <span class="string">'0.14.0'</span>,        <span class="string">'0.15.0'</span>,        <span class="string">'0.15.1'</span>,</span><br><span class="line">  <span class="string">'0.16.0'</span>,        <span class="string">'0.17.0'</span>,        <span class="string">'0.17.1'</span>,</span><br><span class="line">  <span class="string">'0.18.0'</span>,        <span class="string">'0.19.0'</span>,        <span class="string">'0.19.1'</span>,</span><br><span class="line">  <span class="string">'0.20.0'</span>,        <span class="string">'0.20.1'</span>,        <span class="string">'0.21.0'</span>,</span><br><span class="line">  <span class="string">'0.22.0'</span>,        <span class="string">'0.22.1'</span>,        <span class="string">'0.23.0'</span>,</span><br><span class="line">  <span class="string">'0.24.0'</span>,        <span class="string">'0.24.1-es.rc1'</span>, <span class="string">'0.24.1-es.rc2'</span>,</span><br><span class="line">  <span class="string">'0.24.1-es.rc3'</span>, <span class="string">'0.24.1'</span>,        <span class="string">'0.25.0'</span>,</span><br><span class="line">  <span class="string">'0.26.0'</span>,        <span class="string">'0.26.1'</span>,        <span class="string">'0.27.0'</span>,</span><br><span class="line">  <span class="string">'0.27.1'</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-zhi-ding-ban-ben-fan-wei-nei-de-bao-de-fa-bu-qing-kuang">查看指定版本范围内的包的发布情况</h4>
+<p>查看自 0.25.0 以来，所有版本 ramda 包的信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view ramda@<span class="string">'&gt;=0.25.0'</span></span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-npm-bao-guan-wang-di-zhi">查看 npm 包官网地址</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view ramda homepage</span><br></pre></td></tr></table></figure>
+<h4 id="cha-kan-npm-bao-cang-ku-di-zhi">查看 npm 包仓库地址</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view ramda repository.url</span><br></pre></td></tr></table></figure>
+<h4 id="tong-guo-shell-jiao-ben-zu-he-chu-ling-huo-de-cha-xun-ming-ling">通过 shell 脚本，组合出灵活的查询命令</h4>
+<p>可以通过一些 Shell 脚本轻松查看有关依赖项的信息。例如，要查看有关ronn所依赖的opts版本的所有数据，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm view opts@$(npm view ronn dependencies.opts)</span><br></pre></td></tr></table></figure>
+<p>更多 <code>npm view</code> 的高级用法，可以查看 <a href="https://docs.npmjs.com/cli/v7/commands/npm-view" target="_blank" rel="noopener">npm view 官方文档</a></p>
+<h1 id="kai-fa-npm-bao-she-ji-de-ming-ling">开发 npm 包涉及的命令</h1>
+<ul>
+<li>
+<p>npm publish: 将包发布到 npm 源(registry) 上去;</p>
+</li>
+<li>
+<p>npm pack: 打包;</p>
+</li>
+<li>
+<p>npm link: 将当前 package 文件夹软链到全局 npm 环境中;</p>
+</li>
+<li>
+<p>npm unlink: 断开全局软链时，其实就是 npm uninstall 的别名;</p>
+</li>
+<li>
+<p>npm set-script: 在 package.json 的 <code>&quot;scripts&quot;</code> 字段中设置任务;</p>
+</li>
+</ul>
+<h2 id="npm-publish-fa-bao">npm publish – 发包</h2>
+<p>将包发布到 npm 源(registry) 上去。</p>
+<h3 id="mo-ni-fa-bao">模拟发包</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm publish --dry-run</span><br></pre></td></tr></table></figure>
+<p><code>npm publish --dry-run</code> 只是模拟发包，并不会真正发包。会将发包过程中的所有信息都打印出来，用作发包前进行信息确认。也可以使用 <code>npm pack --dry-run</code></p>
+<h3 id="fa-bu-de-bao-zhong-bao-han-de-wen-jian">发布的包中包含的文件</h3>
+<p>要查看软件包中将包含的内容，请运行 <code>npx npm-packlist</code>。默认情况下，所有文件都包括在内，但以下情况除外：</p>
+<ul>
+<li>
+<p>始终包含与软件包安装和分发相关的某些文件。例如，<code>package.json</code>，<code>README.md</code>，<code>LICENSE</code> 等。</p>
+</li>
+<li>
+<p>如果 <code>package.json</code> 中有一个 <code>&quot;files&quot;</code> 列表字段，则仅包含 <code>&quot;files&quot;</code> 指定的文件。（如果指定了目录，则将遵循相同的忽略规则，以递归方式遍历目录并包含目录的内容。）</p>
+</li>
+<li>
+<p>如果存在 <code>.gitignore</code> 或 <code>.npmignore</code> 文件，则其中的被忽略文件以及所有子目录都将从软件包中排除。如果两个文件都存在，则将忽略 <code>.gitignore</code>，而仅使用 <code>.npmignore</code>。</p>
+<p><code>.npmignore</code> 文件遵循与 <code>.gitignore</code> 文件相同的模式规则</p>
+</li>
+<li>
+<p><strong>需要特别注意的是：如果文件匹配某些模式，则除非明确将其添加到 <code>package.json</code> 的 “files” 列表中，否则将永远不会将其包括在内，或者在 <code>.npmignore</code> 或 <code>.gitignore</code> 文件中使用 <code>!</code> ，来强制包含需要发布的文件</strong>。</p>
+<p>例如，npm 发包，默认是会忽略 <code>.npmrc</code> 文件的，如果我确实需要将 <code>.npmrc</code> 包含进发布的包中，则需要使用在 <code>.npmignore</code> 或 <code>.gitignore</code> 中写入规则 <code>!.npmrc</code>，<code>!.npmrc</code> 表示强制包含 <code>.npmrc</code>。</p>
+</li>
+<li>
+<p>符号链接永远不会包含在 npm 软件包中。</p>
+</li>
+</ul>
+<p>有关已发布的软件包中包含的内容以及如何构建该软件包的详细信息，请查看 <a href="https://docs.npmjs.com/cli/v7/using-npm/developers" target="_blank" rel="noopener">开发者须知</a> 。</p>
+<h2 id="npm-pack-da-bao">npm pack – 打包</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm pack [[&lt;@scope&gt;/]&lt;pkg&gt;...] [--dry-run]</span><br></pre></td></tr></table></figure>
+<p>一般会用到 <code>npm pack --dry-run</code> ，看一下即将发布的包的打包情况。加了 <code>--dry-run</code> 会后，命令不会真正的执行，只是把之间结果打印出来，以供调试使用。</p>
+<h2 id="npm-link-amp-npm-unlink-ben-di-kai-fa">npm link &amp; npm unlink - 本地开发</h2>
+<p>本地调试利器</p>
+<h3 id="npm-link">npm link</h3>
+<p>将当前 package 文件夹软链到全局 npm 环境中。开发某个 npm 包时，本地调试非常好用。避免了在开发过程中不断重复发包的困扰。</p>
+<p>npm link 分两步：</p>
+<ul>
+<li>
+<p>软链当前的 package；</p>
+</li>
+<li>
+<p>使用软链过的 package；</p>
+</li>
+</ul>
+<p>如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/projects/node-redis    <span class="comment"># go into the package directory</span></span><br><span class="line">npm link                    <span class="comment"># creates global link</span></span><br><span class="line"><span class="built_in">cd</span> ~/projects/node-bloggy   <span class="comment"># go into some other package directory.</span></span><br><span class="line">npm link redis              <span class="comment"># link-install the package</span></span><br></pre></td></tr></table></figure>
+<h3 id="npm-unlink">npm unlink</h3>
+<p>当本地调试完成，想要断开全局软链时，运行下面命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm unlink &lt;pkg&gt; -g</span><br></pre></td></tr></table></figure>
+<p><code>npm unlink</code> 会将 <pkg> 从全局的 npm 环境中移除（断开软链）。</pkg></p>
+<p>注：<code>npm unlink</code> 其实是 <code>npm uninstall</code> 的别名，所以运行 <code>npm unlink &lt;pkg&gt; -g</code> 等价于 <code>npm uninstall &lt;pkg&gt; -g</code> 。</p>
+<h3 id="npm-set-script">npm set-script</h3>
+<p>在 package.json 的 <code>&quot;scripts&quot;</code> 字段中设置任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">set</span>-script [&lt;script&gt;] [&lt;<span class="built_in">command</span>&gt;]</span><br></pre></td></tr></table></figure>
+<p>如果开发的 npm 包在安装时，需要动态修改项目中 <code>package.json</code> 文件的 <code>&quot;scripts&quot;</code> ，则可以使用该命令进行设置。</p>
+<p>示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="built_in">set</span>-script start <span class="string">"http-server ."</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"my-project"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"http-server ."</span>,</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"some existing value"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向 <code>&quot;scripts&quot;</code> 中添加 <code>&quot;start&quot;</code> 脚本。</p>
+<h1 id="cha-kan-yi-an-zhuang-de-npm-bao-de-ben-di-xin-xi">查看已安装的 npm 包的本地信息</h1>
+<ul>
+<li>
+<p>npm ls: 列出安装的 packages，或者指定 package 的依赖树；</p>
+</li>
+<li>
+<p>npm edit: 使用默认的编辑器打开当前项目中指定的 npm 包；</p>
+</li>
+<li>
+<p>npm explore: 进入指定的被安装的 npm 包的目录；</p>
+</li>
+<li>
+<p>npm explain | npm why: 解释 packages 被安装的原因。主要是把指定包的依赖链条打印出来；</p>
+</li>
+</ul>
+<h2 id="npm-ls">npm ls</h2>
+<p>列出安装的 packages。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls [&lt;pkg&gt; -g]</span><br></pre></td></tr></table></figure>
+<h3 id="da-yin-chu-dang-qian-xiang-mu-yi-an-zhuang-de-shou-ceng-packages">打印出当前项目已安装的首层 packages</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls</span><br></pre></td></tr></table></figure>
+<h3 id="suo-you-de-yi-lai-yi-yi-lai-shu-de-xing-shi-da-yin-chu-lai">所有的依赖以依赖树的形式打印出来</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls -all</span><br></pre></td></tr></table></figure>
+<p>当使用 <code>--all</code> 时，会将所有的依赖以依赖树的形式打印出来。</p>
+<h3 id="da-yin-quan-ju-an-zhuang-de-packages">打印全局安装的 packages</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls -g</span><br></pre></td></tr></table></figure>
+<h3 id="da-yin-zhi-ding-packages-de-an-zhuang-qing-kuang">打印指定 packages 的安装情况</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls name@version-range</span><br></pre></td></tr></table></figure>
+<p><code>npm ls name@version-range</code> 可以以结构树的形式打印出指定 package 在项目中的安装情况。</p>
+<p>也可以使用 <code>npm explain</code> 查看指定的 package 为什么会被安装，作用相当于 <code>npm ls</code> ，只不过展示的顺序是反向的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm explain name</span><br></pre></td></tr></table></figure>
+<h2 id="npm-edit">npm edit</h2>
+<p>使用默认的编辑器，直接打开当前项目已经安装的 package 的文件夹。可以省去手动到 node_modules 中查找 package 的麻烦。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm edit &lt;pkg&gt;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm edit prettier</span><br></pre></td></tr></table></figure>
+<p>会打开当前项目下的 <code>./node_modules/prettier</code> 目录。</p>
+<h3 id="zhi-ding-mo-ren-de-bian-ji-qi-xiu-gai-code-editor-code-bian-liang">指定默认的编辑器，修改 <code>$EDITOR</code> 变量</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="built_in">export</span> EDITOR=<span class="string">"emacsclient -t"</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+<h2 id="npm-explore">npm explore</h2>
+<p>在命令行中，进入指定的被安装的 package 文件夹中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm explore &lt;pkg&gt; [ -- &lt;<span class="built_in">command</span>&gt;]</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<ol>
+<li>进入当前项目中某 package 的目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 进入当前项目中安装的 prettier 目录</span><br><span class="line">npm explore prettier</span><br><span class="line"></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">// project/node_modules/prettier</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>进入全局安装的某 package 目录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 进入全局安装的 prettier 目录</span><br><span class="line">npm explore prettier -g</span><br><span class="line"></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">// /Users/wangzengdi/.nvm/versions/node/v14.15.4/lib/node_modules/prettier</span><br></pre></td></tr></table></figure>
+<h2 id="npm-explain-npm-why">npm explain | npm why</h2>
+<p>解释已安装的 packages，被安装的原因。</p>
+<p>会将当前指定包的依赖关系打印出来（哪些包依赖的指定的包），可以用于解释为什么一个依赖为什么会被安装多次。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm explain &lt;folder | specifier&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">alias</span>: why</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">› npm explain eslint</span><br><span class="line"></span><br><span class="line">eslint@7.25.0 dev</span><br><span class="line">node_modules/eslint</span><br><span class="line">  dev eslint@<span class="string">"^7.25.0"</span> from the root project</span><br><span class="line">  peer eslint@<span class="string">"&gt;= 4.12.1"</span> from babel-eslint@10.1.0</span><br><span class="line">  node_modules/babel-eslint</span><br><span class="line">    dev babel-eslint@<span class="string">"^10.1.0"</span> from the root project</span><br><span class="line">  peer eslint@<span class="string">"&gt;=7.0.0"</span> from eslint-config-prettier@8.3.0</span><br><span class="line">  node_modules/eslint-config-prettier</span><br><span class="line">    dev eslint-config-prettier@<span class="string">"^8.3.0"</span> from the root project</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<p>表示当前项目在 devDependencies 中安装了 7.25.0 版本的 eslint，安装的位置为 <code>node_modules/eslint</code> 。后面的部分表明是哪些包的依赖，导致了 eslint 的安装。</p>
+<h1 id="liu-lan-qi-cha-kan-npm-bao-xin-xi">浏览器查看 npm 包信息</h1>
+<ul>
+<li>
+<p>npm docs | npm home: 在浏览器中打开 npm 包官网；</p>
+</li>
+<li>
+<p>npm repo: 在浏览器中打开 npm 包仓库地址；</p>
+</li>
+</ul>
+<h2 id="npm-docs">npm docs</h2>
+<p>在浏览器中打开指定 npm 包的官方网站。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm docs [pakname]</span><br><span class="line"></span><br><span class="line">aliases: home</span><br></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 会打开 react 官网: https://reactjs.org/</span></span><br><span class="line">npm docs react</span><br><span class="line"></span><br><span class="line"><span class="comment"># 会打开 ramda 官网: https://ramdajs.com/</span></span><br><span class="line">npm docs ramda</span><br></pre></td></tr></table></figure>
+<p>npm 的官方网站一般写在 package.json 中的 “homepage” 字段中。</p>
+<h2 id="npm-repo">npm repo</h2>
+<p>在浏览器中打开指定 npm 包的仓库（一般为 github 仓库）地址。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm repo [&lt;pkgname&gt; [&lt;pkgname&gt; ...]]</span><br></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 会打开 ramda github 仓库: https://github.com/ramda/ramda</span></span><br><span class="line">npm repo ramda</span><br></pre></td></tr></table></figure>
+<h1 id="shi-yong-npm-bao-kai-fa-qi-ta-xiang-mu-shi-yong-dao-de-ming-ling">使用 npm 包开发其他项目时，用到的命令</h1>
+<h2 id="npm-outdated-vs-npm-update">npm outdated vs npm update</h2>
+<h3 id="npm-outdated">npm outdated</h3>
+<p>查看项目中是否存在过期的 packages，或者指定的 packages 是否过期</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm outdated [&lt;pkg&gt; ...]</span><br></pre></td></tr></table></figure>
+<p>举例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">› npm outdated</span><br><span class="line">Package       Current  Wanted  Latest  Location                   Depended by</span><br><span class="line">semver-regex    3.1.2   3.1.2   4.0.0  node_modules/semver-regex  fe.cli</span><br></pre></td></tr></table></figure>
+<p>在某一项目下运行 <code>npm outdated</code>，便可以列出当前项目中所有已经过期的依赖。</p>
+<p>如上所示，semver-regex 已经过期了，当前版本为 <code>3.1.2</code>，最新版本为 <code>4.0.0</code>。</p>
+<p>想要查看 package 的详细信息，可以使用<code>npm view &lt;pkg&gt;</code>，如查看 semver-regex： <code>npm view semver-regex</code>。</p>
+<h4 id="cha-kan-quan-ju-yi-jing-guo-qi-de-package">查看全局已经过期的 package</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm outdated -g</span><br></pre></td></tr></table></figure>
+<h3 id="npm-update-amp-npm-upgrade">npm update &amp; npm upgrade</h3>
+<p>更新 packages，npm update 会将 package 更新到当前已发布的 <strong>最新版本</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm update [-g] [&lt;pkg&gt;...]</span><br><span class="line"></span><br><span class="line">aliases: up, upgrade</span><br></pre></td></tr></table></figure>
+<p>在上文中，我们已经介绍了使用 <code>npm outdated</code> 查看过期的 packages。本段将介绍如何使用 <code>npm update</code> 更新过期的 packages</p>
+<h4 id="geng-xin-dang-qian-xiang-mu-zhong-suo-you-guo-qi-de-xiang-mu">更新当前项目中所有过期的项目</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update</span><br></pre></td></tr></table></figure>
+<h4 id="geng-xin-quan-ju-de-guo-qi-xiang-mu">更新全局的过期项目</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update -g</span><br></pre></td></tr></table></figure>
+<h4 id="geng-xin-zhi-ding-de-packages">更新指定的 packages</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update pkg1 pkg2 ...</span><br></pre></td></tr></table></figure>
+<h1 id="qi-ta-npm-ming-ling">其他 npm 命令</h1>
+<ul>
+<li>
+<p>npm config: npm 配置</p>
+</li>
+<li>
+<p>npm bin: 打印 npm 可执行命令 bin 的文件夹</p>
+</li>
+<li>
+<p>npm completion: npm 补全脚本</p>
+</li>
+</ul>
+<h2 id="npm-config">npm config</h2>
+<p>npm 配置。用于列出当前 npm 环境的配置信息，或管理 npm 配置文件，一般是 .npmrc。</p>
+<h3 id="lie-chu-dang-qian-de-npm-pei-zhi">列出当前的 npm 配置</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm config list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出详细配置</span></span><br><span class="line">npm config list -l</span><br></pre></td></tr></table></figure>
+<h2 id="npm-bin">npm bin</h2>
+<p>打印 npm 可执行命令 bin 的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm bin [-g | --global]</span><br></pre></td></tr></table></figure>
+<h2 id="npm-completion">npm completion</h2>
+<p>npm 补全命令脚本， 可以通过下列命令将命令补全脚本注入到 .bashrc 或 .zshrc 中，这样即可以在终端的任何地方使用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm completion &gt;&gt; ~/.bashrc</span><br><span class="line">npm completion &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/09/Hexo-Init/" rel="prev" title="Hexo-Init">
+      <i class="fa fa-chevron-left"></i> Hexo-Init
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/25/VSCode-Cheat-Sheet/" rel="next" title="VSCode Cheat Sheet -- 备忘录">
+      VSCode Cheat Sheet -- 备忘录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cha-kan-npm-yuan-registry-shang-de-npm-bao-xin-xi"><span class="nav-number">1.</span> <span class="nav-text">查看 npm 源(registry) 上的 npm 包信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-view"><span class="nav-number">1.1.</span> <span class="nav-text">npm view</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cha-kan-bao-de-ji-ben-xin-xi"><span class="nav-number">1.1.1.</span> <span class="nav-text">查看包的基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#geng-jia-ling-huo-de-cha-kan-bao-de-xiang-xi-xin-xi"><span class="nav-number">1.1.2.</span> <span class="nav-text">更加灵活的查看包的详细信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-bao-de-yi-lai"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">查看包的依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-bao-de-zui-xin-ban-ben"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">查看包的最新版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-bao-fa-bu-de-suo-you-ban-ben"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">查看包发布的所有版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-zhi-ding-ban-ben-fan-wei-nei-de-bao-de-fa-bu-qing-kuang"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">查看指定版本范围内的包的发布情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-npm-bao-guan-wang-di-zhi"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">查看 npm 包官网地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-npm-bao-cang-ku-di-zhi"><span class="nav-number">1.1.2.6.</span> <span class="nav-text">查看 npm 包仓库地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tong-guo-shell-jiao-ben-zu-he-chu-ling-huo-de-cha-xun-ming-ling"><span class="nav-number">1.1.2.7.</span> <span class="nav-text">通过 shell 脚本，组合出灵活的查询命令</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kai-fa-npm-bao-she-ji-de-ming-ling"><span class="nav-number">2.</span> <span class="nav-text">开发 npm 包涉及的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-publish-fa-bao"><span class="nav-number">2.1.</span> <span class="nav-text">npm publish – 发包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mo-ni-fa-bao"><span class="nav-number">2.1.1.</span> <span class="nav-text">模拟发包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fa-bu-de-bao-zhong-bao-han-de-wen-jian"><span class="nav-number">2.1.2.</span> <span class="nav-text">发布的包中包含的文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-pack-da-bao"><span class="nav-number">2.2.</span> <span class="nav-text">npm pack – 打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-link-amp-npm-unlink-ben-di-kai-fa"><span class="nav-number">2.3.</span> <span class="nav-text">npm link &amp; npm unlink - 本地开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-link"><span class="nav-number">2.3.1.</span> <span class="nav-text">npm link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-unlink"><span class="nav-number">2.3.2.</span> <span class="nav-text">npm unlink</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-set-script"><span class="nav-number">2.3.3.</span> <span class="nav-text">npm set-script</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cha-kan-yi-an-zhuang-de-npm-bao-de-ben-di-xin-xi"><span class="nav-number">3.</span> <span class="nav-text">查看已安装的 npm 包的本地信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-ls"><span class="nav-number">3.1.</span> <span class="nav-text">npm ls</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#da-yin-chu-dang-qian-xiang-mu-yi-an-zhuang-de-shou-ceng-packages"><span class="nav-number">3.1.1.</span> <span class="nav-text">打印出当前项目已安装的首层 packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suo-you-de-yi-lai-yi-yi-lai-shu-de-xing-shi-da-yin-chu-lai"><span class="nav-number">3.1.2.</span> <span class="nav-text">所有的依赖以依赖树的形式打印出来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#da-yin-quan-ju-an-zhuang-de-packages"><span class="nav-number">3.1.3.</span> <span class="nav-text">打印全局安装的 packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#da-yin-zhi-ding-packages-de-an-zhuang-qing-kuang"><span class="nav-number">3.1.4.</span> <span class="nav-text">打印指定 packages 的安装情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-edit"><span class="nav-number">3.2.</span> <span class="nav-text">npm edit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zhi-ding-mo-ren-de-bian-ji-qi-xiu-gai-code-editor-code-bian-liang"><span class="nav-number">3.2.1.</span> <span class="nav-text">指定默认的编辑器，修改 $EDITOR 变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-explore"><span class="nav-number">3.3.</span> <span class="nav-text">npm explore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-explain-npm-why"><span class="nav-number">3.4.</span> <span class="nav-text">npm explain | npm why</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#liu-lan-qi-cha-kan-npm-bao-xin-xi"><span class="nav-number">4.</span> <span class="nav-text">浏览器查看 npm 包信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-docs"><span class="nav-number">4.1.</span> <span class="nav-text">npm docs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-repo"><span class="nav-number">4.2.</span> <span class="nav-text">npm repo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shi-yong-npm-bao-kai-fa-qi-ta-xiang-mu-shi-yong-dao-de-ming-ling"><span class="nav-number">5.</span> <span class="nav-text">使用 npm 包开发其他项目时，用到的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-outdated-vs-npm-update"><span class="nav-number">5.1.</span> <span class="nav-text">npm outdated vs npm update</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-outdated"><span class="nav-number">5.1.1.</span> <span class="nav-text">npm outdated</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cha-kan-quan-ju-yi-jing-guo-qi-de-package"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">查看全局已经过期的 package</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-update-amp-npm-upgrade"><span class="nav-number">5.1.2.</span> <span class="nav-text">npm update &amp; npm upgrade</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#geng-xin-dang-qian-xiang-mu-zhong-suo-you-guo-qi-de-xiang-mu"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">更新当前项目中所有过期的项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geng-xin-quan-ju-de-guo-qi-xiang-mu"><span class="nav-number">5.1.2.2.</span> <span class="nav-text">更新全局的过期项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geng-xin-zhi-ding-de-packages"><span class="nav-number">5.1.2.3.</span> <span class="nav-text">更新指定的 packages</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#qi-ta-npm-ming-ling"><span class="nav-number">6.</span> <span class="nav-text">其他 npm 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-config"><span class="nav-number">6.1.</span> <span class="nav-text">npm config</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lie-chu-dang-qian-de-npm-pei-zhi"><span class="nav-number">6.1.1.</span> <span class="nav-text">列出当前的 npm 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-bin"><span class="nav-number">6.2.</span> <span class="nav-text">npm bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-completion"><span class="nav-number">6.3.</span> <span class="nav-text">npm completion</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

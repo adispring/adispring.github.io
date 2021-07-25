@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Lenses》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第八篇。 在 第六节  和 第七节 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。 Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thinking in Ramda: 透镜（Lenses）">
+<meta property="og:url" content="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Lenses/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Lenses》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第八篇。 在 第六节  和 第七节 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。 Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.589Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thinking in Ramda: 透镜（Lenses）">
+<meta name="twitter:description" content="译者注：本文翻译自 Randy Coulman 的 《Thinking in Ramda: Lenses》，转载请与原作者或本人联系。下面开始正文。  本文是函数式编程系列文章：Thinking in Ramda 的第八篇。 在 第六节  和 第七节 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。 Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。">
+
+<link rel="canonical" href="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Lenses/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Thinking in Ramda: 透镜（Lenses） | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Lenses/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Thinking in Ramda: 透镜（Lenses）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-18 07:27:42" itemprop="dateCreated datePublished" datetime="2017-06-18T07:27:42+00:00">2017-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/07/12/thinking-in-ramda-lenses/" target="_blank" rel="noopener">Thinking in Ramda: Lenses</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
+<hr>
+<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的第八篇。</p>
+<p>在 <a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">第六节</a>  和 <a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">第七节</a> 中，我们学习了如何以声明式和不变式来读取、更新和转换对象的属性和数组的元素。</p>
+<p>Ramda 提供了一个更通用的工具：透镜（lens），来进行这些操作。</p>
+<h2 id="shi-yao-shi-tou-jing">什么是透镜？</h2>
+<p>透镜将 “getter” 和 “setter” 函数组合为一个单一模块。Ramda 提供了一系列配合透镜一起工作的函数。</p>
+<p>可以将透镜视为对某些较大数据结构的特定部分的聚焦、关注。</p>
+<h2 id="ru-he-chuang-jian-tou-jing">如何创建透镜</h2>
+<p>在 Ramda 中，最常见的创建透镜的方法是 <code>lens</code> 函数。<code>lens</code> 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一个新透镜。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> person = &#123;</span><br><span class="line">  name: <span class="string">'Randy'</span>,</span><br><span class="line">  socialMedia: &#123;</span><br><span class="line">    github: <span class="string">'randycoulman'</span>,</span><br><span class="line">    twitter: <span class="string">'@randycoulman'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> nameLens = lens(prop(<span class="string">'name'</span>), assoc(<span class="string">'name'</span>))</span><br><span class="line"><span class="keyword">const</span> twitterLens = lens(</span><br><span class="line">  path([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>]),</span><br><span class="line">  assocPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里使用 <code>prop</code> 和 <code>path</code> 作为 “getter” 方法；<code>assoc</code> 和 <code>assocPath</code> 作为 “setter” 方法。</p>
+<p>注意，上面实现不得不重复传递属性和路径参数给 “getter” 和 “setter” 方法。幸运的是，Ramda 为最常见类型的透镜提供了便捷方法：<code>lensProp</code>、<code>lensPath</code> 和 <code>lensIndex</code>。</p>
+<ul>
+<li><code>LensProp</code>：创建关注对象某一属性的透镜。</li>
+<li><code>lensPath</code>: 创建关注对象某一嵌套属性的透镜。</li>
+<li><code>lensIndex</code>: 创建关注数组某一索引的透镜。</li>
+</ul>
+<p>可以用 <code>lensProp</code> 和 <code>lensPath</code> 来重写上述示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nameLens = lensProp(<span class="string">'name'</span>)</span><br><span class="line"><span class="keyword">const</span> twitterLens = lensPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br></pre></td></tr></table></figure>
+<p>这样便摆脱了向 “getter” 和 “setter” 重复输入两次相同参数的烦扰，变得简洁多了。在实际工作中，我发现我几乎从来不需要使用通用的 <code>lens</code> 函数。</p>
+<h2 id="wo-neng-yong-ta-zuo-shi-yao-ni">我能用它做什么呢？</h2>
+<p>我们创建了一些透镜，可以用它们做些什么呢？</p>
+<p>Ramda 提供了三个配合透镜一起使用的的函数：</p>
+<ul>
+<li><code>view</code>：读取透镜的值。</li>
+<li><code>set</code>：更新透镜的值。</li>
+<li><code>over</code>：将变换函数作用于透镜。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">view(nameLens, person) <span class="comment">// =&gt; 'Randy'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(twitterLens, '@randy', person)</span><br><span class="line">// =&gt; &#123;</span><br><span class="line"><span class="comment">//   name: 'Randy',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randy'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"> </span><br><span class="line">over(nameLens, toUpper, person)</span><br><span class="line"><span class="comment">// =&gt; &#123;</span></span><br><span class="line"><span class="comment">//   name: 'RANDY',</span></span><br><span class="line"><span class="comment">//   socialMedia: &#123;</span></span><br><span class="line"><span class="comment">//     github: 'randycoulman',</span></span><br><span class="line"><span class="comment">//     twitter: '@randycoulman'</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+<p>注意，<code>set</code> 和 <code>over</code> 会按指定的方式对被透镜关注的属性进行修改，并返回整个新的对象。</p>
+<h2 id="jie-lun">结论</h2>
+<p>如果想从复杂数据结构的操作中抽象出简单、通用的方法，透镜可以提供很多帮助。我们只需暴露透镜；而不需要暴露整个数据结构、或者为每个可访问属性都提供 “setter”、“getter” 和 变换方法。</p>
+<h2 id="xia-yi-jie">下一节</h2>
+<p>我们现在已经了解了许多 Ramda 提供的方法，已经足以应对大部分编程需要。<a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Wrap-Up/" target="_blank" rel="noopener">总结</a> 将回顾整个系列的内容，并会提到一些可能需要自己进一步探索的其他主题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" rel="prev" title="Thinking in Ramda: 数据不变性和数组">
+      <i class="fa fa-chevron-left"></i> Thinking in Ramda: 数据不变性和数组
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/18/Thinking-in-Ramda-Wrap-Up/" rel="next" title="Thinking in Ramda: 概要总结">
+      Thinking in Ramda: 概要总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shi-yao-shi-tou-jing"><span class="nav-number">1.</span> <span class="nav-text">什么是透镜？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ru-he-chuang-jian-tou-jing"><span class="nav-number">2.</span> <span class="nav-text">如何创建透镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wo-neng-yong-ta-zuo-shi-yao-ni"><span class="nav-number">3.</span> <span class="nav-text">我能用它做什么呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jie-lun"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xia-yi-jie"><span class="nav-number">5.</span> <span class="nav-text">下一节</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

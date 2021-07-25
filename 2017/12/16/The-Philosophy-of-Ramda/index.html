@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="目标 我们编写 Ramda 的目的是，用比原生 JavaScript 更好的方式进行编程。给定数据如下： 1234567// `projects` 是一个以下形式的对象类型的数组//     &amp;#123;codename: &apos;atlas&apos;, due: &apos;2013-09-30&apos;, budget: 300000, //      completed: &apos;2013-10-15&apos;, cost: 32500">
+<meta name="keywords" content="Ramda">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ramda 的哲学">
+<meta property="og:url" content="https://adispring.github.io/2017/12/16/The-Philosophy-of-Ramda/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="目标 我们编写 Ramda 的目的是，用比原生 JavaScript 更好的方式进行编程。给定数据如下： 1234567// `projects` 是一个以下形式的对象类型的数组//     &amp;#123;codename: &apos;atlas&apos;, due: &apos;2013-09-30&apos;, budget: 300000, //      completed: &apos;2013-10-15&apos;, cost: 32500">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.589Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ramda 的哲学">
+<meta name="twitter:description" content="目标 我们编写 Ramda 的目的是，用比原生 JavaScript 更好的方式进行编程。给定数据如下： 1234567// `projects` 是一个以下形式的对象类型的数组//     &amp;#123;codename: &apos;atlas&apos;, due: &apos;2013-09-30&apos;, budget: 300000, //      completed: &apos;2013-10-15&apos;, cost: 32500">
+
+<link rel="canonical" href="https://adispring.github.io/2017/12/16/The-Philosophy-of-Ramda/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Ramda 的哲学 | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/12/16/The-Philosophy-of-Ramda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ramda 的哲学
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-12-16 21:39:27" itemprop="dateCreated datePublished" datetime="2017-12-16T21:39:27+00:00">2017-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="mu-biao">目标</h1>
+<p>我们编写 Ramda 的目的是，用比原生 JavaScript 更好的方式进行编程。给定数据如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `projects` 是一个以下形式的对象类型的数组</span></span><br><span class="line"><span class="comment">//     &#123;codename: 'atlas', due: '2013-09-30', budget: 300000, </span></span><br><span class="line"><span class="comment">//      completed: '2013-10-15', cost: 325000&#125;,</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// `assignments` 是将工程名映射到员工名的对象类型的数组，如下所示:</span></span><br><span class="line"><span class="comment">//     &#123;codename: 'atlas', name: 'abby'&#125;,</span></span><br><span class="line"><span class="comment">//     &#123;codename: 'atlas', name: 'greg'&#125;,</span></span><br></pre></td></tr></table></figure>
+<p>我们想按以下形式进行编程：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> employeesByProjectName = R.pipe(</span><br><span class="line">  R.propEq(<span class="string">'codename'</span>), </span><br><span class="line">  R.flip(R.filter)(assignments), </span><br><span class="line">  R.map(R.prop(<span class="string">'name'</span>))</span><br><span class="line">);</span><br><span class="line"><span class="keyword">var</span> onTime = R.filter(<span class="function"><span class="params">proj</span> =&gt;</span> proj.completed &lt;= proj.due);</span><br><span class="line"><span class="keyword">var</span> withinBudget = R.filter(<span class="function"><span class="params">proj</span> =&gt;</span> proj.cost &lt;= proj.budget);</span><br><span class="line"><span class="keyword">var</span> topProjects = R.converge(R.intersection, [onTime, withinBudget]);</span><br><span class="line"><span class="keyword">var</span> bonusEligible = R.pipe(</span><br><span class="line">  topProjects, </span><br><span class="line">  R.map(R.prop(<span class="string">'codename'</span>)), </span><br><span class="line">  R.map(employeesByProjectName), </span><br><span class="line">  R.flatten, </span><br><span class="line">  R.uniq</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bonusEligible(projects));</span><br><span class="line"><span class="comment">// Live version at https://codepen.io/adispring/pen/WdQjXL?editors=0012</span></span><br><span class="line"><span class="comment">// 译者注：原文用的 ramda@0.22.1 版本比较旧了，converge 第二个之后的函数未加中括号</span></span><br><span class="line"><span class="comment">//         本文采用 ramda@0.25.0</span></span><br></pre></td></tr></table></figure>
+<p>这段代码是一段 “函数式” 的 <code>pipeline</code>。它是由模块化、可组合的函数构建而成，这些函数拼接在一起形成长长的管道，然后我们可以从管道入口传入待处理的数据。上面的每个 var 变量声明都代表一个单输入单输出的函数。每个函数的输出结果在管道中继续传递下去。</p>
+<p>这些函数对数据进行转换并将转换结果传给下一个函数。需要注意的是，这些函数都不会改变输入参数的值。</p>
+<p>Ramda 的目标是让这种风格的编码在 JavaScript 中更容易些。这就是它的目的，我们的设计决策都是由这个目标驱动的。还有一个唯二值得关注的点：简洁（Simplicity）。我们追求的是简洁（Simple），而不是简单（容易，Easy）。如果你没有看过 Rich Hickey 的 “Simple Made Easy”，你应该花点时间看看。简洁，意味着不要将独立的功能点耦合或纠缠到一起。Ramda 努力坚持这个原则。（单一职责原则）</p>
+<h1 id="zuo-you-ming">座右铭</h1>
+<p>Ramda 自认为是 “一个实用的 JavaScript 函数式编程库”。什么意思呢？</p>
+<p>在本文接下来的部分，我们将这句话的解释分成几部分，并在下文中分别讨论每部分在 Ramda 中的含义。</p>
+<h1 id="wei-java-script-bian-cheng-ren-yuan-er-she-ji">为 JavaScript 编程人员而设计</h1>
+<h2 id="you-xie-liang-ya">有些惊讶？</h2>
+<p>Ramda 是为编程人员设计的库。它不是一个学术试验品。它是为一线人员构建系统而准备的，它必须能运行，并且是良好、高效地运行。</p>
+<p>我们尽量描述清楚函数的作用，以确保不会因误解而发生意外。不过，我们做的一些事情可能会让很多学术同仁感到惊讶。但只要日常的（工业界）编程人员理解我们，我们就愿意冒这个风险。例如，Ramda 的 <code>is</code> 函数可以用来代替 <code>isArray</code>、<code>isNumber</code>、<code>isFunction</code> 等函数。Ramda 版本的类型判断函数接受一个构造函数和一个对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">is(<span class="built_in">Number</span>, <span class="number">42</span>); <span class="comment">//=&gt; true</span></span><br><span class="line">is(<span class="built_in">Function</span>, <span class="number">42</span>); <span class="comment">//=&gt; false</span></span><br><span class="line">is(<span class="built_in">Object</span>, &#123;&#125;); <span class="comment">//=&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>这也适用于自定义的构造函数。如果 <code>Square</code> 的原型链上包含 <code>Rectangle</code>，则可以这样做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">is(Rectangle, <span class="keyword">new</span> Square(<span class="number">4</span>)); <span class="comment">//=&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>但这也可能引起学术界同仁的疑惑：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">is(<span class="built_in">Object</span>, <span class="number">42</span>); <span class="comment">//=&gt; false</span></span><br></pre></td></tr></table></figure>
+<p>现实世界的编程人员知道这是完全正确的。字符串、布尔值和数字是原生类型，但它们不是对象。然而学者们可能会坚持，认为包装过的 Number 类型继承自 Object，类比 Square/Rectangle ，也应该返回 true。当然，他们可以那么认为… 在他们自己的库里。这些函数对一线的编程人员才是最有用的。（译者注：Ramda 作者可能被学术界 Nerd 们的絮叨伤害过…）</p>
+<h2 id="ming-ling-shi-shi-xian">命令式实现</h2>
+<p>我们并没有非得以函数式的方式实现 Ramda 的函数。许多我们提出的构造，像 folds、maps、filters 只能通过递归进行函数式实现。但由于 JavaScript 并没有对递归进行优化；我们不能用优雅的递归算法来编写这些函数。相反，我们诉诸于丑陋的、命令式的 while 循环。我们来编写令人讨厌的代码，以便（Ramda）用户可以编写更优雅的代码。Ramda 的实现绝不应该被认为是如何编写函数式代码的指导。（译者注：为了效率和实用性的考虑，Ramda 底层实现其实是命令式的）</p>
+<p>虽然我们从 Haskell、ML 和 LISP（及其变种的函数式部分）等函数式语言中获得很多灵感，但 Ramda 从不试图实现这些语言的任何部分。</p>
+<p>Ramda 也没有试图简单地以函数式的方式重写原生 API。机械的生搬硬套没有任何意义。当我们实现 <code>map</code> 函数时，我们既不用非得遵循 Array.prototype.map 的 ECMAScript 规范，也没有囿于已有的实现。我们可以自由地为我们的库定义每个函数的功能，它是如何工作的，确切的参数顺序，它会不会更改输入参数等（永远不会！），返回什么，以及它会抛出什么类型的错误等。换句话说，API 是我们自己的。我们确实受到了函数式编程的传统的限制，但如果在 JavaScript 中使用某些东西需要做出妥协，我们可以做出任何被认为实用的选择。（译者注：总之，我们对 Ramda 有绝对的掌控权）</p>
+<h1 id="zuo-wei-yi-ge-ku">作为一个库</h1>
+<p>Ramda 是一个库，一个工具包，或者类比 Underscore ，是一个辅助开发工具。它不是一个决定如何构建应用程序结构的框架（如 React）。相反，它只是一组函数，旨在使之前描述的可组合函数风格的编程更容易一些。这些函数并没有决定你的工作流程。例如，你不必为了使用过滤器而传递 <code>where</code> 函数的结果。</p>
+<h2 id="wei-shi-yao-bu-shi-yong">为什么不使用…</h2>
+<p>Ramda 不可避免的会与 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 和 <a href="http://lodash.com/" target="_blank" rel="noopener">Lodash</a> 做对比；其所提供的函数在功能和函数名称会有重叠。但是，Ramda 不会成为这些库的替代品。即使有一个神奇的参数顺序调整机制，它仍然不是一个简单的替代品。Ramda 有自身的优势、专注于不同领域。请记住，如果这些库能够很容易地按我们想要的方式进行编程，那么就不需要 Ramda 了。</p>
+<p>当我们开始编写该库时，主要的函数式编程库有：</p>
+<ul>
+<li>
+<p>Oliver Steele 的 <a href="http://osteele.com/sources/javascript/functional/" target="_blank" rel="noopener">Functional Javascript</a>, 这是首次使用令人难以置信的方式，展示真的可以在 JavaScript 中用函数式的方式编程。但它也只是个玩具，用生产环境中不想要的技巧进行Hack。</p>
+</li>
+<li>
+<p>Reg Braithwaite 的 <a href="https://github.com/raganwald/allong.es" target="_blank" rel="noopener">allong.es</a>，这本书已经出来了，并且这个鲜为人知的库已经可以用了。但这个库自称是 Underscore 或 Lodash 的伴侣，虽然做得很好，但它似乎只是一个支持这本书的最小代码集合，而不是一个完整的库。</p>
+</li>
+<li>
+<p>Michael Fogus 的 <a href="https://github.com/fogus/lemonad" target="_blank" rel="noopener">Lemonad</a> 是一个具有前瞻性的实验品，也许是这里面最有趣的一个，它的一些函数在其他 JavaScript 库中是没有的。但它似乎只是一个 playground，基于此，该库基本上被废弃了。</p>
+</li>
+<li>
+<p>当然还有一些大块头，比如 Jeremy Ashkenas 的 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 和 John-David Dalton 的 <a href="http://lodash.com/" target="_blank" rel="noopener">Lodash</a>。这些库的广泛使用，显示了大量的 JavaScript 开发人员不再害怕函数式构造。它们非常受欢迎，已经包含了许多我们想要的工具。</p>
+</li>
+</ul>
+<p>那么为什么我们不使用 Underscore/Lodash 呢？答案很简单。对于我们想要的编程形式，它们犯了一些根本性的错误：它们传递参数的顺序是错误的。</p>
+<p>这听起来很可笑，甚至无足轻重，但是对于这种编程风格来说确实 <strong>必不可少</strong>。为了构建简单可组合的函数，我们需要能正确协同工作的工具。其中最重要的是自动柯里化。为了能正确地进行柯里化，我们必须确保最经常变化的参数 – 通常是数据 – 放到最后。</p>
+<p>差别很简单。假设我们有这样一个可用的函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;<span class="keyword">return</span> a + b;&#125;;</span><br></pre></td></tr></table></figure>
+<p>并且我们想要一个函数，可以计算一篮子水果的总价格，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> basket = [</span><br><span class="line">    &#123;<span class="attr">item</span>: <span class="string">'apples'</span>,  <span class="attr">per</span>: <span class="number">.95</span>, <span class="attr">count</span>: <span class="number">3</span>, <span class="attr">cost</span>: <span class="number">2.85</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">item</span>: <span class="string">'peaches'</span>, <span class="attr">per</span>: <span class="number">.80</span>, <span class="attr">count</span>: <span class="number">2</span>, <span class="attr">cost</span>: <span class="number">1.60</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">item</span>: <span class="string">'plums'</span>,   <span class="attr">per</span>: <span class="number">.55</span>, <span class="attr">count</span>: <span class="number">4</span>, <span class="attr">cost</span>: <span class="number">2.20</span>&#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>我们想要这样写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = reduce(add, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>并且这样使用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> totalCost = compose(sum, pluck(<span class="string">'cost'</span>));</span><br></pre></td></tr></table></figure>
+<p>这就是我们想要的效果。注意看 <code>sum</code> 和 <code>totalCost</code> 是如此的简洁。使用 Underscore 写一个计算总价的函数并不难，但不会如此简洁。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _.reduce(list, add, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> totalCost = <span class="function"><span class="keyword">function</span>(<span class="params">basket</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> sum(_.pluck(basket, <span class="string">'cost'</span>));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在 Lodash 中可能的实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _.reduce(list, add, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> getCosts = _.partialRight(_.pluck, <span class="string">'cost'</span>);</span><br><span class="line"><span class="keyword">var</span> totalCost = _.compose(sum, getCosts);</span><br></pre></td></tr></table></figure>
+<p>或者跳过中间变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _.reduce(list, add, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> totalCost = _.compose(sum, .partialRight(_.pluck, <span class="string">'cost'</span>));</span><br></pre></td></tr></table></figure>
+<p>虽然这已经非常接近我们想要的效果，但是跟 Ramda 版本的相比，还是有差距的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = R.reduce(add, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> total = R.compose(sum, R.pluck(<span class="string">'cost'</span>));</span><br></pre></td></tr></table></figure>
+<p>在 Ramda 中实现这种风格的秘诀非常简单：我们将函数参数放在第一位，数据参数放到最后，并且将每个函数都柯里化。</p>
+<p>来看一下 <code>pluck</code>。Ramda 有一个 <code>pluck</code> 函数，它和 Underscore 及 Lodash 中的 <code>pluck</code> 函数的功能差不多。这些函数接受一个字符串属性名和一个列表；返回由列表元素的属性值组成的列表。但 Underscore 和 Lodash 要求先提供列表，Ramda 希望最后传入列表。当你加入柯里化时，区别非常明显：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">R.pluck(<span class="string">'cost'</span>); <span class="comment">//=&gt; function :: [Object] -&gt; [costs]</span></span><br></pre></td></tr></table></figure>
+<p>通过简单地暂时不传列表参数给 <code>pluck</code>，我们得到一个新函数：接受一个列表，并从新提供的列表中提取 <code>cost</code> 属性值。</p>
+<p>重申一下，就是这个简单的区别，将数据参数放到最后的自动柯里化函数让这两种风格变得不同：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span>(<span class="params">list</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _.reduce(list, add, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> total = <span class="function"><span class="keyword">function</span>(<span class="params">basket</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> sum(_.pluck(basket, <span class="string">'cost'</span>));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = R.reduce(add, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> total = R.compose(sum, R.pluck(<span class="string">'cost'</span>));</span><br></pre></td></tr></table></figure>
+<p>这就是我们开始编写一个新库的原因。</p>
+<h1 id="she-ji-xuan-ze">设计选择</h1>
+<p>接下来的问题是我们想要一个什么类型的库。我们当然知道我们想要一个简洁而又不怪异的 API。但是，这里仍然有一个悬而未决的问题：需要怎样确定 API 的适用广度和深度。</p>
+<p>API 的广度，仅仅指它想要覆盖多少不同类型的功能。有两百个函数的 API 比只有十个函数的 API 适用范围要广得多。与大多数其他库一样，我们对其广度（适用范围）没有特别的限制。我们添加有用的函数，而不用担心库的规模的增大会导致崩溃。</p>
+<p>一个库的深度，可以衡量它的函数们在独立使用时，可以提供多少种的不同的方式。（关于它们如何组合，是另一个完全不同的问题）在这里，我们走向了与 Underscore 及 Lodash 完全不同的方向。因为 JavaScript 不会去检查参数的类型和数量，所以编写根据传入确切参数（参数的类型和数量）而具有多种不同行为的单个函数是相当容易的。Underscore 和 Lodash 使用这种方法让它们的函数更灵活。例如，在 Lodash 中，<code>pluck</code> 不仅可以作用在 list 上，还可以作用在 object 和 string 上。从这个意义上讲，Lodash 是一个相当有深度的 API。Ramda 试图保持相对较浅的深度，原因如下：</p>
+<p>Lodash 提供的功能如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.pluck(<span class="string">'abc'</span>, propertyName);</span><br></pre></td></tr></table></figure>
+<p>其将字符串拆分成由单字母字符串组成的数组，然后返回从每个字符串中提取的指定属性形成的数组。想找个这样的合适的应用场景是非常困难的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.pluck(<span class="string">'abc'</span>, <span class="string">'length'</span>); <span class="comment">//=&gt; [1, 1, 1]</span></span><br></pre></td></tr></table></figure>
+<p>如果你真的想要一个元素为 <code>1</code> ，且对应字符串中的每个字母的列表，下面这段代码比我的 Ramda 解法要短一些：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map(always(<span class="number">1</span>), split(<span class="string">''</span>, <span class="string">'abc'</span>));</span><br></pre></td></tr></table></figure>
+<p>但这貌似没什么用，因为唯一另外一个属性是有意义的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.pluck(<span class="string">'abc'</span>, <span class="string">'0'</span>); <span class="comment">//=&gt; ['a', 'b', 'c']</span></span><br></pre></td></tr></table></figure>
+<p>如果 <code>pluck</code> 不存在，下面这样也是可以的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'abc'</span>.split(<span class="string">''</span>); <span class="comment">//=&gt; ['a', 'b', 'c']</span></span><br></pre></td></tr></table></figure>
+<p>所以在字符串上操作并没多大用处。之所以将其（字符串）包含进来，可能是因为所有属于 Lodash “集合” 类的函数都应该能同时适用于数组、对象和字符串；这只是一个一致性问题。（令人失望的是，Lodash 没有打算扩展到其他实际的集合中去，比如 Map 和 Set）我们已经理解了 <code>pluck</code> 是如何在数组上工作的。它涵盖的另一种类型是对象，如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> flintstones1 = &#123;</span><br><span class="line">    A: &#123;<span class="attr">name</span>: <span class="string">'fred'</span>, <span class="attr">age</span>: <span class="number">30</span>&#125;,</span><br><span class="line">    B: &#123;<span class="attr">name</span>: <span class="string">'wilma'</span>, <span class="attr">age</span>: <span class="number">28</span>&#125;,</span><br><span class="line">    C: &#123;<span class="attr">name</span>: <span class="string">'pebbles'</span>, <span class="attr">age</span>: <span class="number">2</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line">_.pluck(flintstones1, <span class="string">'age'</span>); <span class="comment">//=&gt; [30, 28, 2]</span></span><br></pre></td></tr></table></figure>
+<p>可以创建一个对象，<code>flintstones2</code> ，且以下结果为 <code>true</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.isEqual(flintstones1, flintstones2); <span class="comment">//=&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>但下面结果却为 <code>false</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.pluck(flintstones1, <span class="string">'age'</span>); == _.pluck(flintstones2, <span class="string">'age'</span>); <span class="comment">//=&gt; false;</span></span><br></pre></td></tr></table></figure>
+<p>下面是一种可能的情况：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> flintstones2 = &#123;</span><br><span class="line">    B: &#123;<span class="attr">name</span>: <span class="string">'wilma'</span>, <span class="attr">age</span>: <span class="number">28</span>&#125;,</span><br><span class="line">    A: &#123;<span class="attr">name</span>: <span class="string">'fred'</span>, <span class="attr">age</span>: <span class="number">30</span>&#125;,</span><br><span class="line">    C: &#123;<span class="attr">name</span>: <span class="string">'pebbles'</span>, <span class="attr">age</span>: <span class="number">2</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line">_.pluck(flintstones2, <span class="string">'age'</span>); <span class="comment">//=&gt; [28, 30, 2]</span></span><br></pre></td></tr></table></figure>
+<p>问题在于，<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-12.6.4" target="_blank" rel="noopener">根据规范</a>，对象 keys 的迭代顺序是依赖于实现的；通常它们按照添加到对象中的顺序进行迭代。。</p>
+<p>在写本文时，我提交了一个关于这个问题的 issue。在最好的情况下，只有通过记录问题才能解决问题。但这个问题实在影响深远。如果你想统一列表和对象的行为，你将会不断遇到这个问题，除非你实现一个（非常慢的！）统一的顺序对 Object 属性进行迭代。</p>
+<p>在 Ramda 中，<code>pluck</code> 只作用于列表。它接受一个属性名和一个列表，并返回一个相同长度的新列表。仅此而已。这个 API 深度很浅。（译者注：适用范围不太广）。</p>
+<p>你可以将其看作特点，也可以看作是缺点。以 Lodash 的 <code>filter</code> 为例: 它接受一个数组、对象或字符串作为第一个集合（参数），然后接受一个函数、对象、字符串或者空作为它的回调，并且还需要一个对象或空作为它的 this 参数。你将一次获得 3 * 4 * 2 = 24 个函数！这要么是一个很大的问题，要么增加了从中找到一个你真正想要的方案的难度，增加了太多复杂性。决定权在于你。</p>
+<p>在 Ramda 中，我们认为这种风格会增加不必要的复杂性。我们发现简单的函数签名对于维持简洁是至关重要的。如果我们需要函数既能作用于列表，又能作用于对象，我们会创建各自独立的函数（译者注：一般情况下会这样，但也有特例，比如 <code>map</code>）。如果有一个参数我们偶尔会用到，我们不会创建一个可选参数，而是创建两个函数。尽管这扩大了 API 的规模，但是它们保持了一至的浅度。</p>
+<h2 id="api-de-zeng-chang">API 的增长</h2>
+<p>有一个我们已经意识到的危险，一个可以用三个字母拼出来的危险：“PHP”。我们不希望我们的 API 变成一个不可持续的、功能不一致的怪物。这是真正的威胁，没有强制性的规范来确定我们应该或不应该包含什么。</p>
+<p>我们一直在努力；我们不希望包含一个貌似有用的函数。</p>
+<p>为了避免变成 “PHP” 风格的庞然大物，我们专注于几件事情。首先，API 为王。虽然我们想要函数实现尽可能优雅，但我们为了即使是轻微的 API 性能改进，而牺牲了大量优雅的实现。我们试图执行严格的一致性标准。例如：像 <code>somethingBy</code> 这样的 Ramda 函数，以标准的方式看，与 <code>somethingWith</code> 函数是不同的。如 <a href="https://github.com/ramda/ramda/issues/65" target="_blank" rel="noopener">issue 65</a> 所述，我们</p>
+<blockquote>
+<p>使用 xxBy 来表示单一属性的比较，无论是对象的自然属性还是合成属性；使用 xxWith 表示更具一般性的函数。</p>
+</blockquote>
+<p>一些使用这种方式的函数的例子包括max / min / sort / uniq / difference。</p>
+<h1 id="han-shu-shi">函数式</h1>
+<p>JavaScript 是一门多范式语言。你可以编写简单的命令式代码，面对对象的代码，或函数式代码。原始命令式的代码非常直白、简单。有很多库可以帮助你将 JavaScript 作为面向对象的语言使用。但是将 JavaScript 作为函数式语言使用的库非常少。Ramda 帮忙填补了这个空缺。</p>
+<p>如前所述，我们当然不是第一个。其他库通过各种不同方式让人们可以在 JavaScript 中进行函数式编程（FP）。在我看来，将函数式世界与 JavaScript 结合最成功的可能是 <a href="https://github.com/raganwald/allong.es" target="_blank" rel="noopener">allong.es</a>。但它不是一个流行的库，与 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 、 <a href="http://lodash.com/" target="_blank" rel="noopener">Lodash</a> 这些库不在一个级别上（就流行程度而言）；并且它有一个与 Ramda 不同的目标：它被设计为一种教学工具，一本书的演示库。</p>
+<p>Ramda 正在尝试一些不同的东西。它的目标是成为一个能进行日常实际工作的实用的函数式库。</p>
+<p>我们从头开始构建这个函数式库，使用了许多其他函数式语言通用的技术，以对 JavaScript 有意义的方式对这些技术进行移植。我们并没有试图弥合与面向对象世界之间的鸿沟，或者复制每一种函数式语言的每一个特性。实际上，我们甚至没有试图复制单一函数式语言的每个特性。它仍然是 JavaScript，甚至还继承了 JavaScript 缺陷。</p>
+<h2 id="han-shu-shi-te-xing">函数式特性</h2>
+<p>那么，在广阔的函数式编程领域里，哪些部分是我们想要保留的，又有哪些不在我们的考虑范围呢？下面列出了函数式编程的一些主要（不完整）特性：</p>
+<ul>
+<li>一等函数</li>
+<li>高阶函数</li>
+<li>词法闭包</li>
+<li>引用透明</li>
+<li>数据不可变</li>
+<li>模式匹配</li>
+<li>惰性求值</li>
+<li>高效递归（TCO）</li>
+<li><a href="https://en.wikipedia.org/w/index.php?title=Homoiconicity&amp;redirect=no" target="_blank" rel="noopener">同像性（Homoiconic）</a></li>
+</ul>
+<p>前几个特性都已经内置在 JavaScript 中了。JavaScript 中的函数是一等公民，意味着我们可以像使用字符串、数字或对象等，对其引用或传递。我们还可以将函数作为参数传递给其他函数，并返回全新的函数，所以 JavaScript 中包含高阶函数。因为返回函数可以访问其在创建时的上下文中的所有变量，所以我们也在语言中构建出了词法闭包。</p>
+<p>除此之外，上面列出其他的特性都没有自动包含在 JavaScript 中。有的可以轻易实现，有的只能部分或很难实现，有的则超出了语言的当前能力。</p>
+<p>Ramda 可以确保在不会导致你的代码出问题的情况下，帮助实现（管理）上面的其他一些特性。例如，Ramda 不会改变你的输入数据。永远也不会！如果使用 <code>append</code> 将元素添加到列表的末尾，则会返回包含添加元素的新列表。你的原始列表保持不变。所以，由于 Ramda 不会尝试强行改变不可变的客户端数据，它可以很容易的与不可变数据一起工作。</p>
+<p>另一方面，Ramda 强制要求引用透明。这个概念的意思是：可以在不改变整个程序行为的情况下，将表达式替换为其对应的计算值。对于 Ramda 来说，这意味着 Ramda 不会在应用程序中存储内部状态，也不会引用任何全局变量或者内部状态可以变的闭包。简言之，当你使用相同的值调用 Ramda 函数时，总会得到相同的结果。</p>
+<p>在撰写本文时，正在讨论 Ramda 的惰性求值问题。一些库如 <a href="http://danieltao.com/lazy.js/" target="_blank" rel="noopener">Lazy.js</a> 和 <a href="https://github.com/goatslacker/lz" target="_blank" rel="noopener">Lz.js</a> ，表明在 JavaScript 中进行惰性求值是可行的。<a href="https://github.com/cognitect-labs/transducers-js" target="_blank" rel="noopener">Transducer</a> 提供了一种模拟惰性求值的方法。Ramda 正在努力增强自己这方面的能力。但这是一个巨大的改变，并不会很快实现。</p>
+<p>Ramda 还会考虑加入一定程度的模式匹配，但不会像 Erlang 或 Haskell 这样的语言中的那么强大或方便。我们并没有看到会改变语言语法的宏，所以我们最多可以做一些类似于 <a href="http://raganwald.com/2014/06/23/multiple-dispatch.html#guarded-functions" target="_blank" rel="noopener">Reg Braithwaite 所描述的东西</a>。但是这至少在某种程度上讲是一种模式匹配的技术。</p>
+<p>其他特性都超出了 Ramda 的能力。虽然有 <a href="https://en.wikipedia.org/wiki/Trampoline_(computing)" target="_blank" rel="noopener">trampolining</a> 技术可以让你在不使用尾递归优化工具的情况下获得递归的一些好处，但是它们由于侵入性太强而不能被普遍使用。所以 Ramda 内部没有使用太多递归，也没有提供任何帮助来实现有效的递归。好消息是它将会被提到下一版语言规范的计划中去。</p>
+<p>然后是 <strong>同像性（homoiconicity）</strong> – 某些语言（LISP、Prolog）的特性：程序的语法可以用一种在自身语言中易于理解和修改的数据结构表示的。这远远超出了 JavaScript 当前的能力，甚至超出了 Ramda 的梦想。</p>
+<h1 id="zu-he-xing">组合性</h1>
+<p>Ramda 的目标之一是，允许用户使用小的可组合函数，这是函数式编程的关键。</p>
+<p>函数式编程通常涉及一些少量常见的数据结构，以及搭配操作它们的大量函数。这就是 Ramda 的工作原理。</p>
+<p>简言之，Ramda 主要进行列表操作。但 JavaScript 没有列表的实现；最接近的模拟是 Array（数组）。这是 Ramda 使用的最基本的数据结构。我们不关心 JavaScript 数组的一些深层次可能的性质。我们忽略稀疏数组。如果你传了一个这样的数组给 Ramda，有可能会得到意想不到的结果。你需要传给 Ramda 以 Array 实现的列表。（如果这对你没有意义，不用担心；这是人们使用 JavaScript 数组的标准方式，你必须非常努力，才能创建出不寻常的情况（译者注：错误的情况））。</p>
+<p>许多 Ramda 函数接受列表并且返回列表。这些函数都很容易组合。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// :: [Comment] -&gt; [Number]  </span></span><br><span class="line"><span class="keyword">var</span> userRatingForComments = R.compose(</span><br><span class="line">    R.pluck(<span class="string">'rating'</span>),       <span class="comment">// [User] -&gt; [Number]</span></span><br><span class="line">    R.map(R.propOf(users)),  <span class="comment">// [String] -&gt; [User]</span></span><br><span class="line">    R.pluck(<span class="string">'username'</span>)      <span class="comment">// [Comment] -&gt; [String]</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>Ramda 还包含 <code>pipe</code> 函数，它跟 <code>compose</code> 功能相同，但顺序是反的；我个人觉得它更可读一些：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// :: [Comment] -&gt; [Number]  </span></span><br><span class="line"><span class="keyword">var</span> userRatingForComments = R.pipe(</span><br><span class="line">    R.pluck(<span class="string">'username'</span>),     <span class="comment">// [Comment] -&gt; [String]</span></span><br><span class="line">    R.map(R.propOf(users)),  <span class="comment">// [String] -&gt; [User]</span></span><br><span class="line">    R.pluck(<span class="string">'rating'</span>)        <span class="comment">// [User] -&gt; [Number]</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>当然，组合可以作用于任何类型。如果下一个函数接受当前函数返回的类型，那么一切都应该没问题。</p>
+<p>为了让其工作，Ramda 的函数必须具有足够小的规模。这与 Unix 的哲学不谋而合：大型的工具应该由小工具构建而成，每个工具做且只做一件事情。Ramda 的函数也是如此。理想情况下，这意味着以这些函数为基础的系统的复杂性只是问题自身固有的复杂性，而不是由库增加的附带的复杂性。</p>
+<h2 id="bu-bian-xing">不变性</h2>
+<p>需要再次重申，Ramda 函数不会修改输入数据。这是函数式编程的核心原则，也是 Ramda 工作的核心。虽然这些函数可能会改变内部局部变量，但 Ramda 不会改变传递给它的任何数据。</p>
+<p>这并不意味着你使用的所有东西都会被复制。Ramda 重用了它所能用到的。因此，在像 <code>assoc</code> 和 <code>assocPath</code> 这样的函数，返回具有特定更新属性的对象的克隆中，原始数据的所有非原生（non-primitive）属性在新对象中将以引用的方式使用。如果你想要一个对象的完全解耦的副本，Ramda 提供了 <code>cloneDeep</code>（译者注：现在 Ramda 只提供 <code>clone</code> 用作深拷贝） 函数。</p>
+<p>这种不变性对 Ramda 来说是硬性规定。任何牵扯到变更用户数据的 pull request 都会被拒绝。我们认为这是 Ramda 的主要特征之一。</p>
+<h1 id="shi-yong-xing">实用性</h1>
+<p>最后，Ramda 的目标是成为一个实用的库。这更难表述，因为实用性就像 “美丽” 一样：总是在旁观者眼中才能反映出来。永远都会有对不符合 Ramda 哲学的功能的要求，在那些提议者心目中，这些功能都是非常实用的。通常这些函数（功能）本身是有用的，但是由于不符合 Ramda 的哲学而被拒绝。</p>
+<p>对于 Ramda 而言，实用性意味着一些具体的事情。</p>
+<h2 id="ming-ling-shi-shi-xian-1">命令式实现</h2>
+<p>首先，Ramda 的实现并未遵循 LISP、ML 或者 Haskell 库中的优雅的编码技术。我们使用丑陋的命令式的循环，而不是优雅的递归代码块。一些 Ramda 的作者曾经在一个叫 <a href="https://github.com/CrossEye/eweda" target="_blank" rel="noopener">Eweda</a> 的早起的库中走过这条路，代码非常漂亮，但是在解决实际问题上它却失败了。许多列表函数只能处理一千个左右的条目，而且性能也很糟糕。 JavaScript 的设计没有很好的处理递归，大多数当前的引擎不执行任何尾部调用优化。</p>
+<p>而 Ramda 的源代码却使用了乱七八糟的丑陋的 <code>while</code> 循环。</p>
+<p>这意味着 Ramda 的实现不能作为如何编写功能良好的 JavaScript 的模型（模板）。这太糟糕了。但它是目前的 JavaScript 引擎最实用的一种选择（方案）。</p>
+<h2 id="he-li-de-api">合理的 API</h2>
+<p>Ramda 还试图就 API 中应该包含什么做出实用的选择。我们并没有试图移植 Clojure、Haskell 或任何其他函数式语言中的任何特定的函数子集，也没有试图模仿更成熟的 JavaScript 库或规范的 API。我们采纳函数的标准是，它们表现出合理的效用。当然，它们也必须与我们的函数式范式相契合才会被考虑，但这还不够；我们必须确信它们将会被用到，并且它们提供了通过当前函数不容易实现的价值。</p>
+<p>后者是比较棘手的。有一个平衡的方案，以确定什么情况下语法糖是可以接受的。在之前，我们讨论了 <code>compose</code> 有一个执行顺序相反孪生同胞 <code>pipe</code>。有一种观点认为这是一种浪费，我们不应该把 API 因为这些多余的函数而搞乱。毕竟，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">R.pipe(fn1, fn2, ..., fnN)</span><br></pre></td></tr></table></figure>
+<p>可以重写为如下形式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">R.apply(R.compose, R.reverse([fn1, fn2, ..., fnN]));</span><br></pre></td></tr></table></figure>
+<p>但是，我们确实选择将 <code>pipe</code> 以及其他一些看似多余的函数包含到其中，当它们符合下面的条件时：</p>
+<ul>
+<li>很有可能会被用到</li>
+<li>能更好的表达开发人员的意图</li>
+<li>足够简单的实现</li>
+</ul>
+<h2 id="zheng-ji-qie-yi-zhi-de-api">整洁且一致的 API</h2>
+<p>对于整体一致 API 的追求，听起来不像是一个现实的考虑，更像是一个纯粹主义者的目标。但事实上，提供简单而一致的 API 使得 Ramda 更易于使用。例如，一旦你习惯了 Ramda 对参数顺序的设定，你将很少需要查阅文档以确定如何构建你的调用。</p>
+<p>另外，Ramda 坚决反对可选参数。这个决定有助于形成非常整洁的 API。一个函数应该做什么以及如何调用，通常是非常直观的。</p>
+<h2 id="bing-mei-you-shi-yao-hui-bang-zhu-wo-de-jian-yi">并没有 “什么会帮助我” 的建议</h2>
+<p>最后，向某个人解释这个问题通常是最困难的，那就是一个用户对什么才是实用的概念与整个库的实用性实际上可能只有一点点关系。即使提出的函数有助于解决某个难题，如果问题太过狭隘，或者解决方案偏离了我们的基础哲学，那么它也不会被纳入到 Ramda 中。虽然实用性是在旁观者眼中反映出来的，但那些能够纵观整个库的旁观者会有一个宏观的不同的视野，只有那些能够在整体上提升 Ramda 的改变才会被采纳。</p>
+<h1 id="jie-lun-sheng-er-bu-tong">结论：生而不同</h1>
+<p>Ramda 的诞生是因为，没有任何其他的库能以我们想要的方式工作。我们想要将可以作用于不可变数据的小型可组合函数，组合成简洁的函数式的 pipeline （管道）。当 Ramda 与类似的库相比较时，这涉及到一些似乎颇具争议的决定。我们并不担心这一点。Ramda 为我们工作的很好，似乎也满足了<a href="https://github.com/ramda/ramda/stargazers" target="_blank" rel="noopener">社区的需求</a>。</p>
+<p>我们不再孤单。自从我们开始以来，<a href="https://github.com/nullobject/fkit" target="_blank" rel="noopener">FKit</a> 也萌发了相似的想法。这是一个不太成熟的库，它的工作方式和 <a href="https://github.com/CrossEye/eweda" target="_blank" rel="noopener">Eweda</a> 一样，试图在 API 及其实现上同时保持真正的优雅。在我看来，他们很可能会遇到性能瓶颈。但是，我们无能为力，只能祝福他们。</p>
+<p>Ramda 正在努力坚持它作为 “JavaScript 开发人员的实用的函数式库” 的座右铭。我们认为我们正在管理和维护 Ramda。但我们也<a href="https://github.com/ramda/ramda/issues" target="_blank" rel="noopener">很乐意倾听</a> 您的想法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ramda/" rel="tag"># Ramda</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/12/04/Functions-in-Functional-Programming/" rel="prev" title="函数式编程中的“函数们”">
+      <i class="fa fa-chevron-left"></i> 函数式编程中的“函数们”
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/08/Fantasy-Land-Specification/" rel="next" title="Fantasy-Land-Specification">
+      Fantasy-Land-Specification <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mu-biao"><span class="nav-number">1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zuo-you-ming"><span class="nav-number">2.</span> <span class="nav-text">座右铭</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wei-java-script-bian-cheng-ren-yuan-er-she-ji"><span class="nav-number">3.</span> <span class="nav-text">为 JavaScript 编程人员而设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#you-xie-liang-ya"><span class="nav-number">3.1.</span> <span class="nav-text">有些惊讶？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ming-ling-shi-shi-xian"><span class="nav-number">3.2.</span> <span class="nav-text">命令式实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zuo-wei-yi-ge-ku"><span class="nav-number">4.</span> <span class="nav-text">作为一个库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#wei-shi-yao-bu-shi-yong"><span class="nav-number">4.1.</span> <span class="nav-text">为什么不使用…</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#she-ji-xuan-ze"><span class="nav-number">5.</span> <span class="nav-text">设计选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#api-de-zeng-chang"><span class="nav-number">5.1.</span> <span class="nav-text">API 的增长</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#han-shu-shi"><span class="nav-number">6.</span> <span class="nav-text">函数式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#han-shu-shi-te-xing"><span class="nav-number">6.1.</span> <span class="nav-text">函数式特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zu-he-xing"><span class="nav-number">7.</span> <span class="nav-text">组合性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bu-bian-xing"><span class="nav-number">7.1.</span> <span class="nav-text">不变性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shi-yong-xing"><span class="nav-number">8.</span> <span class="nav-text">实用性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ming-ling-shi-shi-xian-1"><span class="nav-number">8.1.</span> <span class="nav-text">命令式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#he-li-de-api"><span class="nav-number">8.2.</span> <span class="nav-text">合理的 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zheng-ji-qie-yi-zhi-de-api"><span class="nav-number">8.3.</span> <span class="nav-text">整洁且一致的 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bing-mei-you-shi-yao-hui-bang-zhu-wo-de-jian-yi"><span class="nav-number">8.4.</span> <span class="nav-text">并没有 “什么会帮助我” 的建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jie-lun-sheng-er-bu-tong"><span class="nav-number">9.</span> <span class="nav-text">结论：生而不同</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

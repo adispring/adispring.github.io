@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="译者注：本文翻译自 Kevin Beaty 的《Transducers Explained: Part 1》, 转载请与原作者或本人联系。 对原文中出现的专业术语，在不妨碍理解的情况下采用原文单词。 Transduce 相较于 Reduce 的改进，用一句话概括：在使用 Reduce 对每个元素归并之前，先对取出的每个元素进行转换。 Transduce 的时间复杂度为 O(n), 传统 compo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transducers Explained: Part 1 中文">
+<meta property="og:url" content="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/index.html">
+<meta property="og:site_name" content="wangzengdi&#39;s Blog">
+<meta property="og:description" content="译者注：本文翻译自 Kevin Beaty 的《Transducers Explained: Part 1》, 转载请与原作者或本人联系。 对原文中出现的专业术语，在不妨碍理解的情况下采用原文单词。 Transduce 相较于 Reduce 的改进，用一句话概括：在使用 Reduce 对每个元素归并之前，先对取出的每个元素进行转换。 Transduce 的时间复杂度为 O(n), 传统 compo">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/reduce.png">
+<meta property="og:image" content="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/transduce.png">
+<meta property="og:image" content="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/compose_transducers.png">
+<meta property="og:updated_time" content="2021-07-25T10:40:14.589Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Transducers Explained: Part 1 中文">
+<meta name="twitter:description" content="译者注：本文翻译自 Kevin Beaty 的《Transducers Explained: Part 1》, 转载请与原作者或本人联系。 对原文中出现的专业术语，在不妨碍理解的情况下采用原文单词。 Transduce 相较于 Reduce 的改进，用一句话概括：在使用 Reduce 对每个元素归并之前，先对取出的每个元素进行转换。 Transduce 的时间复杂度为 O(n), 传统 compo">
+<meta name="twitter:image" content="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/reduce.png">
+
+<link rel="canonical" href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Transducers Explained: Part 1 中文 | wangzengdi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wangzengdi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Functional Programming</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2016/10/24/Transducers-Explained-Part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Transducers Explained: Part 1 中文
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-24 10:10:20" itemprop="dateCreated datePublished" datetime="2016-10-24T10:10:20+00:00">2016-10-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-25 10:40:14" itemprop="dateModified" datetime="2021-07-25T10:40:14+00:00">2021-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>译者注：本文翻译自 Kevin Beaty 的《<a href="http://simplectic.com/blog/2014/transducers-explained-1/" target="_blank" rel="noopener">Transducers Explained: Part 1</a>》, 转载请与<a href="https://github.com/kevinbeaty" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。<br>
+对原文中出现的专业术语，在不妨碍理解的情况下采用原文单词。</p>
+<p>Transduce 相较于 Reduce 的改进，用一句话概括：在使用 Reduce 对每个元素归并之前，先对取出的每个元素进行转换。</p>
+<p>Transduce 的时间复杂度为 O(n), 传统 compose + reduce 的为O(mn)，m：compose 中包含 转变函数的个数，n：输入“数组”的长度。</p>
+<p>名词解释：</p>
+<ul>
+<li>
+<p>reduce：归并、折叠。</p>
+</li>
+<li>
+<p>reducer：用来进行 reduce 的二元函数。</p>
+</li>
+<li>
+<p>result：reducer 的首个参数，累积值。</p>
+</li>
+<li>
+<p>item：reducer 的第二个参数，reduce 数组遍历过程中的当前元素。</p>
+</li>
+<li>
+<p>transduce：transform + reduce。</p>
+</li>
+<li>
+<p>transducer：传入一个transformer，返回一个新的transformer。</p>
+</li>
+<li>
+<p>transformer：在 reduce 过程中，对当前处理元素进行转换的对象，其中包含三个方法： <code>{ init, step, result }</code></p>
+</li>
+<li>
+<p>xf：reduce 函数的首个参数，可以是 <em>reducer</em>，也可以是 transformer。</p>
+</li>
+<li>
+<p>stepper：等同于 reducer。</p>
+</li>
+</ul>
+<p>下面开始正文。</p>
+<hr>
+<p>本文使用 JavaScript 对 transducers 原理进行剖析。首先介绍数组的 reducing(归并) 过程，并定义用于 数据转换 的 transformers；然后逐步引入 transducers，并将其用于 transduce 中。文末会有总结、展望、一些补充链接，以及当前涉及 transducer 的一些库。</p>
+<p><strong>Transducers…</strong></p>
+<h2 id="shi-yao-shi-transducers">什么是 Transducers ？</h2>
+<p><a href="http://clojure.org/reference/transducers" target="_blank" rel="noopener">原文</a>解释如下</p>
+<blockquote>
+<p>Transducers 是可组合的算法变换。它们独立于输入和输出的上下文，并且作为一个独立的单元提供最基本的 转换(transformation)。由于 transducers 与输入和输出相解耦，所以它们可以用于许多不同的处理场景：collections, streams, channels, observables（集合、流、管道、观察者模式）等。Transducers 可以直接组合，与输入无关,且不会产生额外的中间变量。</p>
+</blockquote>
+<p><strong>嗯…</strong></p>
+<h2 id="huan-shi-bu-tai-li-jie">还是不太理解</h2>
+<p>我们来找一些相关的代码看看。当使用 transducers 时，所谓的 “算法变换” 就已经以函数的形式被定义好了（或至少部分定义好了）, transducer 类似于传入 reduce 的 <code>reducer</code>。<a href="http://clojure.org/reference/transducers" target="_blank" rel="noopener">Clojure 文档</a> 将这些 “算法变换” 称为 <em>reducing function</em>。这又是什么东西？好吧…… ，让我们从 <code>Array#reduce</code> 函数开始讲解。首先来看看 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener">MDN 的定义</a>。</p>
+<h2 id="reduce">Reduce</h2>
+<blockquote>
+<p>reduce() 方法将一个二元函数，作用于一个累积值、以及数组中的每个元素（按从左到右的顺序）， 最终将数组 reduce（归并、折叠）成一个单值。</p>
+</blockquote>
+<p>更多解释可以参考 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener">MDN 文档</a>（译者注：reduce 在某些语言中称为 foldl 左折叠，如 Haskell）。由于大家可能对 reduce 已经比较熟悉，这里将举几个例子来快速说明一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">result, item</span>) =&gt;</span> result + item;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mult = <span class="function">(<span class="params">result, item</span>) =&gt;</span> result * item;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 10 (=1+2+3+4)</span></span><br><span class="line"><span class="keyword">const</span> summed = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>].reduce(sum, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 24 (=1*2*3*4)</span></span><br><span class="line"><span class="keyword">const</span> multed = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>].reduce(mult, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>上述代码中的 <em>reducer</em>s 是 <code>sum</code> 和 <code>mult</code>。<em>reducer</em>s 连同初始值：1，一起传入 <code>reduce</code> 中。“输入源” 是数组 [2, 3, 4]，“输出源” 是通过 reduce 内部实现创建的新数组。</p>
+<p>关于 <code>reduce</code>， 有几个非常重要的点需要注意：</p>
+<ol>
+<li>归并从输入的初始值开始。</li>
+<li><em>reducer</em> 一次处理一个元素，操作过程如下：
+<ul>
+<li>使用传入 <code>reduce</code> 的初始值作为第一步的累积值</li>
+<li>当次操作的返回值作为下次操作的累积值</li>
+</ul>
+</li>
+<li>将最后一次计算结果作为整体的返回值。</li>
+</ol>
+<p>注意，在上述两例中，<em>reducer</em> 是一个二元函数。第一个参数为累积值，其值为由外部传入的初始值，或上次 <em>reducer</em> 的计算结果；第二个参数是在迭代过程中传入的单个元素。在本例中，reduce 对数组中的每个元素进行迭代，并进行归并处理。我们稍后会看到其他的迭代方式。我们使用 <em>reducer</em> 函数来描述 “转换的本质”。</p>
+<h2 id="transformer">Transformer</h2>
+<p>接下来，我们来明确 <em>transformer</em> 的归并过程：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> createTransformer = <span class="function"><span class="params">reducer</span> =&gt;</span> (&#123;</span><br><span class="line">  <span class="comment">// 1. 作为 reduce 的初始值</span></span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> <span class="number">1</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2. 每次输入一个元素，并将本次计算结果</span></span><br><span class="line">  <span class="comment">//    传给下次迭代的 reducer</span></span><br><span class="line">  step: reducer,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3. 将最后一次的计算结果作为最终输出</span></span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> result,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们创建一个对象来封装 reducer，并将其命名为 <code>step</code>；该对象还包含另外两个函数：1. <code>init</code> 函数用于初始化 transformer，<code>result</code> 函数用于将最后一次计算结果转换为最终输出。注意，本文将只关注 <code>step</code> 函数，<code>init</code> 和 <code>result</code> 函数将在后续文章中做深入分析。现在，你可以把它们当作管理 “转换” 生命周期的方法：<code>init</code> 用于初始化，<code>step</code> 用于迭代，<code>result</code> 用于输出整个结果。</p>
+<p>现在，我们来将刚定义的 transformer 运用到 reduce 中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(sum);</span><br><span class="line"><span class="keyword">const</span> output = input.reduce(xf.step, xf.init());</span><br><span class="line"><span class="comment">// output = 10 (=1+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(mult);</span><br><span class="line"><span class="keyword">const</span> output = input.reduce(xf.step, xf.init());</span><br><span class="line"><span class="comment">// output = 24 (=1*2*3*4)</span></span><br></pre></td></tr></table></figure>
+<p>我们的最终目标是将 转换 与输入、输出解耦，所以我们将 <code>reduce</code> 定义为函数的形式。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reduce = <span class="function">(<span class="params">xf, init, input</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> result = input.reduce(xf.step, init);</span><br><span class="line">  <span class="keyword">return</span> xf.result(result);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>为了使用 reduce ，我们向 reduce 传入 transformer、初始值和输入源。上述实现结合了 transformer 的 <code>step</code> 函数和数组的 reduce 函数，并将 <code>step</code> 函数的结果作为输出。这里的 reduce 内部实现仍然假设输入类型为数组。 稍后将去掉这个假设。</p>
+<p>我们显式地向 reduce 传入一个初始值，其实本可以使用 transformer 的 <code>init</code> 函数提供初始值，但考虑到 reduce 函数的灵活性，需要能够自定义初始值。在实践中，transformer 的 <code>init</code> 函数仅在 reduce 未提供初始值的情况下使用。</p>
+<p>新 reduce 函数的使用类似于之前的 reduce 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(sum);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, xf.init(), input);</span><br><span class="line"><span class="comment">// output = 10 (=1+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(mult);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, xf.init(), input);</span><br><span class="line"><span class="comment">// output = 24 (=1*2*3*4)</span></span><br></pre></td></tr></table></figure>
+<p>若想要改变初始值，还可以显式地向 reduce 传入初始值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(sum);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">2</span>, input);</span><br><span class="line"><span class="comment">// output = 11 (=2+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = createTransformer(mult);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">2</span>, input);</span><br><span class="line"><span class="comment">// output = 48 (=2*2*3*4)</span></span><br></pre></td></tr></table></figure>
+<p>reduce 函数现在需要一个 transformer。由于 transformer 的 <code>init</code> 函数未在 reduce 内部用到，且 <code>result</code> 通常是个恒等函数：一个直接返回输入本身的函数，我们将定义一个辅助函数，先将 <em>reducer</em> 转换为 transformer，然后将 transformer 传入 reduce 使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reduce = <span class="function">(<span class="params">xf, init, input</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> xf === <span class="string">'function'</span>)&#123;</span><br><span class="line">    <span class="comment">// 确保含有 transformer </span></span><br><span class="line">    xf = wrap(xf);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> result = input.reduce(xf.step, init);</span><br><span class="line">  <span class="keyword">return</span> xf.result(result);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> wrap = <span class="function"><span class="params">xf</span> =&gt;</span> (&#123;</span><br><span class="line">  <span class="comment">// 1. 我们会显式的传入一个 reduce 的初始值，</span></span><br><span class="line">  <span class="comment">//    所以这里不再需要内部的 init 函数</span></span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'init not supported'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2. 每次输入一个元素，并将本次计算结果</span></span><br><span class="line">  <span class="comment">//    传给下次迭代</span></span><br><span class="line">  step: xf,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3. 将最后一次的计算结果作为输出</span></span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> result,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们检查参数 <code>xf</code> 的类型是否为 function。若是，我们假定它是一个 reducer (step) 函数, 并调用 <code>wrap</code> 函数将其转换为 transformer。然后像之前一样调用 reduce 。</p>
+<p>现在已经可以直接向 reduce 传递 reducer 了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = reduce(sum, <span class="number">1</span>, input);</span><br><span class="line"><span class="comment">// output = 10 (=1+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = reduce(mult, <span class="number">2</span>, input);</span><br><span class="line"><span class="comment">// output = 48 (=2*2*3*4)</span></span><br></pre></td></tr></table></figure>
+<p><img src="./reduce.png" alt="reduce"></p>
+<p>但我们仍然可以向 reduce 传 transformers。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = wrap(sum);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">2</span>, input);</span><br><span class="line"><span class="comment">// output = 11 (=2+2+3+4)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> xf = wrap(mult);</span><br><span class="line"><span class="keyword">const</span> output = reduce(xf, <span class="number">1</span>, input);</span><br><span class="line"><span class="comment">// output = 24 (=1*2*3*4)</span></span><br></pre></td></tr></table></figure>
+<p>注意，这里在外部使用 <code>wrap</code> 将已有的 <code>reducer</code> 转换为 transformer。这在使用 transducers 会经常碰到：开发者将转换定义为简单的函数，transducers 库会自动将将其转换为 transformer。</p>
+<h2 id="bu-yi-yang-de-shu-zu-kao-bei">不一样的数组拷贝</h2>
+<p>目前，我们一直使用数字作为初始值和加法作为 <em>reducer</em> 。其实不一定非要这样，<code>reduce</code> 也可以将数组作为初始值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> append = <span class="function">(<span class="params">result, item</span>) =&gt;</span> result.push(item);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = reduce(append, [], input);</span><br><span class="line"><span class="comment">// output = [2, 3, 4]</span></span><br></pre></td></tr></table></figure>
+<p>我们定义了一个步进函数（stepper/reducer）<code>append</code>，用于将每个元素拷贝到新数组中，并返回该数组。借助 <code>append</code>， reduce 便可以创建一份数组的拷贝。</p>
+<p>上述操作是否够酷？或许算不上…。当你在将元素拷贝到数组前，先对它变换一下，情况开始变得有趣起来。</p>
+<h2 id="zui-gu-dan-de-shu-zi">最孤单的数字</h2>
+<p>（注：One is the loneliest number，一句英文歌词，引出 <code>plus1</code> 转换）</p>
+<p>假设我们想让每个元素加1，定义一个加1函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus1 = <span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>使用上面的函数创建一个 transformer，在 transformer 的 <code>step</code> 中，会对每个元素进行转换。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xfplus1 = &#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'init not needed'</span>); &#125;,</span><br><span class="line"></span><br><span class="line">  step: <span class="function">(<span class="params">result, item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> plus1ed = plus1(item);</span><br><span class="line">    <span class="keyword">return</span> append(result, plus1ed);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// step: (result, item) =&gt; append(result, plus1(item)),</span></span><br><span class="line">  </span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> result,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来使用 transformer 输出每步的计算结果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xf = xfplus1;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [3] (=append([], 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [3,4] (=append([3], 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [3,4,5] (=append([3,4], 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [3,4,5]</span></span><br></pre></td></tr></table></figure>
+<p>我们使用一个 transformer 来遍历元素：将每个元素加 1 后，添加到输出数组中。</p>
+<p>如果想计算数组元素加 1  后的总和，该怎么办呢？可以使用 reduce 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> output = reduce(sum, <span class="number">0</span>, output);</span><br><span class="line"><span class="comment">// 12 (=0+3+4+5)</span></span><br></pre></td></tr></table></figure>
+<p>上述方案虽然可行，但不幸的是，我们在获得最终答案的过程中，不得不创建一个中间数组。有更好的方案吗？</p>
+<p>答案是有的。再来看下上面的 <code>xfplus1</code> ，如果将 <code>append</code> 替换为 <code>sum</code> ，并且以 0 作为初始值，就可以定义一个直接对元素求和，但不会生成中间结果（数组）的 transformer。</p>
+<p>但是，有时我们想立即查看替换 <em>reducer</em> 后的结果，因为涉及到的改变仅仅只是将 <code>append</code> 替换成了 <code>sum</code>。因此我们希望有一个能够创建 转换 的函数，该函数不依赖于用于组合结果的 transformer。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducerPlus1 = <span class="function">(<span class="params">xf</span>) =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">  step: <span class="function">(<span class="params">result, item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> plus1ed = plus1(item);</span><br><span class="line">    <span class="keyword">return</span> xf.step(result, plus1ed);</span><br><span class="line">  &#125;,</span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> xf.result(result),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>该函数接受一个 transformer：<code>xf</code>，返回一个基于 <code>xf</code> 的新 transformer。新 transformer 将经过 <code>plus1</code> 转换的值传给 <code>xf</code>，相当于对 <code>xf</code> 进行代理。由于使用 <code>step</code> 函数可以完全定义这个转换，所以新 transformer 可以复用旧 transformer – <code>xf</code> 的 <code>init</code> 和 <code>result</code> 函数。新 transformer 每次对元素进行 <code>plus1</code> 转换后，利用转换的值对封装的 transformer 的 <code>step</code> 函数进行调用。</p>
+<h2 id="transducer">Transducer</h2>
+<p>我们刚刚创建了第一个 transducer：一个接受已有 transformer，返回新 transformer 的函数。transducer 会将一些额外的处理行为委托给新 transformer。</p>
+<p>我们来尝试一下，使用刚才的 transducer 来重新实现前面的例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus1;</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [3] (=append([], 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [3,4] (=append([3], 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [3,4,5] (=append([3,4], 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [3,4,5]</span></span><br></pre></td></tr></table></figure>
+<p>运行过程和结果与之前相同，很好。唯一的区别是 transformer：<code>xf</code> 的创建。我们使用 <code>wrap</code> 将 <code>append</code> 转换成名为 <code>stepper</code> 的 transformer，然后使用 transducer 封装这个 stepper 并返回一个 <code>plus1</code> 转换。然后我们就可以像从前一样使用转换函数：xf 对每个元素逐步操作，并得到结果。</p>
+<h2 id="zhong-jian-fu-zhu-yuan-su">中间辅助元素</h2>
+<p>从现在开始，事情变得有趣起来：我们可以用同一 transducer，仅在改变 stepper 和初始值的情况下，获得最终的累加和，而不需要中间辅助数组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stepper = wrap(sum);</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus1;</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 3 (=sum(0, 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// 7 (=sum(3, 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// 12 (=sum(7, 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// 12</span></span><br></pre></td></tr></table></figure>
+<p>不需要计算中间数组，一次遍历即可得到结果。<code>sum</code> 与 <code>append</code> 例子只有两处不同：</p>
+<ul>
+<li>创建 stepper 时，用 sum 代替 append 进行封装。</li>
+<li>初始值使用 0 代替 []。</li>
+</ul>
+<p>仅此两处差异，其他完全一样。</p>
+<p>需要注意的是，只有 <code>stepper</code> 转换知道 <code>result</code> 的数据类型。当封装 <code>sum</code> 时，<code>result</code> 的类型为数字，封装 <code>append</code> 时，<code>result</code> 的类型是数组。初始值类型与 stepper 的 <code>result</code> 参数类型相同。每次迭代元素的类型不限，因为 <code>stepper</code> 知道如何组合上次输出的结果和当前的元素，并返回一个新的组合的结果；本次输出结果可能会用于下次迭代中的组合，如此迭代循环。</p>
+<p>这些特性允许我们定义独立于输出的转换。</p>
+<h2 id="ke-neng-hui-xiang-1-yi-yang-zao-gao">可能会像 1 一样糟糕</h2>
+<p>(注：第二句歌词，Can be as bad as one，作者意思应该是，如果 <code>plus2</code> 还跟 <code>plus1</code> 一样从头重新实现一遍，就比较坑了)</p>
+<p>假如我们想要 <code>plus2</code>，需要做哪些改变呢？我们可以像定义 <code>transducerPlus1</code> 那样，定义一个新的 <code>transducerPlus2</code> 。看看 <code>transducerPlus1</code> 是如何实现的，并决定做哪些改变。但这样做违反了 DRY 原则。</p>
+<p>有更好的方案吗？</p>
+<p>实际上，除了将 transformer 中 <code>step</code> 函数的值由 <code>plus1</code> 替换为 <code>plus2</code> 之外，其他的没变。</p>
+<p>因此，可以将 <code>plus1</code> 提取出来，并将其作为 <code>f</code> 传进去。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="function"><span class="params">f</span> =&gt;</span> <span class="function"><span class="params">xf</span> =&gt;</span> (&#123;</span><br><span class="line">  init: <span class="function"><span class="params">()</span> =&gt;</span> xf.init(),</span><br><span class="line">  step: <span class="function">(<span class="params">result, item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> mapped = f(item);</span><br><span class="line">    <span class="keyword">return</span> xf.step(result, mapped);</span><br><span class="line">  &#125;,</span><br><span class="line">  result: <span class="function"><span class="params">result</span> =&gt;</span> xf.result(result),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们定义了 mapping transducer，我们使用它来单步执行转换过程。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus2 = <span class="function"><span class="params">input</span> =&gt;</span> input + <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [4] (=append([], 2+2)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [4,5] (=append([4], 3+2)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [4,5,6] (=append([4,5], 4+1)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [4,5,6]</span></span><br></pre></td></tr></table></figure>
+<p>本例相较于之前 <code>plus1</code> 和 <code>append</code> 的例子，唯一的区别在于使用 <code>map</code> 创建 transducer。我们可以类似地使用 <code>map(plus1)</code> 来创建 <code>plus1</code> transducer。<code>transducerPlus1</code> 虽然只是短暂的出现便被 <code>map(plus1)</code> 代替，但它对我们理解 transduce 的内部原理帮助很大。</p>
+<h2 id="transduce">Transduce</h2>
+<p>上面的例子讲解了如何使用 transducers 对一系列输入进行转换。我们来分解一下其中的步骤。</p>
+<p>首先调用一个包含 stepper 转换的 transducer 来初始化转换，并定义 transduce 的初始值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = wrap(append);</span><br><span class="line"><span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>xf.step</code> 来单步处理每个元素。我们使用初始值作为传入 step 函数的第一个 <code>result</code> 参数，上一个 step 函数的返回值供后面的 step 函数迭代使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> result = xf.step(init, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [3] (=append([], 2+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [3,4] (=append([3], 3+1)))</span></span><br><span class="line"></span><br><span class="line">result = xf.step(result, <span class="number">4</span>);</span><br><span class="line"><span class="comment">// [3,4,5] (=append([3,4], 4+1)))</span></span><br></pre></td></tr></table></figure>
+<p>我们使用 <code>xf.result</code> 输出最终结果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> output = xf.result(result);</span><br><span class="line"><span class="comment">// [3,4,5]</span></span><br></pre></td></tr></table></figure>
+<p>可能你已经注意到了，这与上面定义的 <code>reduce</code> 实现非常相似。事实上确实是这样。我们可以将这个过程封装成一个新的函数 <code>transduce</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transduce = <span class="function">(<span class="params">transducer, stepper, init, input</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> stepper === <span class="string">'function'</span>)&#123;</span><br><span class="line">    <span class="comment">// 确保迭代时，存在可用的 transformer</span></span><br><span class="line">    stepper = wrap(stepper);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 传入 stepper 来创建 transformer</span></span><br><span class="line">  <span class="keyword">const</span> xf = transducer(stepper);</span><br><span class="line">  <span class="comment">// xf 是一个 transformer</span></span><br><span class="line">  <span class="comment">// 现在可以使用上面定义的 reduce 来迭代并变换输入</span></span><br><span class="line">  <span class="keyword">return</span> reduce(xf, init, input);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>就像 reduce，我们需要确保 stepper 是一个 transformer。然后通过向 transducer 传入 stepper 来创建新的 transformer。 最后，我们使用包含新的 transformer 的 reduce 来进行迭代和转换数据。也就是说 transducer 的函数类型为：transformer -&gt; transformer。</p>
+<p>我们来实践一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [3,4,5]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [4,5,6]</span></span><br></pre></td></tr></table></figure>
+<p>上述两例的唯一区别是传递给 map 的函数不同。</p>
+<p>我们来尝试一下不同的步进函数（step function）和初始值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = sum;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 12 (=3+4+5)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = sum;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 15 (=4+5+6)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus1);</span><br><span class="line"><span class="keyword">const</span> stepper = mult;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 60 (=3*4*5)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transducer = map(plus2);</span><br><span class="line"><span class="keyword">const</span> stepper = mult;</span><br><span class="line"><span class="keyword">const</span> init = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// 120 (=4*5*6)</span></span><br></pre></td></tr></table></figure>
+<p><img src="./transduce.png" alt="transduce"></p>
+<p>这里我们只是改变了 stepper 和初始值，便可以得到不同的结果。我们可以在不依赖中间结果的情况下，遍历一次便可求得累加和或乘积。</p>
+<h2 id="zu-he">组合</h2>
+<p>如果我们想加3，该怎么办呢？我们可以定义 <code>plus3</code> 并且使用 <code>map</code>，但利用 transducers 的一个特性来进行优化。</p>
+<p>事实上，可以通过已有的两个函数：<code>plus1</code> 和 <code>plus2</code>，来定义 <code>plus3</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus3 = <span class="function"><span class="params">item</span> =&gt;</span> puls2(plus1(item));</span><br></pre></td></tr></table></figure>
+<p>或许你已经看出来，其实这就是<a href="https://en.wikipedia.org/wiki/Function_composition_%28computer_science%29" target="_blank" rel="noopener">函数组合</a>。让我们通过函数组合来重新定义 <code>plus3</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose2 = <span class="function">(<span class="params">fn1, fn2</span>) =&gt;</span> <span class="function"><span class="params">item</span> =&gt;</span> fn1(fn2(item));</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> plus3 = compose2(plus1, plus2);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = [plus3(<span class="number">2</span>), plus3(<span class="number">3</span>), plus3(<span class="number">4</span>)];</span><br><span class="line"><span class="comment">// [5,6,7]</span></span><br></pre></td></tr></table></figure>
+<p><code>compose2</code> 用于组合两个函数，调用顺序从右向左，看一下 <code>compose2</code> 的实现就可以知道为什么调用顺序是从右向左的了。最后一个 function 接受传入参数，返回结果作为下个 function 的输入。如此迭代，直到输出结果。</p>
+<p>让我们使用 <code>compose2</code> 来定义一个对每个迭代元素加 3 的 transducer，该 transducer 由 <code>plus1</code> 和 <code>plus2</code> 组合而成。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducerPlus3 = map(compose2(plus1, plus2));</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus3;</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [5,6,7]</span></span><br></pre></td></tr></table></figure>
+<p>我们对已有的函数：<code>plus1</code> 和 <code>plus2</code> 进行组合，生成传入 <code>map</code> 的函数，而不是从头重新实现一遍 <code>plus3</code>。</p>
+<p>为什么要告诉你上面这些呢？实际上，我们还可以通过组合其他的 transducers 来创建新的 transducers。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducerPlus1 = map(plus1);</span><br><span class="line"><span class="keyword">const</span> transducerPlus2 = map(plus2);</span><br><span class="line"><span class="keyword">const</span> transducerPlus3 = compose2(transducerPlus1, transducerPlus2);</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus3;</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br><span class="line"><span class="comment">// [5,6,7]</span></span><br></pre></td></tr></table></figure>
+<p>新组合出来的 transducer 又可以用于组合其他的 transducer 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transducerPlus1 = map(plus1);</span><br><span class="line"><span class="keyword">const</span> transducerPlus2 = map(plus2);</span><br><span class="line"><span class="keyword">const</span> transducerPlus3 = compose2(transducerPlus1, transducerPlus2);</span><br><span class="line"><span class="keyword">const</span> transducerPlus4 = compose2(transducerPlus3, transducerPlus1);</span><br><span class="line"><span class="keyword">const</span> transducer = transducerPlus4;</span><br><span class="line"><span class="keyword">const</span> stepper = append;</span><br><span class="line"><span class="keyword">const</span> init = [];</span><br><span class="line"><span class="keyword">const</span> input = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> output = transduce(transducer, stepper, init, input);</span><br></pre></td></tr></table></figure>
+<p><img src="./compose_transducers.png" alt="compose_transducers"></p>
+<p>再次注意，这里与本节前面的例子的唯一区别仅仅在于 transducer 的创建，其它都一样。</p>
+<p>之所以可以使用 组合，是因为 transducers 可以接受已有 transformer，返回新的 transformer。也即 transducer 的输入与输出类型相同，且为单输入单输出的函数。只要符合上述条件，便可以使用函数组合来创建接受相同类型参数的新函数。</p>
+<p>由上可得，transducers 是一种 “可组合的算法变换”。这在实际开发中非常有用：可以将新的变换分解为一系列较小的变换，然后将它们通过 <code>compose</code> 或 <code>pipe</code> 以流水线（ pipeline）的组合起来。后面后有更多的例子进行演示。</p>
+<p>事实上，虽然函数组合的顺序从右向左，而转换本身是自左向右的（译者注：这也是理解 transduce 的难点之一，理解了这个，也就基本理解了 transduce。可以通过单个 transducer 和 transformer 的组合，来理解转换的调用顺序。transduce 本质上做的事情是 <strong>在对每个元素进行归并之前先对其进行转换</strong> ，将这句话在自己心里默念三遍：），这也是 transduce 区别于 reduce 的“唯一”不同点）。</p>
+<p>在上面的 <code>transducersPlus4</code> 示例中，每个元素先进行 <code>plus3</code> 转换，然后进行 <code>plus1</code> 转换。</p>
+<p>虽然在本例中 transducers 的调用顺序对结果没有影响，但是<strong>从左向右</strong>的变换顺序还是需要牢记在心。变换的调用顺序让你在阅读代码时更容易理解，因为它与你的阅读顺序是一致的。</p>
+<h2 id="part-1-zong-jie">part 1 总结</h2>
+<p>Transducers 将 “可组合的算法转换” 抽象出来，使其独立于输入、输出，甚至迭代的整个过程。</p>
+<p>本文演示了如何使用 transducers 来抽象算法转换，transducer 将一个 transformer 转换为另一个 transformer。transformer 可以用于 transduce，进行迭代和转换输入源。</p>
+<p><a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore.js</a> 或 <a href="https://lodash.com/" target="_blank" rel="noopener">Lo-Dash</a> 在进行数组或对象计算时，往往会产生中间结果。而 transducers 以一系列函数的方式定义转换，类似于 reduce 的处理方式：将初始值作为首次迭代的累积值，使用累积值和当前元素进行计算，返回转换后的累积值，并将其作为下次迭代的累积值参数。一旦将这些转换从数据中抽象出来，就可以将相同的转换应用于不同的处理过程，这些处理过程以某个初始的累积值开始，不断对变换后的元素累积。</p>
+<p>我们已经展示了同一 transducer 可以应用于不同的 “输出源”，只需改变初始累积值和 reducer 函数。这种抽象的好处之一为：可以只通过一轮计算便得到结果，且不会产生中间辅助数组。</p>
+<p>尽管没有明确说明，我们还是展示了 transducer 是与迭代过程及输入源解耦的。在迭代过程中，我们使用相同的 transducer 对元素进行转换，并将转换结果传给 step 函数，并且使用数组的 reduce 从数组中拉取待处理的数据元素。</p>
+<h2 id="huan-xiang-liao-jie-geng-duo">还想了解更多！</h2>
+<p><a href="http://simplectic.com/blog/2014/transducers-explained-pipelines/" target="_blank" rel="noopener">看这里</a> ，之后的文章中将会在本文基础上探讨更多主题，例如：transducers 并不一定需要每步都输出元素；并且迭代过程可以提前终止，并返回终止前已经归并的结果。本文只讨论了 step，未讨论 init 和 result，将来也会进行补充。</p>
+<p>我们还将会学习到，输入源可以是任意产生一系列值的模型：惰性列表，不确定的序列生成器，CSP（通信顺序进程），<a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a><br>
+lazy lists, indefinite sequence generation, CSP[<a href="http://phuu.net/2014/08/31/csp-and-transducers.html" target="_blank" rel="noopener">http://phuu.net/2014/08/31/csp-and-transducers.html</a>), [push streams][12], <a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a>, iterators, generators, immutable-js data structures, 等等。</p>
+<h2 id="deng-bu-ji-liao">等不及了！</h2>
+<p>在此期间，可以看看 <a href="http://clojure.org/transducers" target="_blank" rel="noopener">Clojure文档</a>, 或者看看 <a href="https://www.youtube.com/watch?v=6mTbuzafcII" target="_blank" rel="noopener">这个视频</a> 或 <a href="http://phuu.net/2014/08/31/csp-and-transducers.html" target="_blank" rel="noopener">这篇文章</a>。其他更多更好的介绍，可以自行 Google 。</p>
+<p>想要立刻实践一下？已经有三个库实现了相似的API：<a href="https://github.com/cognitect-labs/transducers-js" target="_blank" rel="noopener">transducers-js</a>、<a href="https://github.com/jlongster/transducers.js" target="_blank" rel="noopener">transducers.js</a>、<a href="https://github.com/ramda/ramda/blob/v0.22.1/src/transduce.js" target="_blank" rel="noopener">ramda</a>(译者注：ramda 中 transducer 部分也是本文作者写的）。本文是按照 transducers-js 的实现进行讲解和演示的，但这些概念同样适用于 transducers.js。</p>
+<p><a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore.js</a> 的爱好者？可以查看 <a href="http://simplectic.com/projects/underarm/" target="_blank" rel="noopener">underarm</a>，基于 <a href="https://github.com/transduce/transduce" target="_blank" rel="noopener">transduce</a> 库（译者注：本文作者写的库）写的。</p>
+<p>怎样将 transducer 应用到 <a href="https://github.com/transduce/transduce-stream" target="_blank" rel="noopener">Node.js streams</a> 中呢？我们还在探索。</p>
+<p>希望得到新文章的通知？可以在 Twitter 上关注 <a href="https://twitter.com/simplectic" target="_blank" rel="noopener">simplectic</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/23/Ramda-map-filter-reduce-transduce/" rel="prev" title="Ramda 源码分析（二） map reduce filter">
+      <i class="fa fa-chevron-left"></i> Ramda 源码分析（二） map reduce filter
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/01/Transducers-Explained-Pipelines/" rel="next" title="Transducers Explained: Pipelines 中文">
+      Transducers Explained: Pipelines 中文 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shi-yao-shi-transducers"><span class="nav-number">1.</span> <span class="nav-text">什么是 Transducers ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#huan-shi-bu-tai-li-jie"><span class="nav-number">2.</span> <span class="nav-text">还是不太理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce"><span class="nav-number">3.</span> <span class="nav-text">Reduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transformer"><span class="nav-number">4.</span> <span class="nav-text">Transformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bu-yi-yang-de-shu-zu-kao-bei"><span class="nav-number">5.</span> <span class="nav-text">不一样的数组拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zui-gu-dan-de-shu-zi"><span class="nav-number">6.</span> <span class="nav-text">最孤单的数字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transducer"><span class="nav-number">7.</span> <span class="nav-text">Transducer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zhong-jian-fu-zhu-yuan-su"><span class="nav-number">8.</span> <span class="nav-text">中间辅助元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ke-neng-hui-xiang-1-yi-yang-zao-gao"><span class="nav-number">9.</span> <span class="nav-text">可能会像 1 一样糟糕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transduce"><span class="nav-number">10.</span> <span class="nav-text">Transduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zu-he"><span class="nav-number">11.</span> <span class="nav-text">组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-1-zong-jie"><span class="nav-number">12.</span> <span class="nav-text">part 1 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#huan-xiang-liao-jie-geng-duo"><span class="nav-number">13.</span> <span class="nav-text">还想了解更多！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deng-bu-ji-liao"><span class="nav-number">14.</span> <span class="nav-text">等不及了！</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wangzengdi</p>
+  <div class="site-description" itemprop="description">FE@Meituan.com</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangzengdi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
