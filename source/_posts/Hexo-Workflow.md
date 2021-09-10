@@ -47,3 +47,7 @@ More info: [Deployment](https://hexo.io/docs/deployment.html)
 
 * 官方自动化部署文档 -- Hexo + Travis: https://hexo.io/docs/github-pages.html
 * 空白页问题的解决方案：http://magicse7en.github.io/2016/03/27/travis-ci-auto-deploy-hexo-github/
+
+自动化部署工作流：
+
+本地开发使用 hexo-source 分支，开发完成后，推导 github 仓库，会触发自动化部署，自动部署在 master 分支上生成最新的文档并部署。
