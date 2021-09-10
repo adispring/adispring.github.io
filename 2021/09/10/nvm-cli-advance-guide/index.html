@@ -20,18 +20,19 @@
     var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="FE@Meituan.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wangzengdi&#39;s Blog">
-<meta property="og:url" content="https://adispring.github.io/archives/2017/10/index.html">
+  <meta name="description" content="本文整理了一些 nvm 不常用、但非常有用的命令。主要分为以下几大类：  reinstall-packages             Reinstall global npm packages contained in  to current version  由于使用 npm install -g  安装全局 npm 包，是安装到当前使用的版本的 node 下面，在安装新版本的 node 或者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nvm 高级命令指南">
+<meta property="og:url" content="https://adispring.github.io/2021/09/10/nvm-cli-advance-guide/index.html">
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
-<meta property="og:description" content="FE@Meituan.com">
+<meta property="og:description" content="本文整理了一些 nvm 不常用、但非常有用的命令。主要分为以下几大类：  reinstall-packages             Reinstall global npm packages contained in  to current version  由于使用 npm install -g  安装全局 npm 包，是安装到当前使用的版本的 node 下面，在安装新版本的 node 或者">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-09-10T02:43:42.877Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wangzengdi&#39;s Blog">
-<meta name="twitter:description" content="FE@Meituan.com">
+<meta name="twitter:title" content="nvm 高级命令指南">
+<meta name="twitter:description" content="本文整理了一些 nvm 不常用、但非常有用的命令。主要分为以下几大类：  reinstall-packages             Reinstall global npm packages contained in  to current version  由于使用 npm install -g  安装全局 npm 包，是安装到当前使用的版本的 node 下面，在安装新版本的 node 或者">
 
-<link rel="canonical" href="https://adispring.github.io/archives/2017/10/">
+<link rel="canonical" href="https://adispring.github.io/2021/09/10/nvm-cli-advance-guide/">
 
 
 <script id="page-configurations">
@@ -39,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | wangzengdi's Blog</title>
+  <title>nvm 高级命令指南 | wangzengdi's Blog</title>
   
 
 
@@ -143,71 +144,83 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">OK! 32 posts in total. Keep on posting.</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2021/09/10/nvm-cli-advance-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nvm 高级命令指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-10 10:30:56 / Modified: 02:43:42" itemprop="dateCreated datePublished" datetime="2021-09-10T10:30:56+00:00">2021-09-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2017</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2017-10-21T07:25:36+00:00"
-              content="2017-10-21">
-          10-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2017/10/21/What-Function-Should-I-Use/" itemprop="url">
-            <span itemprop="name">Ramda 函数简介</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2017-10-15T11:52:43+00:00"
-              content="2017-10-15">
-          10-15
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2017/10/15/Haskell-Type-and-TypeClass/" itemprop="url">
-            <span itemprop="name">Haskell: Type and TypeClass</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        <p>本文整理了一些 nvm 不常用、但非常有用的命令。主要分为以下几大类：</p>
+<ul>
+<li>reinstall-packages <version>            Reinstall global <code>npm</code> packages contained in <version> to current version</version></version></li>
+</ul>
+<p>由于使用 npm install -g <package> 安装全局 npm 包，是安装到当前使用的版本的 node 下面，在安装新版本的 node 或者 切换 node 版本后，之前安装的全局 npm 包往往就不生效了，比如，切换 node 版本后，<code>yarn</code> 命令失效。</package></p>
+<p>这时可以用 <code>nvm reinstall-packages &lt;version&gt;</code> 来将之前 node 下面所有的全局 npm 包都重新安装到当前使用的 node 版本中。</p>
+<p>若想查看当前 node 版本中都安装了哪些全局 npm 包，可以使用 <code>npm ls -g</code> 来查看。</p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/10/Hexo-Workflow/" rel="prev" title="Hexo Workflow">
+      <i class="fa fa-chevron-left"></i> Hexo Workflow
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 

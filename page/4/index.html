@@ -149,6 +149,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2016/10/23/Ramda-map-filter-reduce-transduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/23/Ramda-map-filter-reduce-transduce/" class="post-title-link" itemprop="url">Ramda 源码分析（二） map reduce filter</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-23 09:43:20" itemprop="dateCreated datePublished" datetime="2016-10-23T09:43:20+00:00">2016-10-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-10 02:43:42" itemprop="dateModified" datetime="2021-09-10T02:43:42+00:00">2021-09-10</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>map、reduce 和 filter 是函数式编程中用到频率非常高的三个函数，对类Array 类型操作非常方便，被称为 FP 中的三板斧。还有几个相关的稍微复杂的函数也一并介绍： chain（flattenMap）、transduce、into、reduced。</p>
+<h2 id="tu-jie-map-reduce-filter">图解 map/reduce/filter</h2>
+<p>虽然这是 <a href="http://underscorejs.org/" target="_blank" rel="noopener">Underscore</a> 方式的写法，但不影响对三个概念的理解.</p>
+<p><img src="./mapFilterReduce.jpg" alt="map/reduce/filter"></p>
+<h2 id="yuan-ma-fen-xi">源码分析</h2>
+<ul>
+<li>
+<p>map</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = _curry2(_dispatchable(<span class="string">'map'</span>, _xmap, <span class="function"><span class="keyword">function</span> <span class="title">map</span>(<span class="params">fn, functor</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (<span class="built_in">Object</span>.prototype.toString.call(functor)) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'[object Function]'</span>:</span><br><span class="line">      <span class="keyword">return</span> curryN(functor.length, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> fn.call(<span class="keyword">this</span>, functor.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>));</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'[object Object]'</span>:</span><br><span class="line">      <span class="keyword">return</span> _reduce(<span class="function"><span class="keyword">function</span>(<span class="params">acc, key</span>) </span>&#123;</span><br><span class="line">        acc[key] = fn(functor[key]);</span><br><span class="line">        <span class="keyword">return</span> acc;</span><br><span class="line">      &#125;, &#123;&#125;, keys(functor));</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> _map(fn, functor);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2016/10/21/Ramda-SourceCode-Analyze/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,7 +255,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-25 10:51:10" itemprop="dateModified" datetime="2021-07-25T10:51:10+00:00">2021-07-25</time>
+                <time title="Modified: 2021-09-10 02:43:42" itemprop="dateModified" datetime="2021-09-10T02:43:42+00:00">2021-09-10</time>
               </span>
 
           
@@ -331,7 +406,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
