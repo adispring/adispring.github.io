@@ -20,23 +20,19 @@
     var CONFIG = {"hostname":"adispring.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
+  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Debug Nodejs in Spacemacs">
-<meta property="og:url" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/index.html">
+<meta property="og:title" content="Hexo Workflow">
+<meta property="og:url" content="https://adispring.github.io/2021/11/15/Hexo-Workflow/index.html">
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
-<meta property="og:description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/open-nodejs-repl.png">
-<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/import-lib.png">
-<meta property="og:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/eval.png">
-<meta property="og:updated_time" content="2021-11-15T07:34:03.481Z">
+<meta property="og:updated_time" content="2021-11-15T07:34:03.501Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Debug Nodejs in Spacemacs">
-<meta name="twitter:description" content="在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 index.js），另一个用来调试（如运行 node index.js），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。 nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。 这里有两条命令比较重要： 12nodejs-re">
-<meta name="twitter:image" content="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/open-nodejs-repl.png">
+<meta name="twitter:title" content="Hexo Workflow">
+<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 
-<link rel="canonical" href="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/">
+<link rel="canonical" href="https://adispring.github.io/2021/11/15/Hexo-Workflow/">
 
 
 <script id="page-configurations">
@@ -49,7 +45,7 @@
   };
 </script>
 
-  <title>Debug Nodejs in Spacemacs | wangzengdi's Blog</title>
+  <title>Hexo Workflow | wangzengdi's Blog</title>
   
 
 
@@ -155,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/07/22/Debug-nodejs-in-Spacemacs/">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2021/11/15/Hexo-Workflow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Debug Nodejs in Spacemacs
+          Hexo Workflow
         </h1>
 
         <div class="post-meta">
@@ -178,23 +174,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2017-07-22 15:04:44" itemprop="dateCreated datePublished" datetime="2017-07-22T15:04:44+00:00">2017-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-15 07:34:03" itemprop="dateModified" datetime="2021-11-15T07:34:03+00:00">2021-11-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Emacs/" itemprop="url" rel="index"><span itemprop="name">Emacs</span></a>
-                </span>
+              <time title="Created: 2021-11-15 07:34:03" itemprop="dateCreated datePublished" datetime="2021-11-15T07:34:03+00:00">2021-11-15</time>
             </span>
 
           
@@ -208,41 +188,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在调试代码时，往往会开两个窗口进行操作，一个用来编写代码（代码文件如 <code>index.js</code>），另一个用来调试（如运行 <code>node index.js</code>），这样会频繁的在编辑器和调试窗口之间切换；而且使用 node cli 会运行整个文件，而往往我们只想看文件中的部分内容。</p>
-<p>nodejs-repl 库相当于在编辑器和 repl 之间做了桥接，类似于 tmux。</p>
-<p>这里有两条命令比较重要：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodejs-repl-send-region ;; 用于将选中的区域发送至 repl 中，但不求值，在引入库时比较有用</span><br><span class="line">nodejs-repl-send-last-sexp ;; 将当前行光标前面的内容发送至 repl，并进行运算</span><br></pre></td></tr></table></figure>
-<p>具体步骤：</p>
-<h2 id="yi-pei-zhi">一、配置</h2>
-<ol>
-<li>
-<p>在 <code>~/.spacemacs</code> <code>dotspacemacs-additional-packages '(nodejs-repl)</code> 中添加 <code>nodejs-repl</code></p>
-</li>
-<li>
-<p>在 <code>dotspacemacs/user-config ()</code> 中添加快捷键</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(add-hook &apos;js-mode-hook</span><br><span class="line">          (lambda ()</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-x C-e&quot;) &apos;nodejs-repl-send-last-sexp)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-r&quot;) &apos;nodejs-repl-send-region)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-l&quot;) &apos;nodejs-repl-load-file)</span><br><span class="line">            (define-key js-mode-map (kbd &quot;C-c C-z&quot;) &apos;nodejs-repl-switch-to-repl)))</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>运行 <code>M-m f e R</code>，安装 nodejs-repl</li>
-</ol>
-<h2 id="er-diao-shi">二、调试</h2>
-<ol>
-<li>使用 emacs 打开待调试文件；使用 <code>M-x</code> 运行命令 <code>nodejs-repl</code>，便会在编辑窗口相同 frame 里打开 nodejs 的 repl：</li>
-</ol>
-<p><img src="./open-nodejs-repl.png" alt="open-nodejs-repl"></p>
-<ol start="2">
-<li>选中文中的第三方库，使用 <code>nodejs-repl-send-region</code> 命令将其引入 repl 中。（注意，不能使用 <code>nodejs-repl-send-last-sexp</code>！）</li>
-</ol>
-<p><img src="./import-lib.png" alt="import-lib"></p>
-<ol start="3">
-<li>对于需要调试的代码行，运行 <code>nodejs-repl-send-last-sexp</code> ，便会将代码加入 repl 中，并进行运算：</li>
-</ol>
-<p><img src="./eval.png" alt="eval"></p>
-<h2 id="san-todo">三、TODO</h2>
-<ol>
-<li>快捷键配置在 js2-mode 中只能部分起作用，js-mode 中都可以。需要研究一下 emacs 快捷键配置和优先级。</li>
-</ol>
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h3 id="generate-amp-deploy-together">Generate &amp; Deploy together</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h3 id="hexo-zi-dong-hua-bu-shu">Hexo 自动化部署</h3>
+<ul>
+<li>官方自动化部署文档 – Hexo + Travis: <a href="https://hexo.io/docs/github-pages.html" target="_blank" rel="noopener">https://hexo.io/docs/github-pages.html</a></li>
+<li>空白页问题的解决方案：<a href="http://magicse7en.github.io/2016/03/27/travis-ci-auto-deploy-hexo-github/" target="_blank" rel="noopener">http://magicse7en.github.io/2016/03/27/travis-ci-auto-deploy-hexo-github/</a></li>
+</ul>
+<p>自动化部署工作流：</p>
+<p>本地开发使用 hexo-source 分支，开发完成后，推导 github 仓库，会触发自动化部署，自动部署在 master 分支上生成最新的文档并部署。</p>
 
     </div>
 
@@ -258,13 +226,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/06/28/Why-Curry-Helps/" rel="prev" title="为什么柯里化有帮助">
-      <i class="fa fa-chevron-left"></i> 为什么柯里化有帮助
+    <a href="/2021/09/10/nvm-cli-advance-guide/" rel="prev" title="nvm 高级命令指南">
+      <i class="fa fa-chevron-left"></i> nvm 高级命令指南
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2017/07/29/Product-Softwares-in-nix/" rel="next" title="Product Softwares in *nix">
-      Product Softwares in *nix <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -323,7 +288,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yi-pei-zhi"><span class="nav-number">1.</span> <span class="nav-text">一、配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#er-diao-shi"><span class="nav-number">2.</span> <span class="nav-text">二、调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#san-todo"><span class="nav-number">3.</span> <span class="nav-text">三、TODO</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#quick-start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate-amp-deploy-together"><span class="nav-number">1.5.</span> <span class="nav-text">Generate &amp; Deploy together</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-zi-dong-hua-bu-shu"><span class="nav-number">1.6.</span> <span class="nav-text">Hexo 自动化部署</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
