@@ -191,3 +191,140 @@ export {
 ```
 
 通过展示三个库对外暴露接口的 index.ts 文件，我们就可以很清晰看到它们暴露的内容，以及依赖关系。
+
+我们再来看一下如何使用 装饰器、class 和 TypeScript 来写 Vue 组件：
+
+```ts
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class YourComponent extends Vue {
+  @Prop({ default: 'default value' }) readonly title!: string
+
+  message: string = 'hello, world';
+
+  onClick(): void {}
+}
+```
+
+`YourComponent extends Vue` 就可以继承 Vue 上面所有的属性和方法，方法包括实例方法和静态方法，YourComponent 可以直接通过 this 调用 Vue 上的实例方法，在开发时，编辑器也会自动提示。我们来看一下 Vue 的类型声明：
+
+下面是 Vue 实例上的属性和方法的声明
+
+```ts
+export interface Vue {
+  readonly $el: Element;
+  readonly $options: ComponentOptions<Vue>;
+  readonly $parent: Vue;
+  readonly $root: Vue;
+  readonly $children: Vue[];
+  readonly $refs: { [key: string]: Vue | Element | (Vue | Element)[] | undefined };
+  readonly $slots: { [key: string]: VNode[] | undefined };
+  readonly $scopedSlots: { [key: string]: NormalizedScopedSlot | undefined };
+  readonly $isServer: boolean;
+  readonly $data: Record<string, any>;
+  readonly $props: Record<string, any>;
+  readonly $ssrContext: any;
+  readonly $vnode: VNode;
+  readonly $attrs: Record<string, string>;
+  readonly $listeners: Record<string, Function | Function[]>;
+
+  $mount(elementOrSelector?: Element | string, hydrating?: boolean): this;
+  $forceUpdate(): void;
+  $destroy(): void;
+  $set: typeof Vue.set;
+  $delete: typeof Vue.delete;
+  $watch(
+    expOrFn: string,
+    callback: (this: this, n: any, o: any) => void,
+    options?: WatchOptions
+  ): (() => void);
+  $watch<T>(
+    expOrFn: (this: this) => T,
+    callback: (this: this, n: T, o: T) => void,
+    options?: WatchOptions
+  ): (() => void);
+  $on(event: string | string[], callback: Function): this;
+  $once(event: string | string[], callback: Function): this;
+  $off(event?: string | string[], callback?: Function): this;
+  $emit(event: string, ...args: any[]): this;
+  $nextTick(callback: (this: this) => void): void;
+  $nextTick(): Promise<void>;
+  $createElement: CreateElement;
+}
+```
+
+下面是 Vue 的静态属性和静态方法，也即 Vue 构造函数上的属性和方法：
+
+```ts
+export interface VueConstructor<V extends Vue = Vue> {
+  new <Data = object, Methods = object, Computed = object, PropNames extends string = never>(options?: ThisTypedComponentOptionsWithArrayProps<V, Data, Methods, Computed, PropNames>): CombinedVueInstance<V, Data, Methods, Computed, Record<PropNames, any>>;
+  // ideally, the return type should just contain Props, not Record<keyof Props, any>. But TS requires to have Base constructors with the same return type.
+  new <Data = object, Methods = object, Computed = object, Props = object>(options?: ThisTypedComponentOptionsWithRecordProps<V, Data, Methods, Computed, Props>): CombinedVueInstance<V, Data, Methods, Computed, Record<keyof Props, any>>;
+  new (options?: ComponentOptions<V>): CombinedVueInstance<V, object, object, object, Record<keyof object, any>>;
+
+  extend<Data, Methods, Computed, PropNames extends string = never>(options?: ThisTypedComponentOptionsWithArrayProps<V, Data, Methods, Computed, PropNames>): ExtendedVue<V, Data, Methods, Computed, Record<PropNames, any>>;
+  extend<Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<V, Data, Methods, Computed, Props>): ExtendedVue<V, Data, Methods, Computed, Props>;
+  extend<PropNames extends string = never>(definition: FunctionalComponentOptions<Record<PropNames, any>, PropNames[]>): ExtendedVue<V, {}, {}, {}, Record<PropNames, any>>;
+  extend<Props>(definition: FunctionalComponentOptions<Props, RecordPropsDefinition<Props>>): ExtendedVue<V, {}, {}, {}, Props>;
+  extend(options?: ComponentOptions<V>): ExtendedVue<V, {}, {}, {}, {}>;
+
+  nextTick<T>(callback: (this: T) => void, context?: T): void;
+  nextTick(): Promise<void>
+  set<T>(object: object, key: string | number, value: T): T;
+  set<T>(array: T[], key: number, value: T): T;
+  delete(object: object, key: string | number): void;
+  delete<T>(array: T[], key: number): void;
+
+  directive(
+    id: string,
+    definition?: DirectiveOptions | DirectiveFunction
+  ): DirectiveOptions;
+  filter(id: string, definition?: Function): Function;
+
+  component(id: string): VueConstructor;
+  component<VC extends VueConstructor>(id: string, constructor: VC): VC;
+  component<Data, Methods, Computed, Props>(id: string, definition: AsyncComponent<Data, Methods, Computed, Props>): ExtendedVue<V, Data, Methods, Computed, Props>;
+  component<Data, Methods, Computed, PropNames extends string = never>(id: string, definition?: ThisTypedComponentOptionsWithArrayProps<V, Data, Methods, Computed, PropNames>): ExtendedVue<V, Data, Methods, Computed, Record<PropNames, any>>;
+  component<Data, Methods, Computed, Props>(id: string, definition?: ThisTypedComponentOptionsWithRecordProps<V, Data, Methods, Computed, Props>): ExtendedVue<V, Data, Methods, Computed, Props>;
+  component<PropNames extends string>(id: string, definition: FunctionalComponentOptions<Record<PropNames, any>, PropNames[]>): ExtendedVue<V, {}, {}, {}, Record<PropNames, any>>;
+  component<Props>(id: string, definition: FunctionalComponentOptions<Props, RecordPropsDefinition<Props>>): ExtendedVue<V, {}, {}, {}, Props>;
+  component(id: string, definition?: ComponentOptions<V>): ExtendedVue<V, {}, {}, {}, {}>;
+
+  use<T>(plugin: PluginObject<T> | PluginFunction<T>, options?: T): VueConstructor<V>;
+  use(plugin: PluginObject<any> | PluginFunction<any>, ...options: any[]): VueConstructor<V>;
+  mixin(mixin: VueConstructor | ComponentOptions<Vue>): VueConstructor<V>;
+  compile(template: string): {
+    render(createElement: typeof Vue.prototype.$createElement): VNode;
+    staticRenderFns: (() => VNode)[];
+  };
+
+  observable<T>(obj: T): T;
+
+  util: {
+    warn(msg: string, vm?: InstanceType<VueConstructor>): void;
+  };
+
+  config: VueConfiguration;
+  version: string;
+}
+```
+
+## 装饰器如何将 vue class 转换为 vue 配置对象
+
+下面我们讲一下 vue 的装饰器是如何将 vue class 形式的组件，转换为 vue 引擎能识别的传统的配置对象的。
+
+首先来讲一下装饰器的相关知识。
+
+装饰器的定义如下：
+
+> 装饰器是一种特殊类型的声明，它能够被附加到类声明，方法， 访问符，属性或参数上。 装饰器使用 @expression这种形式，expression求值后必须为一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入。
+
+* 装饰器修饰的对象：装饰器可以从整体上修饰类，也可以在局部修饰类中的各种类型的成员：方法， 访问符，属性或参数。总之装饰器是用来修饰类的。
+
+* 装饰器的书写形式：@expression。expression 有两种书写形式：
+  * 一种是直接写一个函数，如 `@Component`；
+  * 另一种是写一个进行求值的函数，如 `@Component(options)`。
+
+上面两种装饰器的书写，其实都是对 @ 后面的 expression 求值，返回求值的结果。只不过在 `@Component` 中，Component 求值之后还是它自身（这里需要好好理解一下）；在 `@Component(options)` 中，Component(options) 的求值结果，是 Component 调用 options 之后的函数返回值；
+
