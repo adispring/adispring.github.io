@@ -4,6 +4,8 @@ date: 2022-03-24 15:28:37
 tags:
 ---
 
+## Vue 使用 TypeScript 开发原理简介
+
 在 Vue2 中，我们编写的 单文件组件（SCF，也即 Single-File Components），其实是 vue 自创的前端领域语言（类比小程序开发语言，也是一门领域语言），形式如下所示：
 
 ```vue
@@ -118,4 +120,74 @@ export default {
 }
 ```
 
-Vue2 使用 TypeScript 开发，原理就是这么简单。
+Vue2 使用 TypeScript 开发，原理就是这么简单。下面来详细讲一下 Vue2 使用 TypeScript 开发原理。
+
+## Vue2 使用 TypeScript 开发详解
+
+Vue2 使用 TypeScript 开发，依赖三个库：
+
+* vue-property-decorator: 提供所有的装饰器；开发时会直接用到的库；依赖 vue-class-component 和 vue；
+* vue-class-component: 提供 @Component 装饰器 和 基本的装饰器工厂函数 `createDecorator`；开发时不会直接用到；依赖 vue；vue-property-decorator 中暴露的 @Component，其实是 vue-class-component 提供的；vue-property-decorator 中其他的装饰器，都是由 `createDecorator` 创建的；
+* vue: Vue 基础库，提供 Vue 的类型声明，vue-property-decorator 中暴露的 Vue，其实就是 vue 中的 Vue 类；
+
+我们来具体看一下这三个库对外暴露的接口：
+
+ vue-property-decorator:
+
+```ts
+import Vue from 'vue'
+import Component, { mixins } from 'vue-class-component'
+
+export { Component, Vue, mixins as Mixins }
+
+export { Emit } from './decorators/Emit'
+export { Prop } from './decorators/Prop'
+export { Ref } from './decorators/Ref'
+export { Watch } from './decorators/Watch'
+// ...
+```
+
+vue-class-component
+
+```ts
+import Vue, { ComponentOptions } from 'vue'
+import { VueClass } from './declarations'
+import { componentFactory, $internalHooks } from './component'
+
+export { createDecorator, VueDecorator, mixins } from './util'
+
+function Component <V extends Vue>(options: ComponentOptions<V> & ThisType<V>): <VC extends VueClass<V>>(target: VC) => VC
+function Component <VC extends VueClass<Vue>>(target: VC): VC
+function Component (options: ComponentOptions<Vue> | VueClass<Vue>): any {
+  if (typeof options === 'function') {
+    return componentFactory(options)
+  }
+  return function (Component: VueClass<Vue>) {
+    return componentFactory(Component, options)
+  }
+}
+
+Component.registerHooks = function registerHooks (keys: string[]): void {
+  $internalHooks.push(...keys)
+}
+
+export default Component
+```
+
+vue
+
+```ts
+import { Vue } from "./vue";
+import "./umd";
+
+export default Vue;
+
+export {
+  CreateElement,
+  VueConstructor
+} from "./vue";
+
+// ...
+```
+
+通过展示三个库对外暴露接口的 index.ts 文件，我们就可以很清晰看到它们暴露的内容，以及依赖关系。
