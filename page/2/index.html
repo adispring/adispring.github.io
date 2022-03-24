@@ -149,6 +149,157 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/11/11/Practical-Ramda-Recursion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wangzengdi">
+      <meta itemprop="description" content="FE@Meituan.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangzengdi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/11/11/Practical-Ramda-Recursion/" class="post-title-link" itemprop="url">Practical Ramda: Recursion</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-11 00:10:07" itemprop="dateCreated datePublished" datetime="2017-11-11T00:10:07+00:00">2017-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Practical-Ramda/" itemprop="url" rel="index"><span itemprop="name">Practical Ramda</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文首先介绍了递归的定义、实质、满足条件等，然后利用 Ramda API 和 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator" target="_blank" rel="noopener">Spread &amp; Rest</a> 操作符对递归进行实例讲解。</p>
+<h1 id="di-gui-de-li-lun-ji-chu">递归的理论基础</h1>
+<p>递归的定义：一种直接或者间接调用自身的过程。</p>
+<p>递归的实质：将待求解问题分解成规模缩小的同类子问题，然后递归调用方法来表示问题的解。是一个不断将问题拆分然后组合的过程。</p>
+<p>递归的过程：“能进则进，不进则退”。</p>
+<p>递归问题需满足的条件：</p>
+<ol>
+<li>一个（或多个）基本情景 – 一个不使用递归而产生结果的终止情景；</li>
+<li>一组可以将所有其他情景归约至基本情景的规则。</li>
+</ol>
+<p>递归的条件归结为：一个终止条件和一组归约的规则。</p>
+<p>递归能让我们写出非常简洁、直观的代码，但简洁并不等于简单（容易）。递归是一种从总体到局部的思维过程，与传统的命令式的思维方式差异较大。命令式思维要求显示地提供详细的求解步骤，而递归（或者函数式）要求用概括性的语言对问题进行描述，问题的描述本身就是编程的整个过程，这要求我们具有很强的抽象思维和逻辑推理能力。</p>
+<p>递归的编程模式：</p>
+<ol>
+<li>定义终止条件；</li>
+<li>编写递归的归约规则。</li>
+</ol>
+<p>但如果语言中实现了惰性求值，也可以不定义终止条件，比如递归生成无限长的序列。</p>
+<p>以上便是递归的理论解释，下面我们通过一些实例对递归进行实际演示。</p>
+<h1 id="di-gui-de-shi-jian">递归的实践</h1>
+<p>递归能够很好地处理列表和树形数据结构的很多问题。很多时候，我们解决问题的模式就是对不断缩小的列表或树反复做同一件事情。实际上，列表和树本身的构造也可以看做递归的过程。</p>
+<p>列表可以看作有列表首元素（头部）和其余元素（尾部）的组合，如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list = R.prepend(<span class="number">1</span>, R.prepend(<span class="number">2</span>, R.prepend(<span class="number">3</span>, []))); <span class="comment">// =&gt; [1, 2, 3]</span></span><br><span class="line"><span class="keyword">var</span> list = [<span class="number">1</span>, ...[<span class="number">2</span>, ...[<span class="number">3</span>, ...[]]]];</span><br></pre></td></tr></table></figure>
+<p>本文中我们使用 ramda 和 expect npm库进行演示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> R = <span class="built_in">require</span>(<span class="string">'ramda'</span>);</span><br><span class="line"><span class="keyword">const</span> expect = <span class="built_in">require</span>(<span class="string">'expect'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="kuai-su-pai-xu">快速排序</h2>
+<p>下面以经典的快速排序为例开始递归算法的演示。快排的定义为：所有小于头部的元素（它们也需要排序）在先，大于头部的元素（它们也需要排序）在后，终止条件为空数组。</p>
+<p>首先我们用模式匹配 <a href="http://ramda.cn/docs/#cond" target="_blank" rel="noopener">R.cond</a> 的方式来进行递归排序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> quickSort = R.cond(</span><br><span class="line">  [R.isEmpty, R.always([])],</span><br><span class="line">  [</span><br><span class="line">    R.T,</span><br><span class="line">    xs =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> head = R.head(xs);</span><br><span class="line">    <span class="keyword">const</span> tail = R.tail(xs);</span><br><span class="line">    <span class="keyword">return</span> R.compose(quickSort, R.filter(R.lte(R.__, head)))(tail)</span><br><span class="line">     .concat(head)</span><br><span class="line">     .concat(R.compose(quickSort, R.filter(R.gte(R.__, head)))(tail));</span><br><span class="line">  &#125;]</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">expect(quickSort([<span class="number">5</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">3</span>])).toEqual([<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">9</span>]);</span><br></pre></td></tr></table></figure>
+<p>快排的过程如下所示（借用 <a href="http://learnyouahaskell.com/recursion" target="_blank" rel="noopener">Learn You a Haskell for Great Good!</a> 的图)：</p>
+<p><img src="./quicksort.png" alt="quicksort"></p>
+<p>如果只有一个 <code>if-else</code> 对，我们也可以使用 <a href="http://ramda.cn/docs/#ifElse" target="_blank" rel="noopener">R.ifElse</a> 来代替 <a href="http://ramda.cn/docs/#cond" target="_blank" rel="noopener">R.cond</a>。另外，我们还可以用 <a href="http://ramda.cn/docs/#when" target="_blank" rel="noopener">R.when</a> 和 <a href="http://ramda.cn/docs/#unless" target="_blank" rel="noopener">R.unless</a> 来进一步简化 <a href="http://ramda.cn/docs/#ifElse" target="_blank" rel="noopener">R.ifElse</a>。</p>
+<p>使用 Ramda API 的递归规则还是有些冗长，我们可以使用 ES6 中的 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator" target="_blank" rel="noopener">Spread &amp; Rest</a> 操作符和 <a href="http://ramda.cn/docs/#unless" target="_blank" rel="noopener">R.unless</a> 对列表的头部元素和其他尾部元素的提取和组合进行简化，如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> quickSort = R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  ([head, ...tail]) =&gt; [</span><br><span class="line">    ...R.compose(quickSort, R.filter(R.lte(R.__, head)))(tail),</span><br><span class="line">    head,</span><br><span class="line">    ...R.compose(quickSort, R.filter(R.gte(R.__, head)))(tail),</span><br><span class="line">  ]</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">expect(quickSort([<span class="number">5</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">3</span>])).toEqual([<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">9</span>]);</span><br></pre></td></tr></table></figure>
+<h2 id="fei-bo-na-qi-xu-lie">斐波那契序列</h2>
+<p>下面展示的是斐波那契序列, 斐波那契序列的数学表达式如下所示：</p>
+<ul>
+<li>f(0) = 0</li>
+<li>f(1) = 1</li>
+<li>f(n) = f(n-1) + f(n-2)</li>
+</ul>
+<p>以序列元素值为半径的斐波那契螺旋线如下所示：</p>
+<p><img src="./fibonacci.jpg" alt="fibonacci"></p>
+<p>代码实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fib = <span class="function"><span class="params">n</span> =&gt;</span> R.unless(</span><br><span class="line">  R.contains(R.__, [<span class="number">0</span>, <span class="number">1</span>]),</span><br><span class="line">  () =&gt; fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>)</span><br><span class="line">)(n);</span><br><span class="line"></span><br><span class="line">expect(fib(<span class="number">6</span>)).toEqual(<span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="map-filter-reduce">map、filter、reduce</h2>
+<p><a href="http://ramda.cn/docs/#map" target="_blank" rel="noopener">map</a>、<a href="http://ramda.cn/docs/#filter" target="_blank" rel="noopener">filter</a>、<a href="http://ramda.cn/docs/#reduce" target="_blank" rel="noopener">reduce</a> 作为函数式编程中处理列表的三个基本函数，在底层实现或者演示时，一般会采用命令式的 for 循环迭代来实现，既然列表本身可以看作递归结构，我们就用递归来尝试实现函数式编程中处理列表的 “三镖客”。</p>
+<p>首先以 <code>map</code> 为例，从命令式 for 循环实现开始，然后是递归实现，并在对递归实现的优化中展示函数式编程（或者说 Ramda 库）灵活、多变而又优雅的编程方式，体会什么才是真正的编程之美。</p>
+<p>map 的 <a href="https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch7.html" target="_blank" rel="noopener">Hindley-Milner</a> 类型签名如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map :: Functor f =&gt; (a → b) → f a → f b</span><br></pre></td></tr></table></figure>
+<p>其实 <code>map</code> 是 <a href="https://en.wikipedia.org/wiki/Functor" target="_blank" rel="noopener">Functor</a> 的一个函数，Functor 是具体范畴之间的映射（态射），关于范畴、Functor、态射等函数式的概念不在本次的讨论范围之内，感兴趣的同学可以自己查看相关资料。在这里，可以将 Functor 看做是列表（列表是 Functor 的一个实例），<code>map</code> 看作不同类型列表之间的映射，将源列表中的元素进行转换，生成一个包含映射后元素的新列表。</p>
+<p><code>map</code> 列表形式的类型签名如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map :: (a → b) → [a] → [b]</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 命令式实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> map = <span class="function">(<span class="params">fn, list</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> newList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; list.length; i++) &#123;</span><br><span class="line">    newList[i] = fn(list[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newList;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">expect(map(R.multiply(<span class="number">2</span>), R.range(<span class="number">1</span>, <span class="number">5</span>))).toEqual([<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>]);</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 递归实现1，三目运算符版：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mapR = <span class="function">(<span class="params">fn, list</span>) =&gt;</span></span><br><span class="line">  (R.isEmpty(list) ? list : R.prepend(fn(R.head(list)), mapR(fn, R.tail(list))));</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 递归实现2，模式匹配（<a href="http://ramda.cn/docs/#cond" target="_blank" rel="noopener">R.cond</a>）版：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mapR2 = <span class="function">(<span class="params">fn, list</span>) =&gt;</span> R.cond([</span><br><span class="line">  [R.isEmpty, R.identity],</span><br><span class="line">  [R.T, R.converge(R.prepend, [R.compose(fn, R.head), xs =&gt; mapR2(fn, R.tail(xs))])],</span><br><span class="line">])(list);</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 递归实现3，unless（<a href="http://ramda.cn/docs/#unless" target="_blank" rel="noopener">R.unless</a>）版：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mapR3 = <span class="function">(<span class="params">fn, list</span>) =&gt;</span> R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  R.converge(R.prepend, [R.compose(fn, R.head), xs =&gt; mapR3(fn, R.tail(xs))])</span><br><span class="line">)(list);</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 递归实现4，<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator" target="_blank" rel="noopener">Spread Operator</a>  + unless 版：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mapR5 = <span class="function">(<span class="params">fn, xs</span>) =&gt;</span> R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  ([head, ...tail]) =&gt; [fn(head), ...mapR5(fn, tail)]</span><br><span class="line">)(xs);</span><br></pre></td></tr></table></figure>
+<p>总结一下上述命令式、递归实现以及递归的优化实现的特点。</p>
+<p>命令式实现需要显式写出内部的每步实现步骤，包括如何获取、变换和组合元素等；还使用了 mutable 的数据，包括全局的结果列表 <code>newList</code> 和 迭代索引 <code>i</code>。命令式的好处是符合正常的思维方式，但缺点是引入了较多冗余的 “噪声”，比如 for 循环、全局变量 <code>newList</code> 和 <code>i</code> 都是辅助项，这些辅助项稍微增多，代码复杂度会显著上升，真正有用的信息便会淹没在了这些 “噪声” 里面。</p>
+<p>反观递归式（函数式）的实现（如 <code>map</code> 的 <code>Spead Operator</code> + <code>unless</code> 版实现），我们只需要通过对问题的描述，便得到功能的实现。而描述的过程看似简单，实则内含了对问题本质的抽象和逻辑分析，对人们的思维能力要求更高。</p>
+<p>再讲一下 <code>Spead Operator</code> 语法糖。很多人不屑于用语法糖，态度往往是：这不就是 xxx 的语法糖吗？没什么大不了的啊。但语法上的便利其实也是很重要的一方面，因为我们想要表达的思想是要由语法来承载的。</p>
+<p>这里引用《函数式编程思维》中的一段话：</p>
+<blockquote>
+<p>我跟 Martin Fowler 在巴塞罗那的一辆出租车上有过一次记忆深刻的讨论，我们聊的是 Smalltalk 的衰落和 Java 的兴盛。Fowler 在这两种语言上都有很深厚的积累，他说，起初 他觉得从 Smalltalk 到 Java 的变化只是一些语法上的不便，结果却发现被阻碍的还有原先 语言所承载的思维方式。在语法处处掣肘下塑造出来的抽象，很难配合我们的思维过程而 不产生无谓的摩擦。</p>
+</blockquote>
+<p>下面对 <code>filter</code> 和 <code>reduce</code> 的递归实现做一个展示。</p>
+<p><code>filter</code> 的递归实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> filterR = <span class="function">(<span class="params">pred, list</span>) =&gt;</span></span><br><span class="line">  R.isEmpty(list) ? list : pred(R.head(list)) ? R.prepend(R.head(list), filterR(pred, R.tail(list))) : filterR(pred, R.tail(list));</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> filterR2 = <span class="function">(<span class="params">pred, list</span>) =&gt;</span> R.cond([</span><br><span class="line">  [R.isEmpty, R.identity],</span><br><span class="line">  [R.compose(pred, R.head), R.converge(R.prepend, [R.head, xs =&gt; filterR2(pred, R.tail(xs))])],</span><br><span class="line">  [R.T, xs =&gt; filterR2(pred, R.tail(xs))],</span><br><span class="line">])(list);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> filterR3 = <span class="function">(<span class="params">pred, list</span>) =&gt;</span> R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  R.converge(R.concat, [R.compose(R.ifElse(pred, R.of, R.always([])), R.head), xs =&gt; filterR3(pred, R.tail(xs))])</span><br><span class="line">)(list);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> filterR3 = <span class="function">(<span class="params">pred, list</span>) =&gt;</span> R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  R.converge(R.concat, [R.compose(R.ifElse(pred, R.of, R.always([])), R.head), xs =&gt; filterR3(pred, R.tail(xs))])</span><br><span class="line">)(list);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> filterR4 = <span class="function">(<span class="params">pred, list</span>) =&gt;</span> R.unless(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  ([head, ...tail]) =&gt; [...(pred(head) ? [head] : []), ...filterR4(pred, tail)]</span><br><span class="line">)(list);</span><br><span class="line"></span><br><span class="line">expect(filterR(<span class="function"><span class="params">a</span> =&gt;</span> a % <span class="number">2</span>, R.range(<span class="number">1</span>, <span class="number">10</span>))).toEqual([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]);</span><br></pre></td></tr></table></figure>
+<p>reduce 的递归实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reduceR = <span class="function">(<span class="params">fn, acc, list</span>) =&gt;</span></span><br><span class="line">  (R.isEmpty(list) ? acc : reduceR(fn, fn(acc, R.head(list)), R.tail(list)));</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> reduceR2 = <span class="function">(<span class="params">fn, acc, list</span>) =&gt;</span> R.cond([</span><br><span class="line">  [R.isEmpty, () =&gt; acc],</span><br><span class="line">  [R.T, xs =&gt; reduceR2(fn, fn(acc, R.head(xs)), R.tail(xs))],</span><br><span class="line">])(list);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> reduceR3 = <span class="function">(<span class="params">fn, acc, list</span>) =&gt;</span> R.ifElse(</span><br><span class="line">  R.isEmpty,</span><br><span class="line">  () =&gt; acc,</span><br><span class="line">  xs =&gt; reduceR3(fn, fn(acc, R.head(xs)), R.tail(xs))</span><br><span class="line">)(list);</span><br><span class="line"></span><br><span class="line">expect(reduceR(R.add, <span class="number">0</span>, R.range(<span class="number">1</span>, <span class="number">5</span>))).toEqual(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="zong-jie">总结</h1>
+<p>本文从递归的定义、实质等基本理论开始，然后是递归的一些实例，其中大量运用了 <a href="http://ramda.cn" target="_blank" rel="noopener">ramda</a> 函数式编程库中的 API，既是对递归的演示，也是对 ramda API 的实践展示。展示了递归和函数式在编程时的强悍的表达能力和对极致简约的追求。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/10/21/What-Function-Should-I-Use/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,7 +331,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1313,7 +1464,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1388,7 +1539,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:48" itemprop="dateModified" datetime="2021-11-18T08:07:48+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1461,7 +1612,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
 
           
@@ -1537,7 +1688,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:48" itemprop="dateModified" datetime="2021-11-18T08:07:48+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1645,7 +1796,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1768,7 +1919,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:48" itemprop="dateModified" datetime="2021-11-18T08:07:48+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1946,7 +2097,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2127,7 +2278,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
+                <time title="Modified: 2022-03-24 12:05:37" itemprop="dateModified" datetime="2022-03-24T12:05:37+00:00">2022-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -2167,133 +2318,6 @@
 <p>这种自动柯里化使得 “通过组合函数来创建新函数” 变得非常容易。因为 API 都是函数优先、数据最后（先传函数，最后传数据参数），你可以不断地组合函数，直到创建出需要的新函数，然后将数据传入其中。（Hugh Jackson 发表了一遍描述这种风格优点的 <a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">非常优秀的文章</a>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// take an object with an `amount` property</span></span><br><span class="line"><span class="comment">// add one to it</span></span><br><span class="line"><span class="comment">// find its remainder when divided by 7</span></span><br><span class="line"><span class="keyword">var</span> amtAdd1Mod7 = R.compose(R.moduloBy(<span class="number">7</span>), R.add(<span class="number">1</span>), R.prop(<span class="string">'amount'</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// we can use that as is:</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">17</span>&#125;); <span class="comment">// =&gt; 4</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">987</span>&#125;); <span class="comment">// =&gt; 1</span></span><br><span class="line">amtAdd1Mod7(&#123;<span class="attr">amount</span>: <span class="number">68</span>&#125;); <span class="comment">// =&gt; 6</span></span><br><span class="line"><span class="comment">// etc. </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// But we can also use our composed function on a list of objects, e.g. to `map`:</span></span><br><span class="line"><span class="keyword">var</span> amountObjects = [</span><br><span class="line">  &#123;<span class="attr">amount</span>: <span class="number">903</span>&#125;, &#123;<span class="attr">amount</span>: <span class="number">2875654</span>&#125;, &#123;<span class="attr">amount</span>: <span class="number">6</span>&#125;</span><br><span class="line">]</span><br><span class="line">R.map(amtAdd1Mod7, amountObjects); <span class="comment">// =&gt; [1, 6, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// of course, `map` is also curried, so you can generate a new function </span></span><br><span class="line"><span class="comment">// using `amtAdd1Mod7` that will wait for a list of "amountObjects" to </span></span><br><span class="line"><span class="comment">// get passed in:</span></span><br><span class="line"><span class="keyword">var</span> amountsToValue = map(amtAdd1Mod7);</span><br><span class="line">amountsToValue(amountObjects); <span class="comment">// =&gt; [1, 6, 0]</span></span><br></pre></td></tr></table></figure>
 <p><a href="https://www.npmjs.org/package/ramda" target="_blank" rel="noopener">Ramda 提供了 npm 包</a>，可以下载下来尝试一下。如果你对 Ramda 库有什么想法或改进建议，<a href="https://github.com/CrossEye/ramda/issues" target="_blank" rel="noopener">请联系我们</a>。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://adispring.github.io/2017/06/18/Thinking-in-Ramda-Wrap-Up/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wangzengdi">
-      <meta itemprop="description" content="FE@Meituan.com">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wangzengdi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/06/18/Thinking-in-Ramda-Wrap-Up/" class="post-title-link" itemprop="url">Thinking in Ramda: 概要总结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-06-18 10:17:35" itemprop="dateCreated datePublished" datetime="2017-06-18T10:17:35+00:00">2017-06-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-18 08:07:49" itemprop="dateModified" datetime="2021-11-18T08:07:49+00:00">2021-11-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Thinking-in-Ramda/" itemprop="url" rel="index"><span itemprop="name">Thinking in Ramda</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>译者注：本文翻译自 Randy Coulman 的 《<a href="http://randycoulman.com/blog/2016/07/19/thinking-in-ramda-wrap-up/" target="_blank" rel="noopener">Thinking in Ramda: Wrap-Up</a>》，转载请与<a href="https://github.com/randycoulman" target="_blank" rel="noopener">原作者</a>或<a href="https://github.com/adispring" target="_blank" rel="noopener">本人</a>联系。下面开始正文。</p>
-<hr>
-<p>本文是函数式编程系列文章：<a href="https://adispring.coding.me/categories/Thinking-in-Ramda/" target="_blank" rel="noopener">Thinking in Ramda</a> 的总结篇。</p>
-<p>在过去的八篇文章中，我们一直在讨论 <a href="http://ramda.cn/" target="_blank" rel="noopener">Ramda JavsScipt 库</a>，它提供了一系列以函数式、声明式和数据不变性方式工作的函数。</p>
-<p>在这个系列中，我们了解了蕴含在 Ramda API 背后的一些指导原则：</p>
-<ul>
-<li>
-<p>数据放在最后：几乎所有的函数都将数据参数作为最后一个参数。</p>
-</li>
-<li>
-<p>柯里化：Ramda 几乎所有的函数都是自动柯里化的。也即，可以使用函数必需参数的子集来调用函数，这会返回一个接受剩余参数的新函数。当所有参数都传入后，原始函数才被调用。</p>
-</li>
-</ul>
-<p>这两个原则使我们能编写出非常清晰的函数式代码，可以将基本的构建模块组合成更强大的操作。</p>
-<h2 id="zong-jie">总结</h2>
-<p>作为参考，一下是本系列文章的简单概要。</p>
-<ul>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/09/Thinking-in-Ramda-%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">入门</a>：介绍了函数、纯函数和数据不变性思想。作为入门，展示了一些集合迭代函数，如：<code>map</code>、<code>filter</code> 和 <code>reduce</code> 等。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/10/Thinking-in-Ramda-Combining-Functions/" target="_blank" rel="noopener">函数组合</a>：演示了可以使用工具（如 <code>both</code>、<code>either</code>、<code>pipe</code> 和 <code>compose</code>）以多种方式组合函数。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Partial-Application/" target="_blank" rel="noopener">部分应用(Partial Application)</a>：演示了一种非常有用的函数延时调用方式：可以先向函数传入部分参数，以后根据需要将其余参数传入。借助 <code>partial</code> 和 <code>curry</code> 可以实现部分应用。我们还学习了 <code>flip</code> 和占位符（<code>__</code>）。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/11/Thinking-in-Ramda-Declarative-Programming/" target="_blank" rel="noopener">声明式编程</a>：介绍了命令式和函数式编程之间的区别。学习了如何使用 Ramda 的声明式函数代替算术、比较、逻辑和条件运算符。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/13/Thinking-in-Ramda-Pointfree-Style/" target="_blank" rel="noopener">无参数风格编程(Pointfree Style)</a>：介绍了 pointfree 风格的思想，也被称为 “tatic” 式编程。在 pointfree 式编程时，实际上不会看到正在操作的数据参数，数据被隐含在函数中了。程序是由许多较小的、简单的构建模块组合而成。只有在最后才将组合后的函数应用于实际的数据上。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/16/Thinking-in-Ramda-Immutability-and-Objects/" target="_blank" rel="noopener">数据不变性和对象</a>：该节让我们回到了声明式编程的思想，展示了读取、更新、删除和转换对象属性所需的工具。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/17/Thinking-in-Ramda-Immutability-and-Arrays/" target="_blank" rel="noopener">数据不变性和数组</a>：继续上一节的主题，展示了数据不变性在数组中的应用。</p>
-</li>
-<li>
-<p><a href="https://adispring.coding.me/2017/06/18/Thinking-in-Ramda-Lenses/" target="_blank" rel="noopener">透镜(Lenses)</a>：引入了透镜的概念，该结构允许我们把重点聚焦在较大的数据结构的一小部分上。借助 <code>view</code>、<code>set</code> 和 <code>over</code> 函数，可以对较大数据结构的小部分被关注数据进行读取、更新和变换操作。</p>
-</li>
-</ul>
-<h2 id="hou-xu">后续</h2>
-<p>该系列文章并未覆盖到 Ramda 所有部分。特别是，我们没有讨论处理字符串的函数，也没有讨论一些更高阶的概念，如 <a href="http://ramda.cn/docs/#transduce" target="_blank" rel="noopener">transducers</a>。</p>
-<p>要了解更多 Ramda 的作用，我建议仔细阅读 <a href="http://ramda.cn/docs/" target="_blank" rel="noopener">官方文档</a>，那里有大量的信息。所有的函数都按照它们处理数据的类型进行了分类，尽管有一些重叠。比如，有几个处理数组的函数可以用于处理字符串，<code>map</code> 可以作用于数组和对象两种类型。</p>
-<p>如果你对更高级的函数式主题感兴趣，可以参考一下资料：</p>
-<ul>
-<li>
-<p>Transducers：这里有一篇 <a href="http://simplectic.com/blog/2015/ramda-transducers-logs/" target="_blank" rel="noopener">使用 transducers 解析日志</a> 的介绍性文章。（译者也翻译了该系列两篇文章：<a href="https://adispring.coding.me/2016/10/24/Transducers-Explained-Part-1/" target="_blank" rel="noopener">《Transducers Explained: Part 1 中文》</a> 和 <a href="https://adispring.coding.me/2016/11/01/Transducers-Explained-Pipelines/" target="_blank" rel="noopener">《Transducers Explained: Pipelines 中文》</a>）。</p>
-</li>
-<li>
-<p>代数数据类型：如果你已经阅读了很多关于函数式编程的知识，应该听过代数类型和相关术语，如 “Functor”、“Applicative” 和 “Monad”。如果有兴趣深入了解这方面的思想，及其在 Ramda 中的实现和应用，可以查看 <a href="https://github.com/ramda/ramda-fantasy" target="_blank" rel="noopener">ramda-fantasy</a> 项目，该项目实现了符合 <a href="https://github.com/fantasyland/fantasy-land" target="_blank" rel="noopener">Fantasy Land 规范</a> （又称为 JavaScript 代数规范）的一些数据类型。</p>
-</li>
-</ul>
 
       
     </div>
@@ -2378,7 +2402,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -2415,7 +2439,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
