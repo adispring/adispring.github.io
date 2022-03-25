@@ -1,12 +1,12 @@
 ---
-title: Write Vue2 with TypeScript
+title: TypeScript 开发 Vue2
 date: 2022-03-24 15:28:37
 tags:
 ---
 
-## Vue 使用 TypeScript 开发原理简介
+## 原理简介
 
-在 Vue2 中，我们编写的 单文件组件（SCF，也即 Single-File Components），其实是 vue 自创的前端领域语言（类比小程序开发语言，也是一门领域语言），形式如下所示：
+在 Vue2 中，我们编写的 单文件组件（SCF，也即 Single-File Components），其实是 vue 自创的前端领域语言（类比各互联网厂的小程序开发语言，也是各自造（抄）的领域语言），形式如下所示：
 
 ```vue
 <template>
@@ -122,7 +122,7 @@ export default {
 
 Vue2 使用 TypeScript 开发，原理就是这么简单。下面来详细讲一下 Vue2 使用 TypeScript 开发原理。
 
-## Vue2 使用 TypeScript 开发详解
+## 依赖包介绍
 
 Vue2 使用 TypeScript 开发，依赖三个库：
 
@@ -314,13 +314,13 @@ export interface VueConstructor<V extends Vue = Vue> {
 
 下面我们讲一下 vue 的装饰器是如何将 vue class 形式的组件，转换为 vue 引擎能识别的传统的配置对象的。
 
-### 装饰器
+### 装饰器定义
 
 装饰器的定义如下：
 
 > 装饰器是一种特殊类型的声明，它能够被附加到类声明，方法， 访问符，属性或参数上。 装饰器使用 @expression这种形式，expression求值后必须为一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入。
 
-先来看一个简单的示例:
+简单示例如下:
 
 ```ts
 function red(target) {
@@ -336,36 +336,9 @@ MyComponent.color // 'red'
 
 我们定义了一个 red 装饰器，作用是给被装饰类添加一个值为 `'red'` 的 color 属性。
 
-我们看到，装饰器本质上就是一个函数，用来对传入的数据做一定的转换（修饰）。下面我们具体解读一下装饰器的定义。
+我们看到，装饰器本质上就是一个函数，可以对数据做一定的转换（修饰）。
 
-* 装饰器可装饰的数据类型：只能装饰类及类的内部成员（方法，访问符，属性或参数）
-* 装饰器的书写形式：@expression。expression 有两种书写形式：
-  * 直接写一个函数，如 `@d`；
-  * 函数求值后的返回值，如 `@d(options)`。
-
-装饰器的这两种书写形式，本质上都是返回一个用来进行数据转换的函数。只不过后一种写法，可以对在进行装饰时，可以做一些配置，更加灵活，这种接受参数的装饰器，也称为装饰器工厂：其实就是一个生成装饰器的函数。
-
-关于装饰器工厂的好处，还是以上面给组件添加颜色的例子来讲解。
-
-假定我们要给组件添加蓝色，此时我们要写一个 `blue` 装饰器：
-
-```ts
-function blue(target) {
-  target.color = 'blue';
-}
-
-@blue
-class MyComponent {
-}
-
-MyComponent.color // 'blue'
-```
-
-如果要写其他颜色的装饰器，需要每次要写一个新的颜色装饰器。但其实它们做的事情本质上是一样的：给组件添加颜色，只不过添加的颜色不同。
-
-根据 DRY（Don't Repeat Yourself）原则，有重复的地方，就意味着我们要做一些公共模块提取工作。
-
-对于装饰器来讲，这就是装饰器工厂。我们可以提取一个公共的给组件添加颜色的装饰器，颜色是可配的，如下所示：
+我们还可以利用装饰器工厂，来提高装饰器的复用性，例如我们想要一个可以给组件添加任意颜色的装饰器，则可以这样写：
 
 ```ts
 function addColor(color) {
@@ -385,4 +358,60 @@ class MyComponent2 {
 MyComponent2.color // 'blue'
 ```
 
-通过装饰器工厂，我们实现了对装饰器的复用。
+装饰器工厂，说白了，就是一个生成装饰器的函数
+
+装饰器的概念，就简单介绍到这里。
+
+### 装饰器的执行顺序
+
+在TypeScript中，装饰器的执行顺序为：首先执行属性装饰器，然后执行方法装饰器，其次是方法参数装饰器，最后是类装饰器。如果同一个类型的装饰器有多个，总是先执行后面的装饰器。
+
+因此对于下面使用装饰器的  Vue class 组件：
+
+```ts
+import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
+
+@Component
+export default class YourComponent extends Vue {
+  @Ref readonly elementRef!: HTMLElement;
+  @Prop({ default: 'default value' }) readonly title!: string
+
+  message: string = 'hello, world';
+
+  onClick(): void {}
+}
+```
+
+会先执行类属性上的装饰器，如 @Ref、@Prop，这两个装饰器，会将被修饰的属性收集到对应类型的数组中（refs 数组，props 数组），然后是方法的装饰器，最后会执行 @Component ，对刚才装饰器收集的属性、方法，以及为修饰的属性、方法做分类处理，最终转成 Vue 引擎能识别的、原始的 vue 组件配置对象：
+
+```ts
+export default {
+  props: {
+    title: {
+      default: 'default value',
+    },
+  },
+
+  data() {
+    message: 'hello, world',
+  },
+
+  methods: {
+    onClick() {}
+  },
+
+  computed: {
+    elementRef: {
+      cache: false,
+      get(this: Vue) {
+        return this.$refs['elementRef']
+      },
+    }
+  }
+```
+
+使用 vue-property-decorator 装饰器，将 vue class 转换为 vue 配置对象的过程，就解释完了。
+
+## 参考
+
+* [装饰器](https://www.tslang.cn/docs/handbook/decorators.html)
