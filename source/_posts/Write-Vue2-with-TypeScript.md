@@ -50,7 +50,7 @@ export default {
 
 其中 `<script> ... </script>` 标签内包含了一个使用 JavaScript 编写的、 Vue 组件的配置对象，配置对象中包含 props、data、methods 等内容。
 
-从上面的示例可以看出，Vue 只能够对 props 进行有限的类型检查，不能对 data、methods 等其他配置项做类型声明。并且在对 props 进行类型声明时，只能使用下列原生构造函数：String Number Boolean Array Object Date Function Symbol 来做类型校验，不能进行更具体、深入的类型声明，可以说是非常鸡肋。
+从上面的示例可以看出，原始的 Vue 配置对象，只能够对 props 进行有限的类型检查，不能对 data、methods 等其他配置项做类型声明和类型检查。并且在对 props 进行类型声明时，只能使用下列原生构造函数：String Number Boolean Array Object Date Function Symbol 来做类型校验，不能进行更具体、深入的类型声明，可以说是非常鸡肋。
 
 对一个对象进行 TypeScript 类型声明是比较困难的，而对 `class` 进行 TypeScript 类型声明是相对简单、自然的：我们可以很方便地对 class 的属性和方法添加类型，还可以通过 `extends` 继承父类的类型。如下所示：
 
@@ -310,21 +310,79 @@ export interface VueConstructor<V extends Vue = Vue> {
 }
 ```
 
-## 装饰器如何将 vue class 转换为 vue 配置对象
+## 装饰器将 vue class 转换为配置对象的过程
 
 下面我们讲一下 vue 的装饰器是如何将 vue class 形式的组件，转换为 vue 引擎能识别的传统的配置对象的。
 
-首先来讲一下装饰器的相关知识。
+### 装饰器
 
 装饰器的定义如下：
 
 > 装饰器是一种特殊类型的声明，它能够被附加到类声明，方法， 访问符，属性或参数上。 装饰器使用 @expression这种形式，expression求值后必须为一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入。
 
-* 装饰器修饰的对象：装饰器可以从整体上修饰类，也可以在局部修饰类中的各种类型的成员：方法， 访问符，属性或参数。总之装饰器是用来修饰类的。
+先来看一个简单的示例:
 
+```ts
+function red(target) {
+  target.color = 'red';
+}
+
+@red
+class MyComponent {
+}
+
+MyComponent.color // 'red'
+```
+
+我们定义了一个 red 装饰器，作用是给被装饰类添加一个值为 `'red'` 的 color 属性。
+
+我们看到，装饰器本质上就是一个函数，用来对传入的数据做一定的转换（修饰）。下面我们具体解读一下装饰器的定义。
+
+* 装饰器可装饰的数据类型：只能装饰类及类的内部成员（方法，访问符，属性或参数）
 * 装饰器的书写形式：@expression。expression 有两种书写形式：
-  * 一种是直接写一个函数，如 `@Component`；
-  * 另一种是写一个进行求值的函数，如 `@Component(options)`。
+  * 直接写一个函数，如 `@d`；
+  * 函数求值后的返回值，如 `@d(options)`。
 
-上面两种装饰器的书写，其实都是对 @ 后面的 expression 求值，返回求值的结果。只不过在 `@Component` 中，Component 求值之后还是它自身（这里需要好好理解一下）；在 `@Component(options)` 中，Component(options) 的求值结果，是 Component 调用 options 之后的函数返回值；
+装饰器的这两种书写形式，本质上都是返回一个用来进行数据转换的函数。只不过后一种写法，可以对在进行装饰时，可以做一些配置，更加灵活，这种接受参数的装饰器，也称为装饰器工厂：其实就是一个生成装饰器的函数。
 
+关于装饰器工厂的好处，还是以上面给组件添加颜色的例子来讲解。
+
+假定我们要给组件添加蓝色，此时我们要写一个 `blue` 装饰器：
+
+```ts
+function blue(target) {
+  target.color = 'blue';
+}
+
+@blue
+class MyComponent {
+}
+
+MyComponent.color // 'blue'
+```
+
+如果要写其他颜色的装饰器，需要每次要写一个新的颜色装饰器。但其实它们做的事情本质上是一样的：给组件添加颜色，只不过添加的颜色不同。
+
+根据 DRY（Don't Repeat Yourself）原则，有重复的地方，就意味着我们要做一些公共模块提取工作。
+
+对于装饰器来讲，这就是装饰器工厂。我们可以提取一个公共的给组件添加颜色的装饰器，颜色是可配的，如下所示：
+
+```ts
+function addColor(color) {
+  return (target) {
+    target.color;
+  }
+}
+
+@addColor('red')
+class MyComponent1 {
+}
+MyComponent1.color // 'red'
+
+@addColor('blue')
+class MyComponent2 {
+}
+MyComponent2.color // 'blue'
+```
+
+通过装饰器工厂，我们实现了对装饰器的复用。
