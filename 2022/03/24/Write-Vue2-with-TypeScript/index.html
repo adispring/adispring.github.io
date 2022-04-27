@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="wangzengdi&#39;s Blog">
 <meta property="og:description" content="原理简介 在 Vue2 中，我们编写的 单文件组件（SCF，也即 Single-File Components），其实是 vue 自创的前端领域语言（类比各互联网厂的小程序开发语言，也是各自造（抄）的领域语言），形式如下所示： 12345678910111213141516171819202122232425262728293031323334353637&amp;lt;template&amp;gt;  &amp;lt">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2022-03-25T12:17:40.667Z">
+<meta property="og:updated_time" content="2022-04-27T12:20:36.696Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TypeScript 开发 Vue2">
 <meta name="twitter:description" content="原理简介 在 Vue2 中，我们编写的 单文件组件（SCF，也即 Single-File Components），其实是 vue 自创的前端领域语言（类比各互联网厂的小程序开发语言，也是各自造（抄）的领域语言），形式如下所示： 12345678910111213141516171819202122232425262728293031323334353637&amp;lt;template&amp;gt;  &amp;lt">
@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-25 12:17:40" itemprop="dateModified" datetime="2022-03-25T12:17:40+00:00">2022-03-25</time>
+                <time title="Modified: 2022-04-27 12:20:36" itemprop="dateModified" datetime="2022-04-27T12:20:36+00:00">2022-04-27</time>
               </span>
 
           
@@ -248,7 +248,12 @@
 <p>装饰器工厂，说白了，就是一个生成装饰器的函数</p>
 <p>装饰器的概念，就简单介绍到这里。</p>
 <h3 id="zhuang-shi-qi-de-zhi-xing-shun-xu">装饰器的执行顺序</h3>
-<p>在TypeScript中，装饰器的执行顺序为：首先执行属性装饰器，然后执行方法装饰器，其次是方法参数装饰器，最后是类装饰器。如果同一个类型的装饰器有多个，总是先执行后面的装饰器。</p>
+<p>在TypeScript中，装饰器的执行顺序为：</p>
+<ol>
+<li>类成员装饰器，一般按书写顺序从前往后执行；</li>
+<li>类装饰器；</li>
+</ol>
+<p>关于装饰器调用顺序，网上几乎所有中文资料都是错的！</p>
 <p>因此对于下面使用装饰器的  Vue class 组件：</p>
 <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Vue, Component, Prop, Ref &#125; <span class="keyword">from</span> <span class="string">'vue-property-decorator'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> YourComponent <span class="keyword">extends</span> Vue &#123;</span><br><span class="line">  <span class="meta">@Ref</span> readonly elementRef!: HTMLElement;</span><br><span class="line">  <span class="meta">@Prop</span>(&#123; <span class="keyword">default</span>: <span class="string">'default value'</span> &#125;) readonly title!: <span class="built_in">string</span></span><br><span class="line"></span><br><span class="line">  message: <span class="built_in">string</span> = <span class="string">'hello, world'</span>;</span><br><span class="line"></span><br><span class="line">  onClick(): <span class="built_in">void</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>会先执行类属性上的装饰器，如 @Ref、@Prop，这两个装饰器，会将被修饰的属性收集到对应类型的数组中（refs 数组，props 数组），然后是方法的装饰器，最后会执行 @Component ，对刚才装饰器收集的属性、方法，以及为修饰的属性、方法做分类处理，最终转成 Vue 引擎能识别的、原始的 vue 组件配置对象：</p>
@@ -277,7 +282,7 @@
       <i class="fa fa-chevron-left"></i> Lerna 备忘录
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/03/25/Hexo-Workflow/" rel="next" title="Hexo Workflow">
+    <a href="/2022/04/27/Hexo-Workflow/" rel="next" title="Hexo Workflow">
       Hexo Workflow <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
